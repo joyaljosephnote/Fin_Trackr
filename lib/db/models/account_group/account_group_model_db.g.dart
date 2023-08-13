@@ -17,10 +17,11 @@ class AccountGroupModelAdapter extends TypeAdapter<AccountGroupModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AccountGroupModel(
-      accountType: fields[3] as AccountType,
+      id: fields[0] as String,
       name: fields[1] as String,
-      amount: fields[2] as double,
-    )..id = fields[0] as String?;
+      amount: fields[2] as double?,
+      accountType: fields[3] as AccountType,
+    );
   }
 
   @override

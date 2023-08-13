@@ -12,17 +12,19 @@ enum AccountType {
 @HiveType(typeId: 4)
 class AccountGroupModel {
   @HiveField(0)
-  String? id;
+  String id;
   @HiveField(1)
   String name;
   @HiveField(2)
-  double amount;
+  double? amount;
   @HiveField(3)
   AccountType accountType;
-  AccountGroupModel(
-      {required this.accountType, required this.name, required this.amount}) {
-    id = DateTime.now().microsecondsSinceEpoch.toString();
-  }
+  AccountGroupModel({
+    required this.id,
+    required this.name,
+    this.amount,
+    required this.accountType,
+  });
 }
 
 // flutter packages pub run build_runner watch --use-polling-watcher --delete-conflicting-outputs

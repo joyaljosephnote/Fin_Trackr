@@ -39,7 +39,7 @@ class _ExpenseCategoryListState extends State<ExpenseCategoryList> {
     if (screenWidth > 350) {
       fontSize = 16; // increase font size for screen width above 350
     }
-    getAllCategory();
+    CategoryDB().getAllCategory();
     return Scaffold(
       backgroundColor: AppColor.ftScafoldColor,
       appBar: AppBar(
@@ -165,7 +165,7 @@ class _ExpenseCategoryListState extends State<ExpenseCategoryList> {
                                 ExpenseCategoryProvider().addDefaultCategory(
                                     AppDefaultExpenseCategory()
                                         .appDefaultExpenseCategory);
-                                getAllCategory();
+                                CategoryDB().getAllCategory();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         duration: Duration(seconds: 2),
@@ -193,7 +193,7 @@ class _ExpenseCategoryListState extends State<ExpenseCategoryList> {
             ),
             Expanded(
               child: ValueListenableBuilder(
-                valueListenable: expenseCategoryNotifier,
+                valueListenable: CategoryDB().expenseCategoryNotifier,
                 builder: (BuildContext ctx,
                     List<CategoryModel> expenseCategoryList, Widget? child) {
                   final filterdList = expenseCategoryList
@@ -300,7 +300,7 @@ class _ExpenseCategoryListState extends State<ExpenseCategoryList> {
                                                         .appDefaultExpenseCategory);
                                             defaultFlag = false;
                                           }
-                                          getAllCategory();
+                                          CategoryDB().getAllCategory();
                                         },
                                         child: const Text('Default Categories',
                                             style: TextStyle(
@@ -360,7 +360,7 @@ class _ExpenseCategoryListState extends State<ExpenseCategoryList> {
             TextButton(
                 onPressed: () {
                   for (var category in selectedExpenseCategory) {
-                    deleteCategory(category.id!);
+                    CategoryDB().deleteCategory(category.id!);
                     setState(() {
                       selectedExpenseCategory = [];
                     });

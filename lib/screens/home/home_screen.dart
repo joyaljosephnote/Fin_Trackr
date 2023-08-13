@@ -1,4 +1,5 @@
 import 'package:fin_trackr/constant/constant.dart';
+import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/screens/accounts_screen/accounts_screen.dart';
 import 'package:fin_trackr/screens/home/widget/bottom_navigation.dart';
 import 'package:fin_trackr/screens/home/widget/floatting_action_button.dart';
@@ -24,6 +25,7 @@ class HoemeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CategoryDB().getAllCategory();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(

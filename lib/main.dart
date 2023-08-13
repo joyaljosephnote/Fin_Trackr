@@ -1,11 +1,15 @@
 import 'package:fin_trackr/constant/constant.dart';
+// ignore: unused_import
+import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
+import 'package:fin_trackr/db/models/account_group/account_group_model_db.dart';
 import 'package:fin_trackr/db/models/currency/curency_model.db.dart';
+import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
+
 import 'package:fin_trackr/screens/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import 'db/models/category/category_model_db.dart';
 
 Future<void> main() async {
@@ -21,6 +25,18 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(CurrencyModelAdapter().typeId)) {
     Hive.registerAdapter(CurrencyModelAdapter());
   }
+  if (!Hive.isAdapterRegistered(AccountTypeAdapter().typeId)) {
+    Hive.registerAdapter(AccountTypeAdapter());
+  }
+  if (!Hive.isAdapterRegistered(AccountGroupModelAdapter().typeId)) {
+    Hive.registerAdapter(AccountGroupModelAdapter());
+  }
+
+  if (!Hive.isAdapterRegistered(TransactionModelAdapter().typeId)) {
+    Hive.registerAdapter(TransactionModelAdapter());
+  }
+  await addInitialData();
+  getAllAccountGroup();
   getCurrency();
   runApp(const MyApp());
 }

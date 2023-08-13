@@ -1,4 +1,5 @@
 import 'package:fin_trackr/constant/constant.dart';
+import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/screens/app_settings_screen/account_group_settings/account_group.dart';
 import 'package:fin_trackr/screens/app_settings_screen/expense_category_settings/expense_category_list_view.dart';
 import 'package:fin_trackr/screens/app_settings_screen/income_category_settings/income_category_list_view.dart';
@@ -40,6 +41,7 @@ class _TransactionScreenSelector extends State<TransactionScreenSelector>
 
   @override
   Widget build(BuildContext context) {
+    CategoryDB().getAllCategory();
     final double screenWidth = MediaQuery.of(context).size.width;
 
     double fontSize =
@@ -83,7 +85,7 @@ class _TransactionScreenSelector extends State<TransactionScreenSelector>
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AccountGroup(),
+                        builder: (context) => const AccountGroup(),
                       ),
                     );
                   }

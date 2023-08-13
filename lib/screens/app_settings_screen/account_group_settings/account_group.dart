@@ -1,4 +1,8 @@
+import 'package:fin_trackr/db/functions/account_group_function.dart';
+import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
+import 'package:fin_trackr/db/models/account_group/account_group_model_db.dart';
+import 'package:fin_trackr/db/models/category/category_model_db.dart';
 import 'package:flutter/material.dart';
 import 'package:fin_trackr/constant/constant.dart';
 
@@ -12,16 +16,33 @@ class AccountGroup extends StatefulWidget {
 
 class _AccountGrouptState extends State<AccountGroup> {
   // ignore: prefer_final_field, non_constant_identifier_names
-  String? AccountGroupNameController;
-  // ignore: non_constant_identifier_names
-  final AccountGroupAmountController = TextEditingController(text: '0.00');
+  TextEditingController accountGroupNameController = TextEditingController();
+  TextEditingController accountGroupAmountController = TextEditingController();
 
   // ignore: non_constant_identifier_names
   final _formKey = GlobalKey<FormState>();
+  //it is used for updation
+  late AccountGroupModel accountGroupModel;
+
+  // this flag for defauilt income category button check;
+  bool? defaultFlag = true;
+
+  //textFeildEdit button is used for change theSave button updation
+  bool textFeildEdit = false;
+
+  List<CategoryModel> selectedIncomeCategory = [];
 
   @override
   Widget build(BuildContext context) {
-    getCurrency();
+    getAllAccountGroup();
+    CategoryDB().getAllCategory();
+    final double screenWidth = MediaQuery.of(context).size.width;
+    double fontSize =
+        9; // default font size for screen width between 280 and 350
+
+    if (screenWidth > 350) {
+      fontSize = 16; // increase font size for screen width above 350
+    }
     return Scaffold(
       backgroundColor: AppColor.ftScafoldColor,
       appBar: AppBar(
@@ -45,52 +66,36 @@ class _AccountGrouptState extends State<AccountGroup> {
                             child: Align(
                               alignment: Alignment.bottomLeft,
                               child: Text(
-                                'Name ',
+                                'Acc. group',
                                 style: TextStyle(
-                                  color: AppColor.ftTextTertiaryColor,
-                                ),
+                                    color: AppColor.ftTextTertiaryColor),
                               ),
                             ),
                           ),
                           Expanded(
-                            child: DropdownButtonFormField<String>(
-                              hint: const Text(
-                                'Groups',
-                                style: TextStyle(
-                                    color: AppColor.ftTextTertiaryColor),
-                              ),
-                              dropdownColor: AppColor.ftAppBarColor,
-                              style: const TextStyle(
-                                color: AppColor.ftTextSecondayColor,
-                              ),
-                              decoration: const InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: AppColor.ftTabBarSelectorColor,
+                            child: TextFormField(
+                                textCapitalization:
+                                    TextCapitalization.sentences,
+                                keyboardType: TextInputType.text,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Required Feild';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                controller: accountGroupNameController,
+                                cursorColor: AppColor.ftTextSecondayColor,
+                                style: const TextStyle(
+                                    color: AppColor.ftTextSecondayColor),
+                                decoration: const InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: AppColor.ftTabBarSelectorColor),
                                   ),
                                 ),
-                              ),
-                              // value: ,
-                              items: const [
-                                DropdownMenuItem(
-                                  value: 'cash',
-                                  child: Text('Cash'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 'account',
-                                  child: Text('Account'),
-                                ),
-                              ],
-                              onChanged: (value) {},
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Required Feild';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                          ),
+                                readOnly: true),
+                          )
                         ],
                       ),
                       Row(
@@ -117,7 +122,7 @@ class _AccountGrouptState extends State<AccountGroup> {
                                   return null;
                                 }
                               },
-                              controller: AccountGroupAmountController,
+                              controller: accountGroupAmountController,
                               cursorColor: AppColor.ftTextSecondayColor,
                               style: const TextStyle(
                                 color: AppColor.ftTextSecondayColor,
@@ -137,9 +142,9 @@ class _AccountGrouptState extends State<AccountGroup> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 35),
+                      const SizedBox(height: 30),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -149,34 +154,14 @@ class _AccountGrouptState extends State<AccountGroup> {
                               ),
                               textStyle: const TextStyle(fontSize: 16),
                               padding: const EdgeInsets.symmetric(
-                                vertical: 10,
-                                horizontal: 25,
-                              ),
+                                  vertical: 10, horizontal: 25),
                             ),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    duration: Duration(seconds: 2),
-                                    elevation: 2,
-                                    behavior: SnackBarBehavior.floating,
-                                    padding: EdgeInsets.all(15),
-                                    backgroundColor: AppColor.ftAppBarColor,
-                                    content: Text(
-                                      'Saved',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                            child: const Text(
+                            onPressed: () {},
+                            child: Text(
                               ' Save ',
                               style: TextStyle(
-                                color: AppColor.ftTextSecondayColor,
-                              ),
+                                  color: AppColor.ftTextSecondayColor,
+                                  fontSize: fontSize),
                             ),
                           ),
                           ElevatedButton(
@@ -189,27 +174,92 @@ class _AccountGrouptState extends State<AccountGroup> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 25),
                             ),
-                            onPressed: () {
-                              AccountGroupAmountController.clear();
-                            },
-                            child: const Text(
-                              'Clear ',
+                            onPressed: () {},
+                            child: Text(
+                              'Clear',
                               style: TextStyle(
-                                color: AppColor.ftTextSecondayColor,
-                              ),
+                                  color: AppColor.ftTextSecondayColor,
+                                  fontSize: fontSize),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 35),
+                      const SizedBox(height: 30),
                       const Divider(
-                        thickness: 3,
-                        color: AppColor.ftSecondaryDividerColor,
-                      )
+                          thickness: 3, color: AppColor.ftSecondaryDividerColor)
                     ],
                   ),
                 ),
               ],
+            ),
+            Expanded(
+              child: ValueListenableBuilder(
+                valueListenable: accountGroupNotifier,
+                builder: (BuildContext ctx,
+                    List<AccountGroupModel> accountGroupNameList,
+                    Widget? child) {
+                  return accountGroupNameList.isNotEmpty
+                      ? ListView.separated(
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (ctx, index) {
+                            final data = accountGroupNameList[index];
+                            return Row(
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  height: 40,
+                                  child: Text(
+                                    data.name,
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        color: AppColor.ftTextSecondayColor),
+                                  ),
+                                ),
+                                const Spacer(),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(
+                                      () {
+                                        accountGroupNameController =
+                                            TextEditingController(
+                                                text: data.name);
+                                      },
+                                    );
+                                    accountGroupModel = data;
+                                  },
+                                  icon: const Icon(Icons.edit_outlined,
+                                      color: AppColor.ftTextTertiaryColor),
+                                ),
+                              ],
+                            );
+                          },
+                          separatorBuilder: (ctx, index) {
+                            return const Divider(
+                                thickness: 1,
+                                color: AppColor.ftSecondaryDividerColor);
+                          },
+                          itemCount: accountGroupNameList.length)
+                      : const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "Please add a new category or click the 'Default Categories' button to add default categories.",
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.grey),
+                                    ),
+                                    SizedBox(height: 25),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                },
+              ),
             ),
           ],
         ),

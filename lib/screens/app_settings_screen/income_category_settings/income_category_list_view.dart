@@ -32,7 +32,7 @@ class _IncomeCategoryListState extends State<IncomeCategoryList> {
 
   @override
   Widget build(BuildContext context) {
-    getAllCategory();
+    CategoryDB().getAllCategory();
     final double screenWidth = MediaQuery.of(context).size.width;
     double fontSize =
         9; // default font size for screen width between 280 and 350
@@ -165,7 +165,7 @@ class _IncomeCategoryListState extends State<IncomeCategoryList> {
                                 IncomeCategoryProvider().addDefaultCategory(
                                     AppDefaultIncomeCategory()
                                         .appDefaultIncomeCategory);
-                                getAllCategory();
+                                CategoryDB().getAllCategory();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         duration: Duration(seconds: 2),
@@ -193,7 +193,7 @@ class _IncomeCategoryListState extends State<IncomeCategoryList> {
             ),
             Expanded(
               child: ValueListenableBuilder(
-                valueListenable: incomeCategoryNotifier,
+                valueListenable: CategoryDB().incomeCategoryNotifier,
                 builder: (BuildContext ctx,
                     List<CategoryModel> incomeCategoryList, Widget? child) {
                   final filterdList = incomeCategoryList
@@ -300,7 +300,7 @@ class _IncomeCategoryListState extends State<IncomeCategoryList> {
                                                         .appDefaultIncomeCategory);
                                             defaultFlag = false;
                                           }
-                                          getAllCategory();
+                                          CategoryDB().getAllCategory();
                                         },
                                         child: const Text('Default Categories',
                                             style: TextStyle(
@@ -359,7 +359,7 @@ class _IncomeCategoryListState extends State<IncomeCategoryList> {
             TextButton(
                 onPressed: () {
                   for (var category in selectedIncomeCategory) {
-                    deleteCategory(category.id!);
+                    CategoryDB().deleteCategory(category.id!);
                     setState(() {
                       selectedIncomeCategory = [];
                     });

@@ -9,11 +9,11 @@ class ExpenseCategoryProvider {
     if (name.isEmpty == null) {
       return;
     } else {
-      editCategory(
+      CategoryDB().editCategory(
           editCategoryModel: editCategoryModel,
           name: categoryController.text,
           id: editCategoryModel.id);
-      getAllCategory();
+      CategoryDB().getAllCategory();
     }
   }
 
@@ -32,7 +32,7 @@ class ExpenseCategoryProvider {
         name: _expenseCategoryName,
         categoryType: CategoryType.expense,
       );
-      addCategory(_expenseCategory);
+      CategoryDB().addCategory(_expenseCategory);
     }
   }
 
@@ -43,7 +43,7 @@ class ExpenseCategoryProvider {
         categoryType: CategoryType.expense,
         id: "${categoryController.text.trim().toLowerCase()}+${CategoryType.expense}",
         isDeleted: false);
-    addCategory(_expenseCategory);
+    CategoryDB().addCategory(_expenseCategory);
     categoryController.clear();
   }
 }

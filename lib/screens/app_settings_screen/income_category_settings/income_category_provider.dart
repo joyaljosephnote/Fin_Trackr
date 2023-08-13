@@ -9,11 +9,11 @@ class IncomeCategoryProvider {
     if (name.isEmpty == null) {
       return;
     } else {
-      editCategory(
+      CategoryDB().editCategory(
           editCategoryModel: editCategoryModel,
           name: categoryController.text,
           id: editCategoryModel.id);
-      getAllCategory();
+      CategoryDB().getAllCategory();
     }
   }
 
@@ -31,7 +31,7 @@ class IncomeCategoryProvider {
         name: _incomeCategoryName,
         categoryType: CategoryType.income,
       );
-      addCategory(_incomeCategory);
+      CategoryDB().addCategory(_incomeCategory);
     }
   }
 
@@ -42,7 +42,7 @@ class IncomeCategoryProvider {
         categoryType: CategoryType.income,
         id: "${categoryController.text.trim().toLowerCase()}+${CategoryType.income}",
         isDeleted: false);
-    addCategory(_incomeCategery);
+    CategoryDB().addCategory(_incomeCategery);
     categoryController.clear();
   }
 }
