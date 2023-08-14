@@ -33,7 +33,11 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
           style: TextStyle(fontSize: 18),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.sort_rounded)),
+          IconButton(
+              onPressed: () {
+                showPopupMenu1();
+              },
+              icon: const Icon(Icons.sort_rounded)),
           IconButton(
               alignment: Alignment.centerLeft,
               onPressed: () {},
@@ -73,7 +77,19 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
                             children: [
                               TextField(
                                 controller: clearcontroller,
-                                onChanged: (value) {},
+                                onChanged: (value) {
+                                  TransactionDB.instance.search(value);
+
+                                  if (value.isEmpty) {
+                                    searchBarNotifier.value = false;
+                                    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+                                    searchBarNotifier.notifyListeners();
+                                  } else {
+                                    searchBarNotifier.value = true;
+                                    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+                                    searchBarNotifier.notifyListeners();
+                                  }
+                                },
                                 cursorColor: AppColor.ftTextSecondayColor,
                                 style: const TextStyle(
                                     color: AppColor.ftTextSecondayColor),
@@ -314,6 +330,48 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
       mapList[model.date]!.add(model);
     }
     return mapList;
+  }
+
+  void showPopupMenu1() async {
+    await showMenu(
+      color: AppColor.ftAppBarColor,
+      context: context,
+      position: const RelativeRect.fromLTRB(100, 80, 10, 10),
+      items: [
+        PopupMenuItem(
+            onTap: () {
+              TransactionDB.instance.filter('All');
+              TransactionDB.instance.refresh();
+            },
+            child: const Text(
+              'All',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.ftTextSecondayColor),
+            )),
+        PopupMenuItem(
+            onTap: () {
+              TransactionDB.instance.filter('Income');
+            },
+            child: const Text(
+              'Income',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.ftTextSecondayColor),
+            )),
+        PopupMenuItem(
+            onTap: () {
+              TransactionDB.instance.filter('Expense');
+            },
+            child: const Text(
+              'Expense',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.ftTextSecondayColor),
+            )),
+      ],
+      elevation: 8.0,
+    );
   }
 }
 
