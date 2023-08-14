@@ -29,13 +29,14 @@ class TransactionModel {
   @HiveField(7)
   String? image;
   TransactionModel(
-      {required this.date,
+      {required this.id,
+      required this.date,
       required this.account,
       required this.amount,
       required this.categoryType,
       required this.category,
       required this.note,
       this.image}) {
-    id = DateTime.now().microsecondsSinceEpoch.toString();
+    // id = DateTime.now().microsecondsSinceEpoch.toString();
   }
 }

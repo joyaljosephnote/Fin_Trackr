@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
+import 'package:fin_trackr/db/functions/currency_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/db/models/account_group/account_group_model_db.dart';
 import 'package:fin_trackr/db/models/category/category_model_db.dart';
@@ -181,8 +182,11 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                         style: const TextStyle(
                           color: AppColor.ftTextSecondayColor,
                         ),
-                        decoration: const InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
+                        decoration: InputDecoration(
+                          prefixText: "${currencySymboleUpdate.value} ",
+                          prefixStyle: const TextStyle(
+                              color: AppColor.ftTextSecondayColor),
+                          enabledBorder: const UnderlineInputBorder(
                             borderSide: BorderSide(
                               color: AppColor.ftTabBarSelectorColor,
                             ),
@@ -471,10 +475,9 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 25),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           if (_FormKey.currentState!.validate()) {
-                            addIncomeTransaction();
-                            print(addIncomeTransaction());
+                            await addIncomeTransaction();
                           }
                         },
                         child: const Text(
@@ -588,6 +591,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
     final parsedAmount = double.tryParse(amount);
 
     final model = TransactionModel(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
       date: DateFormat('yyyy-MM-dd').format(selectedDate),
       amount: parsedAmount ?? 0.0,
       account: getAccountTypeFromString(accountType) ?? AccountType.cash,

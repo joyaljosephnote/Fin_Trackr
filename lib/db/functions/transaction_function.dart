@@ -31,6 +31,7 @@ class TransactionDB implements TransactionDBFunctions {
   Future<void> refresh() async {
     final list = await getAllTransactions();
     list.sort((first, second) => second.date.compareTo(first.date));
+    print("${list.length} from database Trans");
     transactionListNotifier.value.clear();
     transactionListNotifier.value.addAll(list);
     // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
@@ -54,8 +55,9 @@ class TransactionDB implements TransactionDBFunctions {
   Future<void> editTransactionDb(int id, TransactionModel model) async {
     final db = await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
     await db.putAt(id, model);
-    transactionListNotifier.value.clear();
-    transactionListNotifier.value.addAll(db.values);
-    getAllTransactions();
+    // transactionListNotifier.value.clear();
+    // transactionListNotifier.value.addAll(db.values);
+    // getAllTransactions();
+    refresh();
   }
 }

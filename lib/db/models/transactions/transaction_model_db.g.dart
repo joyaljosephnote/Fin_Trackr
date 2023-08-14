@@ -17,6 +17,7 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return TransactionModel(
+      id: fields[0] as String?,
       date: fields[1] as String,
       account: fields[3] as AccountType,
       amount: fields[2] as double,
@@ -24,7 +25,7 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
       category: fields[5] as CategoryModel,
       note: fields[6] as String,
       image: fields[7] as String?,
-    )..id = fields[0] as String?;
+    );
   }
 
   @override
