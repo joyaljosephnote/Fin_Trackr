@@ -5,10 +5,14 @@ import 'dart:io';
 import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
+import 'package:fin_trackr/db/functions/transaction_function.dart';
+import 'package:fin_trackr/db/models/account_group/account_group_model_db.dart';
 import 'package:fin_trackr/db/models/category/category_model_db.dart';
+import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
 
 XFile? images;
@@ -204,52 +208,58 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                       ),
                     ),
                     Expanded(
-                        child: Container(
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: AppColor.ftTabBarSelectorColor,
-                            width: 1,
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 12),
                         child: Theme(
-                          data: Theme.of(context).copyWith(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                          ),
-                          child: DropdownButton<String>(
-                            hint: const Text(
-                              'Select account type',
-                              style: TextStyle(color: Colors.transparent),
+                      data: Theme.of(context).copyWith(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                      ),
+                      child: DropdownButtonFormField<String>(
+                        decoration: const InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: AppColor.ftTabBarSelectorColor,
                             ),
-                            value: accountType,
-                            items: accountGroupNotifier.value
-                                .map((e) => DropdownMenuItem(
-                                      value: e.id,
-                                      child: Text(
-                                        e.name,
-                                        style: const TextStyle(
-                                          color: AppColor.ftTextSecondayColor,
-                                        ),
-                                      ),
-                                      onTap: () {},
-                                    ))
-                                .toList(),
-                            onChanged: (selectedValue) {
-                              setState(() {
-                                accountType = selectedValue;
-                              });
-                            },
-                            underline: Container(),
-                            isExpanded: true,
-                            icon: const Icon(Icons.arrow_drop_down,
-                                color: AppColor.ftTabBarSelectorColor),
-                            dropdownColor: AppColor.ftAppBarColor,
                           ),
                         ),
+                        hint: const Text(
+                          'Select account type',
+                          style: TextStyle(color: Colors.transparent),
+                        ),
+                        value: accountType,
+                        items: accountGroupNotifier.value
+                            .map((e) => DropdownMenuItem(
+                                  value: e.id,
+                                  child: Text(
+                                    e.name,
+                                    style: const TextStyle(
+                                      color: AppColor.ftTextSecondayColor,
+                                    ),
+                                  ),
+                                  onTap: () {},
+                                ))
+                            .toList(),
+                        onChanged: (selectedValue) {
+                          setState(() {
+                            accountType = selectedValue;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Required Feild';
+                          } else {
+                            return null;
+                          }
+                        },
+                        isExpanded: true,
+                        icon: Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: const Icon(Icons.arrow_drop_down,
+                                color: AppColor.ftTabBarSelectorColor),
+                          ),
+                        ),
+                        dropdownColor: AppColor.ftAppBarColor,
                       ),
                     )),
                   ],
@@ -269,59 +279,64 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                       ),
                     ),
                     Expanded(
-                        child: Container(
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: AppColor.ftTabBarSelectorColor,
-                            width: 1,
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 12),
                         child: Theme(
-                          data: Theme.of(context).copyWith(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                          ),
-                          child: DropdownButton<String>(
-                            hint: const Text(
-                              'Select category',
-                              style: TextStyle(color: Colors.transparent),
+                      data: Theme.of(context).copyWith(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                      ),
+                      child: DropdownButtonFormField<String>(
+                        decoration: const InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: AppColor.ftTabBarSelectorColor,
                             ),
-                            value: _categoryID,
-                            items: CategoryDB()
-                                .incomeCategoryNotifier
-                                .value
-                                .where((e) =>
-                                    e.categoryType == CategoryType.income)
-                                .map((e) => DropdownMenuItem(
-                                      value: e.id,
-                                      child: Text(
-                                        e.name,
-                                        style: const TextStyle(
-                                          color: AppColor.ftTextSecondayColor,
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        print(e.categoryType);
-                                        selectedcategoryModel = e;
-                                      },
-                                    ))
-                                .toList(),
-                            onChanged: (selectedValue) {
-                              setState(() {
-                                _categoryID = selectedValue;
-                              });
-                            },
-                            underline: Container(),
-                            isExpanded: true,
-                            icon: const Icon(Icons.arrow_drop_down,
-                                color: AppColor.ftTabBarSelectorColor),
-                            dropdownColor: AppColor.ftAppBarColor,
                           ),
                         ),
+                        hint: const Text(
+                          'Select category',
+                          style: TextStyle(color: Colors.transparent),
+                        ),
+                        value: _categoryID,
+                        items: CategoryDB()
+                            .incomeCategoryNotifier
+                            .value
+                            .where((e) => e.categoryType == CategoryType.income)
+                            .map((e) => DropdownMenuItem(
+                                  value: e.id,
+                                  child: Text(
+                                    e.name,
+                                    style: const TextStyle(
+                                      color: AppColor.ftTextSecondayColor,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    print(e.categoryType);
+                                    selectedcategoryModel = e;
+                                  },
+                                ))
+                            .toList(),
+                        onChanged: (selectedValue) {
+                          setState(() {
+                            _categoryID = selectedValue;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Required Feild';
+                          } else {
+                            return null;
+                          }
+                        },
+                        isExpanded: true,
+                        icon: Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: const Icon(Icons.arrow_drop_down,
+                                color: AppColor.ftTabBarSelectorColor),
+                          ),
+                        ),
+                        dropdownColor: AppColor.ftAppBarColor,
                       ),
                     )),
                   ],
@@ -457,7 +472,10 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                               vertical: 10, horizontal: 25),
                         ),
                         onPressed: () {
-                          if (_FormKey.currentState!.validate()) {}
+                          if (_FormKey.currentState!.validate()) {
+                            addIncomeTransaction();
+                            print(addIncomeTransaction());
+                          }
                         },
                         child: const Text(
                           ' Save ',
@@ -497,10 +515,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                               vertical: 10, horizontal: 25),
                         ),
                         onPressed: () {
-                          // if (_formKey.currentState!.validate()) {
-                          //   addMoneyProLF.addAmountButtonClicked(context: context);
-                          //   addMoneyProLF.clearField();
-                          // }
+                          if (_FormKey.currentState!.validate()) {}
                         },
                         child: const Text(
                           'Delete',
@@ -558,9 +573,44 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
   }
 
   void textFeildClear() {
-    _amountController.clear();
-    // _accountController.clear();
-    // _categoryController.clear();
-    _noteController.clear();
+    setState(() {
+      selectedDate = DateTime.now();
+      _amountController.clear();
+      _categoryID = null;
+      _noteController.clear();
+      image = null;
+    });
+  }
+
+  Future addIncomeTransaction() async {
+    final note = _noteController.text;
+    final amount = _amountController.text;
+    final parsedAmount = double.tryParse(amount);
+
+    final model = TransactionModel(
+      date: DateFormat('yyyy-MM-dd').format(selectedDate),
+      amount: parsedAmount ?? 0.0,
+      account: getAccountTypeFromString(accountType) ?? AccountType.cash,
+      categoryType: selectedCategoryType,
+      category: selectedcategoryModel!,
+      note: note.trim(),
+      image: image?.path,
+    );
+
+    await TransactionDB.instance.addTransaction(model);
+    textFeildClear();
+
+    print("$model is printed for verification");
+  }
+
+  AccountType? getAccountTypeFromString(String? str) {
+    switch (str?.toLowerCase().trim()) {
+      case 'cash':
+        return AccountType.cash;
+      case 'account':
+        return AccountType.account;
+      default:
+        return AccountType.cash;
+    }
   }
 }

@@ -1,6 +1,8 @@
 import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
+import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/db/models/category/category_model_db.dart';
+import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
 import 'package:fin_trackr/details/about_app/about_app.dart';
 import 'package:fin_trackr/screens/app_settings_screen/account_group_settings/account_group.dart';
 import 'package:fin_trackr/screens/app_settings_screen/contact_us.dart';
@@ -372,6 +374,10 @@ class AppSettingsScreen extends StatelessWidget {
                 final categoryDb =
                     await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
                 categoryDb.clear();
+                final transactionDB =
+                    await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
+                transactionDB.clear();
+
                 // final currencyDb =
                 //     await Hive.openBox<CurrencyModel>(CURENCY_DB_NAME);
                 // currencyDb.clear();
