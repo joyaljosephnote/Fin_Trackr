@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:fin_trackr/db/models/category/category_model_db.dart';
 import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
 import 'package:flutter/foundation.dart';
@@ -133,5 +135,100 @@ class TransactionDB implements TransactionDBFunctions {
       // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       transactionListNotifier.notifyListeners();
     }
+  }
+
+  Future<void> filterDataByDate(String dateRange) async {
+    // ignore: non_constant_identifier_names
+    final TransactionDb =
+        await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
+    List<TransactionModel> dateFilterList = [];
+    if (dateRange == 'today') {
+      if (selectedCatogory == "Income") {
+        dateFilterList = TransactionDb.values
+            .where((element) =>
+                element.categoryType == CategoryType.income &&
+                DateTime.parse(element.date).day == DateTime.now().day &&
+                DateTime.parse(element.date).month == DateTime.now().month &&
+                DateTime.parse(element.date).year == DateTime.now().year)
+            .toList();
+      } else if (selectedCatogory == "Expense") {
+        dateFilterList = TransactionDb.values
+            .where((element) =>
+                element.categoryType == CategoryType.expense &&
+                DateTime.parse(element.date).day == DateTime.now().day &&
+                DateTime.parse(element.date).month == DateTime.now().month &&
+                DateTime.parse(element.date).year == DateTime.now().year)
+            .toList();
+      } else {
+        dateFilterList = TransactionDb.values
+            .where((element) =>
+                DateTime.parse(element.date).day == DateTime.now().day &&
+                DateTime.parse(element.date).month == DateTime.now().month &&
+                DateTime.parse(element.date).year == DateTime.now().year)
+            .toList();
+        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+        transactionListNotifier.notifyListeners();
+      }
+    } else if (dateRange == 'yesterday') {
+      if (selectedCatogory == "Income") {
+        dateFilterList = TransactionDb.values
+            .where((element) =>
+                element.categoryType == CategoryType.income &&
+                DateTime.parse(element.date).day == DateTime.now().day - 1 &&
+                DateTime.parse(element.date).month == DateTime.now().month &&
+                DateTime.parse(element.date).year == DateTime.now().year)
+            .toList();
+      } else if (selectedCatogory == "Expense") {
+        dateFilterList = TransactionDb.values
+            .where((element) =>
+                element.categoryType == CategoryType.expense &&
+                DateTime.parse(element.date).day == DateTime.now().day - 1 &&
+                DateTime.parse(element.date).month == DateTime.now().month &&
+                DateTime.parse(element.date).year == DateTime.now().year)
+            .toList();
+      } else {
+        dateFilterList = TransactionDb.values
+            .where((element) =>
+                DateTime.parse(element.date).day == DateTime.now().day - 1 &&
+                DateTime.parse(element.date).month == DateTime.now().month &&
+                DateTime.parse(element.date).year == DateTime.now().year)
+            .toList();
+        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+        transactionListNotifier.notifyListeners();
+      }
+    } else if (dateRange == 'last week') {
+      final DateTime today = DateTime.now();
+      final DateTime weekAgo = today.subtract(const Duration(days: 7));
+
+      if (selectedCatogory == "Income") {
+        dateFilterList = TransactionDb.values
+            .where((element) =>
+                element.categoryType == CategoryType.income &&
+                DateTime.parse(element.date).isAfter(weekAgo) &&
+                DateTime.parse(element.date).isBefore(today))
+            .toList();
+      } else if (selectedCatogory == "Expense") {
+        dateFilterList = TransactionDb.values
+            .where((element) =>
+                element.categoryType == CategoryType.expense &&
+                DateTime.parse(element.date).isAfter(weekAgo) &&
+                DateTime.parse(element.date).isBefore(today))
+            .toList();
+      } else {
+        dateFilterList = TransactionDb.values
+            .where((element) =>
+                DateTime.parse(element.date).isAfter(weekAgo) &&
+                DateTime.parse(element.date).isBefore(today))
+            .toList();
+      }
+    } else if (dateRange == 'all') {
+      refresh();
+    } else {
+      TransactionDb.values.toList();
+    }
+    transactionListNotifier.value.clear();
+    transactionListNotifier.value.addAll(dateFilterList);
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+    transactionListNotifier.notifyListeners();
   }
 }

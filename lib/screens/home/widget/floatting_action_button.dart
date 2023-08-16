@@ -20,7 +20,7 @@ class CustomFloatingActionButton extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const TransactionScreenSelector()));
+                  builder: (context) => TransactionScreenSelector()));
         } else if (index == 2) {
           // print('Accounts');
           Navigator.push(context,

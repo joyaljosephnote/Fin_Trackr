@@ -3,9 +3,11 @@ import 'package:fin_trackr/db/functions/currency_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/db/models/category/category_model_db.dart';
 import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
+import 'package:fin_trackr/screens/transaction_screen/add_transactions/add_transactions_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
+import 'dart:io';
 
 class ViewAllScreen extends StatefulWidget {
   const ViewAllScreen({super.key});
@@ -40,7 +42,9 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
               icon: const Icon(Icons.sort_rounded)),
           IconButton(
               alignment: Alignment.centerLeft,
-              onPressed: () {},
+              onPressed: () {
+                showPopupMenu2();
+              },
               icon: const Icon(Ionicons.calendar_outline, size: 22)),
         ],
       ),
@@ -93,14 +97,16 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
                                 cursorColor: AppColor.ftTextSecondayColor,
                                 style: const TextStyle(
                                     color: AppColor.ftTextSecondayColor),
-                                decoration: const InputDecoration(
-                                  suffixIcon: Icon(Ionicons.search_outline),
+                                decoration: InputDecoration(
+                                  suffixIcon: searchBarNotifier.value == false
+                                      ? const Icon(Ionicons.search_outline)
+                                      : null,
                                   suffixIconColor:
                                       AppColor.ftTabBarSelectorColor,
-                                  hintText: 'Search',
-                                  hintStyle: TextStyle(
+                                  hintText: 'Search by category name',
+                                  hintStyle: const TextStyle(
                                       color: AppColor.ftTextTertiaryColor),
-                                  enabledBorder: UnderlineInputBorder(
+                                  enabledBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide(
                                       color: AppColor.ftSecondaryDividerColor,
                                     ),
@@ -146,13 +152,13 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
                           physics: const BouncingScrollPhysics(),
                           itemCount: keys.length,
                           itemBuilder: (context, index) {
-                            double incomeData = mapList.values.fold(0,
-                                (previousValue, element) {
-                              for (var transaction in element) {
-                                if (transaction.categoryType ==
-                                    CategoryType.income) {
-                                  previousValue += transaction.amount;
-                                }
+                            List<TransactionModel> calculationList =
+                                mapList[keys[index]]!;
+                            double incomeData = calculationList.fold(0,
+                                (previousValue, transaction) {
+                              if (transaction.categoryType ==
+                                  CategoryType.income) {
+                                return previousValue + transaction.amount;
                               }
                               return previousValue;
                             });
@@ -373,71 +379,198 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
       elevation: 8.0,
     );
   }
+
+  void showPopupMenu2() async {
+    await showMenu(
+      color: AppColor.ftAppBarColor,
+      context: context,
+      position: const RelativeRect.fromLTRB(100, 80, 10, 10),
+      items: [
+        PopupMenuItem(
+            onTap: () {
+              TransactionDB.instance.filterDataByDate('all');
+            },
+            child: const Text(
+              'All',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.ftTextSecondayColor),
+            )),
+        PopupMenuItem(
+            onTap: () {
+              TransactionDB.instance.filterDataByDate('today');
+            },
+            child: const Text(
+              'Today',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.ftTextSecondayColor),
+            )),
+        PopupMenuItem(
+            onTap: () {
+              TransactionDB.instance.filterDataByDate('yesterday');
+            },
+            child: const Text(
+              'Yesterday',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.ftTextSecondayColor),
+            )),
+        PopupMenuItem(
+            onTap: () {
+              TransactionDB.instance.filterDataByDate('last week');
+            },
+            child: const Text(
+              'Last Week',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.ftTextSecondayColor),
+            )),
+      ],
+      elevation: 8.0,
+    );
+  }
 }
 
-class TransactionsCategory extends StatelessWidget {
+class TransactionsCategory extends StatefulWidget {
   TransactionsCategory({
     required this.newList,
     super.key,
   });
 
-  final NumberFormat formatter = NumberFormat('#,##0.00');
-
   final List<TransactionModel> newList;
 
+  @override
+  State<TransactionsCategory> createState() => _TransactionsCategoryState();
+}
+
+class _TransactionsCategoryState extends State<TransactionsCategory> {
+  final NumberFormat formatter = NumberFormat('#,##0.00');
+
+  bool screenExpand = false;
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
-      itemCount: newList.length,
+      itemCount: widget.newList.length,
       itemBuilder: (context, index) {
-        final data = newList[index];
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: SizedBox(
-                  width: 100,
-                  child: Text(
-                    data.category.name,
-                    style: const TextStyle(
-                      color: AppColor.ftTextTertiaryColor,
-                      fontSize: 13,
+        final data = widget.newList[index];
+        return GestureDetector(
+          onTap: () {
+            if (screenExpand == false) {
+              setState(() {
+                screenExpand = true;
+              });
+            } else if (screenExpand == true) {
+              setState(() {
+                screenExpand = false;
+              });
+            }
+          },
+          onLongPress: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => TransactionScreenSelector(),
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: SizedBox(
+                        width: 100,
+                        child: Text(
+                          data.category.name,
+                          style: const TextStyle(
+                            color: AppColor.ftTextTertiaryColor,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 5),
-                // ignore: avoid_unnecessary_containers
-                child: Container(
-                  child: Text(
-                    data.account.name.substring(0, 1).toUpperCase() +
-                        data.account.name.substring(1).toLowerCase(),
-                    style: const TextStyle(
-                      color: AppColor.ftTextTertiaryColor,
-                      fontSize: 13,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      // ignore: avoid_unnecessary_containers
+                      child: Container(
+                        child: Text(
+                          data.account.name.substring(0, 1).toUpperCase() +
+                              data.account.name.substring(1).toLowerCase(),
+                          style: const TextStyle(
+                            color: AppColor.ftTextTertiaryColor,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    const Spacer(),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        data.categoryType == CategoryType.income
+                            ? '+ ${currencySymboleUpdate.value} ${formatter.format(data.amount)}'
+                            : '- ${currencySymboleUpdate.value} ${formatter.format(data.amount)}',
+                        style: const TextStyle(
+                          color: AppColor.ftTextTertiaryColor,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              const Spacer(),
-              Container(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  data.categoryType == CategoryType.income
-                      ? '+ ${currencySymboleUpdate.value} ${formatter.format(data.amount)}'
-                      : '- ${currencySymboleUpdate.value} ${formatter.format(data.amount)}',
-                  style: const TextStyle(
-                    color: AppColor.ftTextTertiaryColor,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            ],
+                screenExpand == true
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Column(
+                          children: [
+                            Container(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                'Note : ${data.note}',
+                                // data.note,
+                                style: const TextStyle(
+                                  color: AppColor.ftTextTertiaryColor,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 1,
+                                ),
+                              ),
+                              margin: const EdgeInsets.only(top: 5),
+                              child: data.image != null
+                                  ? Image.file(
+                                      File(data.image.toString()),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.2,
+                                      width:
+                                          MediaQuery.of(context).size.width * 2,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const SizedBox.shrink(),
+                            ),
+                            const Divider(
+                              color: AppColor.ftSecondaryDividerColor,
+                            )
+                          ],
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Container(),
+                      ),
+              ],
+            ),
           ),
         );
       },

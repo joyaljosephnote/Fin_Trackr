@@ -604,6 +604,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     await TransactionDB.instance.addTransaction(model);
     textFeildClear();
 
+    // ignore: avoid_print
     print("$model is printed for verification");
   }
 
