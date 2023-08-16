@@ -22,9 +22,15 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
   NumberFormat formatter = NumberFormat('#,##0.00');
 
   @override
+  void initState() {
+    TransactionDB.instance.refresh();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    TransactionDB.instance.refresh();
+
     return Scaffold(
       backgroundColor: AppColor.ftScafoldColor,
       appBar: AppBar(
@@ -469,10 +475,17 @@ class _TransactionsCategoryState extends State<TransactionsCategory> {
             }
           },
           onLongPress: () {
+            int tabIndex = 2;
+            if (data.categoryType == CategoryType.income) {
+              tabIndex = 0;
+            } else if (data.categoryType == CategoryType.expense) {
+              tabIndex = 1;
+            }
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => TransactionScreenSelector(),
+                builder: (_) =>
+                    TransactionScreenSelector(tabIndex: tabIndex, model: data),
               ),
             );
           },

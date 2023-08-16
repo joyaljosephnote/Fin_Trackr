@@ -6,7 +6,7 @@ part 'transaction_model_db.g.dart';
 @HiveType(typeId: 6)
 class TransactionModel {
   @HiveField(0)
-  String? id;
+  int? id;
 
   @HiveField(1)
   final String date;

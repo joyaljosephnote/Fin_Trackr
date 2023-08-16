@@ -29,7 +29,7 @@ class TransactionDB implements TransactionDBFunctions {
   Future<void> addTransaction(TransactionModel value) async {
     final transactionDB =
         await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
-    await transactionDB.add(value);
+    await transactionDB.put(value.id, value);
   }
 
   Future<void> refresh() async {
@@ -51,13 +51,13 @@ class TransactionDB implements TransactionDBFunctions {
   @override
   Future<void> deleteTransaction(int id) async {
     final db = await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
-    db.deleteAt(id);
+    await db.delete(id);
     refresh();
   }
 
   Future<void> editTransactionDb(int id, TransactionModel model) async {
     final db = await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
-    await db.putAt(id, model);
+    await db.put(id, model);
     // transactionListNotifier.value.clear();
     // transactionListNotifier.value.addAll(db.values);
     // getAllTransactions();
@@ -227,7 +227,7 @@ class TransactionDB implements TransactionDBFunctions {
       TransactionDb.values.toList();
     }
     transactionListNotifier.value.clear();
-    transactionListNotifier.value.addAll(dateFilterList);
+    transactionListNotifier.value = dateFilterList;
     // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     transactionListNotifier.notifyListeners();
   }

@@ -591,7 +591,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     final parsedAmount = double.tryParse(amount);
 
     final model = TransactionModel(
-      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      id: DateTime.now().microsecondsSinceEpoch,
       date: DateFormat('yyyy-MM-dd').format(selectedDate),
       amount: parsedAmount ?? 0.0,
       account: getAccountTypeFromString(accountType) ?? AccountType.cash,

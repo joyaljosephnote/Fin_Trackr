@@ -1,5 +1,6 @@
 import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
+import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
 import 'package:fin_trackr/screens/app_settings_screen/account_group_settings/account_group.dart';
 import 'package:fin_trackr/screens/app_settings_screen/expense_category_settings/expense_category_list_view.dart';
 import 'package:fin_trackr/screens/app_settings_screen/income_category_settings/income_category_list_view.dart';
@@ -13,11 +14,14 @@ import 'package:ionicons/ionicons.dart';
 final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
 
 class TransactionScreenSelector extends StatefulWidget {
-  const TransactionScreenSelector({super.key});
+  TransactionScreenSelector({super.key, this.tabIndex, this.model});
 
   @override
   State<TransactionScreenSelector> createState() =>
       _TransactionScreenSelector();
+  final int? tabIndex;
+
+  final TransactionModel? model;
 }
 
 const colors = [
@@ -37,6 +41,12 @@ class _TransactionScreenSelector extends State<TransactionScreenSelector>
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
     super.initState();
+    if (widget.tabIndex != null) {
+      setState(() {
+        _tabIndex = widget.tabIndex!;
+        _tabController.index = widget.tabIndex!;
+      });
+    }
   }
 
   @override
@@ -209,8 +219,8 @@ class _TransactionScreenSelector extends State<TransactionScreenSelector>
           builder: (_) => TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _tabController,
-            children: const [
-              AddIncomeScreen(),
+            children: [
+              AddIncomeScreen(modelFromTransation: widget.model),
               AddExpenseScreen(),
               AddTransferScreen(),
             ],

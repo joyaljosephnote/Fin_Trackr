@@ -19,26 +19,51 @@ import 'package:ionicons/ionicons.dart';
 XFile? images;
 
 class AddIncomeScreen extends StatefulWidget {
-  const AddIncomeScreen({super.key});
+  const AddIncomeScreen({super.key, this.modelFromTransation});
 
   @override
   State<AddIncomeScreen> createState() => _AddIncomeScreenState();
+  final TransactionModel? modelFromTransation;
 }
 
 class _AddIncomeScreenState extends State<AddIncomeScreen> {
   DateTime selectedDate = DateTime.now();
 
-  final _amountController = TextEditingController();
+  TextEditingController _amountController = TextEditingController();
   String? _categoryID;
   CategoryType selectedCategoryType = CategoryType.income;
   String? accountType;
   CategoryModel? selectedcategoryModel;
-  final _noteController = TextEditingController();
+  TextEditingController _noteController = TextEditingController();
 
   // ignore: non_constant_identifier_names
   final _FormKey = GlobalKey<FormState>();
 
   File? image;
+
+  @override
+  void initState() {
+    if (widget.modelFromTransation != null) {
+      // String accountTypeFromTransaction = '';
+      // if (widget.modelFromTransation!.account == AccountType.account) {
+      //   accountTypeFromTransaction = 'Account';
+      // } else if (widget.modelFromTransation!.account == AccountType.cash) {
+      //   accountTypeFromTransaction = 'Cash';
+      // }
+
+      // setState(() {
+      selectedDate = DateTime.parse(widget.modelFromTransation!.date);
+      _amountController.text = widget.modelFromTransation!.amount.toString();
+
+      // accountType = accountTypeFromTransaction;
+      _noteController.text = widget.modelFromTransation!.note;
+      if (widget.modelFromTransation!.image != null) {
+        image = File(widget.modelFromTransation!.image!);
+      }
+      // });
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -247,13 +272,13 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                             accountType = selectedValue;
                           });
                         },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Required Feild';
-                          } else {
-                            return null;
-                          }
-                        },
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'Required Feild';
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
                         isExpanded: true,
                         icon: Padding(
                           padding: const EdgeInsets.only(right: 12),
@@ -480,9 +505,11 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                             await addIncomeTransaction();
                           }
                         },
-                        child: const Text(
-                          ' Save ',
-                          style: TextStyle(
+                        child: Text(
+                          widget.modelFromTransation == null
+                              ? ' Save '
+                              : 'Update',
+                          style: const TextStyle(
                             color: AppColor.ftTextSecondayColor,
                           ),
                         ),
@@ -518,7 +545,8 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                               vertical: 10, horizontal: 25),
                         ),
                         onPressed: () {
-                          if (_FormKey.currentState!.validate()) {}
+                          TransactionDB.instance.deleteTransaction(
+                              widget.modelFromTransation!.id!);
                         },
                         child: const Text(
                           'Delete',
@@ -590,21 +618,40 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
     final amount = _amountController.text;
     final parsedAmount = double.tryParse(amount);
 
-    final model = TransactionModel(
-      id: DateTime.now().microsecondsSinceEpoch.toString(),
-      date: DateFormat('yyyy-MM-dd').format(selectedDate),
-      amount: parsedAmount ?? 0.0,
-      account: getAccountTypeFromString(accountType) ?? AccountType.cash,
-      categoryType: selectedCategoryType,
-      category: selectedcategoryModel!,
-      note: note.trim(),
-      image: image?.path,
-    );
+    if (widget.modelFromTransation == null) {
+      final model = TransactionModel(
+        id: DateTime.now().day + DateTime.now().hour + DateTime.now().second,
+        date: DateFormat('yyyy-MM-dd').format(selectedDate),
+        amount: parsedAmount ?? 0.0,
+        account: getAccountTypeFromString(accountType) ?? AccountType.cash,
+        categoryType: selectedCategoryType,
+        category: selectedcategoryModel!,
+        note: note.trim(),
+        image: image?.path,
+      );
 
-    await TransactionDB.instance.addTransaction(model);
+      await TransactionDB.instance.addTransaction(model);
+    } else {
+      print('in side else case');
+      final model = TransactionModel(
+        id: widget.modelFromTransation!.id,
+        date: DateFormat('yyyy-MM-dd').format(selectedDate),
+        amount: parsedAmount ?? 0.0,
+        account: getAccountTypeFromString(accountType) ?? AccountType.cash,
+        categoryType: selectedCategoryType,
+        category: selectedcategoryModel!,
+        note: note.trim(),
+        image: image?.path,
+      );
+
+      await TransactionDB.instance.editTransactionDb(model.id!, model);
+
+      print('in side else case 1');
+    }
+    print('in side else case 2');
     textFeildClear();
 
-    print("$model is printed for verification");
+    // print("$model is printed for verification");
   }
 
   AccountType? getAccountTypeFromString(String? str) {
