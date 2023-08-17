@@ -588,15 +588,28 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       ),
                     )
                   : Center(
-                      child: Container(
-                        height: screenHeight / 2.5,
-                        alignment: Alignment.bottomCenter,
-                        child: const Text(
-                          "No transactions yet !",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.grey,
-                          ),
+                      child: SizedBox(
+                        height: screenHeight / 2,
+                        child: const Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Ionicons.rocket,
+                              color: AppColor.ftTextTertiaryColor,
+                              size: 80,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "No transactions yet !",
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: AppColor.ftTextTertiaryColor,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );

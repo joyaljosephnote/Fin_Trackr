@@ -31,7 +31,6 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       backgroundColor: AppColor.ftScafoldColor,
       appBar: AppBar(
@@ -313,15 +312,28 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
                       ),
                     )
                   : Center(
-                      child: Container(
-                        height: screenHeight / 2.5,
-                        alignment: Alignment.bottomCenter,
-                        child: const Text(
-                          "No transactions yet !",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.grey,
-                          ),
+                      child: SizedBox(
+                        height: screenHeight / 1.5,
+                        child: const Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Ionicons.rocket,
+                              color: AppColor.ftTextTertiaryColor,
+                              size: 80,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "No transactions yet !",
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: AppColor.ftTextTertiaryColor,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );
