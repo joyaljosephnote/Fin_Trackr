@@ -3,6 +3,7 @@ import 'package:fin_trackr/db/functions/currency_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/db/models/category/category_model_db.dart';
 import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
+import 'package:fin_trackr/screens/accounts_screen/balance_calculation.dart';
 import 'package:fin_trackr/screens/transaction_screen/add_transactions/add_transactions_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -168,13 +169,11 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
                               }
                               return previousValue;
                             });
-                            double expenseData = mapList.values.fold(0,
-                                (previousValue, element) {
-                              for (var transaction in element) {
-                                if (transaction.categoryType ==
-                                    CategoryType.expense) {
-                                  previousValue += transaction.amount;
-                                }
+                            double expenseData = calculationList.fold(0,
+                                (previousValue, transaction) {
+                              if (transaction.categoryType ==
+                                  CategoryType.expense) {
+                                previousValue += transaction.amount;
                               }
                               return previousValue;
                             });
@@ -208,6 +207,7 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
                                             Row(
                                               children: [
                                                 Container(
+                                                  width: 65,
                                                   decoration:
                                                       const BoxDecoration(
                                                     color: AppColor
@@ -439,7 +439,7 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
 }
 
 class TransactionsCategory extends StatefulWidget {
-  TransactionsCategory({
+  const TransactionsCategory({
     required this.newList,
     super.key,
   });
@@ -456,6 +456,7 @@ class _TransactionsCategoryState extends State<TransactionsCategory> {
   bool screenExpand = false;
   @override
   Widget build(BuildContext context) {
+    balanceAmount();
     return ListView.builder(
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),

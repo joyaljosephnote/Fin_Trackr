@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, prefer_final_fields
 
 import 'dart:io';
 
@@ -67,13 +67,12 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    TransactionDB.instance.refresh();
+    CategoryDB.instance.getAllCategory();
     getAllAccountGroup();
-    CategoryDB().getAllCategory();
     final double screenWidth = MediaQuery.of(context).size.width;
-
     double fontSize =
         9; // default font size for screen width between 280 and 350
-
     if (screenWidth > 350) {
       fontSize = 16; // increase font size for screen width above 350
     }
@@ -272,13 +271,13 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                             accountType = selectedValue;
                           });
                         },
-                        // validator: (value) {
-                        //   if (value == null || value.isEmpty) {
-                        //     return 'Required Feild';
-                        //   } else {
-                        //     return null;
-                        //   }
-                        // },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Required Feild';
+                          } else {
+                            return null;
+                          }
+                        },
                         isExpanded: true,
                         icon: Padding(
                           padding: const EdgeInsets.only(right: 12),
@@ -386,6 +385,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                     ),
                     Expanded(
                       child: TextFormField(
+                        textCapitalization: TextCapitalization.sentences,
                         keyboardType: TextInputType.text,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -547,6 +547,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                         onPressed: () {
                           TransactionDB.instance.deleteTransaction(
                               widget.modelFromTransation!.id!);
+                          textFeildClear();
                         },
                         child: const Text(
                           'Delete',

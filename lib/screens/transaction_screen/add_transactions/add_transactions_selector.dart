@@ -51,7 +51,7 @@ class _TransactionScreenSelector extends State<TransactionScreenSelector>
 
   @override
   Widget build(BuildContext context) {
-    CategoryDB().getAllCategory();
+    CategoryDB.instance.getAllCategory();
     final double screenWidth = MediaQuery.of(context).size.width;
 
     double fontSize =
@@ -221,8 +221,8 @@ class _TransactionScreenSelector extends State<TransactionScreenSelector>
             controller: _tabController,
             children: [
               AddIncomeScreen(modelFromTransation: widget.model),
-              AddExpenseScreen(),
-              AddTransferScreen(),
+              AddExpenseScreen(modelFromTransation: widget.model),
+              const AddTransferScreen(),
             ],
           ),
         ),

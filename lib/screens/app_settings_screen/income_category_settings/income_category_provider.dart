@@ -1,4 +1,5 @@
 import 'package:fin_trackr/db/functions/category_functions.dart';
+import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/db/models/category/category_model_db.dart';
 
 class IncomeCategoryProvider {
@@ -32,6 +33,7 @@ class IncomeCategoryProvider {
         categoryType: CategoryType.income,
       );
       CategoryDB().addCategory(_incomeCategory);
+      CategoryDB.instance.getAllCategory();
     }
   }
 
@@ -43,6 +45,7 @@ class IncomeCategoryProvider {
         id: "${categoryController.text.trim().toLowerCase()}+${CategoryType.income}",
         isDeleted: false);
     CategoryDB().addCategory(_incomeCategery);
+    CategoryDB().getAllCategory();
     categoryController.clear();
   }
 }

@@ -33,6 +33,7 @@ class ExpenseCategoryProvider {
         categoryType: CategoryType.expense,
       );
       CategoryDB().addCategory(_expenseCategory);
+      CategoryDB.instance.getAllCategory();
     }
   }
 

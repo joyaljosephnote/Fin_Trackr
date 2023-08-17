@@ -1,7 +1,9 @@
 import 'package:fin_trackr/constant/constant.dart';
 // ignore: unused_import
 import 'package:fin_trackr/db/functions/account_group_function.dart';
+import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
+import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/db/models/account_group/account_group_model_db.dart';
 import 'package:fin_trackr/db/models/currency/curency_model.db.dart';
 import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
@@ -36,6 +38,9 @@ Future<void> main() async {
     Hive.registerAdapter(TransactionModelAdapter());
   }
   await addInitialData();
+
+  TransactionDB.instance.refresh();
+  CategoryDB.instance.getAllCategory();
   getAllAccountGroup();
   getCurrency();
   runApp(const MyApp());
