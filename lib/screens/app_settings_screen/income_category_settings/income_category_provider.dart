@@ -1,5 +1,4 @@
 import 'package:fin_trackr/db/functions/category_functions.dart';
-import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/db/models/category/category_model_db.dart';
 
 class IncomeCategoryProvider {

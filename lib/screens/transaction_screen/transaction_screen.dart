@@ -4,7 +4,6 @@ import 'package:fin_trackr/db/functions/currency_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/db/models/category/category_model_db.dart';
 import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
-import 'package:fin_trackr/screens/accounts_screen/accounts_screen.dart';
 import 'package:fin_trackr/screens/accounts_screen/balance_calculation.dart';
 import 'package:fin_trackr/screens/calculator/calculator_screen.dart';
 import 'package:fin_trackr/screens/transaction_screen/all_transaction_screen.dart';
