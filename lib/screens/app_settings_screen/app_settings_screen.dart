@@ -9,10 +9,13 @@ import 'package:fin_trackr/screens/app_settings_screen/contact_us.dart';
 import 'package:fin_trackr/screens/app_settings_screen/currency_selector/currency_selector.dart';
 import 'package:fin_trackr/screens/app_settings_screen/expense_category_settings/expense_category_list_view.dart';
 import 'package:fin_trackr/screens/app_settings_screen/income_category_settings/income_category_list_view.dart';
+import 'package:fin_trackr/screens/welcome_screen/welcome_screen1.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:ionicons/ionicons.dart';
 import 'dart:math' as math;
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSettingsScreen extends StatelessWidget {
   const AppSettingsScreen({super.key});
@@ -371,18 +374,22 @@ class AppSettingsScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () async {
+                SharedPreferences preferences =
+                    await SharedPreferences.getInstance();
+                await preferences.clear();
+                SharedPreferences textcontrol =
+                    await SharedPreferences.getInstance();
+                await textcontrol.clear();
                 final categoryDb =
                     await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
-                categoryDb.clear();
                 final transactionDB =
                     await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
+                categoryDb.clear();
                 transactionDB.clear();
 
-                // final currencyDb =
-                //     await Hive.openBox<CurrencyModel>(CURENCY_DB_NAME);
-                // currencyDb.clear();
                 // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const WelcomeScreenOne()));
               },
               child: const Text(
                 'Yes',

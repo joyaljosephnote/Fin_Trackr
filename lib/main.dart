@@ -7,7 +7,8 @@ import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/db/models/account_group/account_group_model_db.dart';
 import 'package:fin_trackr/db/models/currency/curency_model.db.dart';
 import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
-
+import 'package:fin_trackr/screens/welcome_screen/welcome_screen1.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fin_trackr/screens/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -39,18 +40,26 @@ Future<void> main() async {
   }
   await addInitialData();
 
-  TransactionDB.instance.refresh();
-  CategoryDB.instance.getAllCategory();
-  getAllAccountGroup();
-  getCurrency();
-  runApp(const MyApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    bool hasSeenWelcomeScreen =
+        preferences.getBool('hasSeenWelcomeScreen') ?? false;
+    runApp(MyApp(hasSeenWelcomeScreen));
+  });
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool hasScreenWelcomeScreen;
+  const MyApp(this.hasScreenWelcomeScreen, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    TransactionDB.instance.refresh();
+    CategoryDB.instance.getAllCategory();
+    getAllAccountGroup();
+    getCurrency();
+
     // Disables landscape and portrait mode
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -67,7 +76,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColor.ftScafoldColor),
         useMaterial3: true,
       ),
-      home: const SplashScreen(),
+      builder: (context, child) => MaterialApp(
+        home: hasScreenWelcomeScreen
+            ? const SplashScreen()
+            : const WelcomeScreenOne(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

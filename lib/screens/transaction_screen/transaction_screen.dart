@@ -8,9 +8,9 @@ import 'package:fin_trackr/screens/accounts_screen/balance_calculation.dart';
 import 'package:fin_trackr/screens/calculator/calculator_screen.dart';
 import 'package:fin_trackr/screens/transaction_screen/all_transaction_screen.dart';
 import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:lottie/lottie.dart';
 
 // ignore: must_be_immutable
 class TransactionScreen extends StatefulWidget {
@@ -40,7 +40,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
     double incomeData = 0;
     double expenseData = 0;
 
-    double screenHeight = MediaQuery.of(context).size.height;
     // double balance = incomeData - expenseData;
     return Scaffold(
       backgroundColor: AppColor.ftPrimaryColor,
@@ -589,21 +588,21 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     )
                   : Center(
                       child: SizedBox(
-                        height: screenHeight / 2,
-                        child: const Column(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Ionicons.rocket,
-                              color: AppColor.ftTextTertiaryColor,
-                              size: 80,
+                            const SizedBox(
+                              height: 70,
                             ),
                             SizedBox(
-                              height: 10,
+                              width: 150,
+                              child: Lottie.asset(
+                                'assets/noSearch.json',
+                              ),
                             ),
-                            Text(
-                              "No transactions yet !",
+                            const Text(
+                              "No data available..!",
                               style: TextStyle(
                                 fontSize: 15,
                                 color: AppColor.ftTextTertiaryColor,

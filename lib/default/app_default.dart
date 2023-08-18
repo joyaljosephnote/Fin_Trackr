@@ -10,6 +10,7 @@ class AppDefaultIncomeCategory {
 class AppDefaultExpenseCategory {
   List<String> appDefaultExpenseCategory = [
     'Food',
+    'Bills',
     'Social Life',
     'Transport',
     'Culture',
@@ -19,14 +20,5 @@ class AppDefaultExpenseCategory {
     'Helth',
     'Education',
     'Other',
-  ];
-}
-
-class AppDefaultAccountGroups {
-  List<String> appDefaultAccountGroup = [
-    'Cash',
-    'Accounts',
-    'Savings',
-    'Others',
   ];
 }

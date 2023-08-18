@@ -10,6 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
 import 'dart:io';
 
+import 'package:lottie/lottie.dart';
+
 class ViewAllScreen extends StatefulWidget {
   const ViewAllScreen({super.key});
 
@@ -30,8 +32,8 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.ftScafoldColor,
       appBar: AppBar(
         elevation: 0,
@@ -312,29 +314,29 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
                       ),
                     )
                   : Center(
-                      child: SizedBox(
-                        height: screenHeight / 1.5,
-                        child: const Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Ionicons.rocket,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 120,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                          ),
+                          SizedBox(
+                            width: 180,
+                            child: Lottie.asset(
+                              'assets/nodata.json',
+                            ),
+                          ),
+                          const Text(
+                            "No transactions yet !",
+                            style: TextStyle(
+                              fontSize: 15,
                               color: AppColor.ftTextTertiaryColor,
-                              size: 80,
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "No transactions yet !",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: AppColor.ftTextTertiaryColor,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     );
             },
