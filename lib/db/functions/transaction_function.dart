@@ -76,7 +76,9 @@ class TransactionDB implements TransactionDBFunctions {
                   .toLowerCase()
                   .trim()
                   .contains(text.toLowerCase()))
-          .toList();
+          .toList()
+        ..sort((first, second) => second.date.compareTo(first.date));
+      // ..sort((first, second) => second.id!.compareTo(first.id!));
     } else if (selectedCatogory == 'Expense') {
       filteredList = db.values
           .where((element) =>
@@ -85,21 +87,24 @@ class TransactionDB implements TransactionDBFunctions {
                   .toLowerCase()
                   .trim()
                   .contains(text.toLowerCase()))
-          .toList();
+          .toList()
+        ..sort((first, second) => second.date.compareTo(first.date));
     } else if (selectedCatogory == "All") {
       filteredList = db.values
           .where((element) => element.category.name
               .toLowerCase()
               .trim()
               .contains(text.toLowerCase()))
-          .toList();
+          .toList()
+        ..sort((first, second) => second.date.compareTo(first.date));
     } else {
       filteredList = db.values
           .where((element) => element.category.name
               .toLowerCase()
               .trim()
               .contains(text.toLowerCase()))
-          .toList();
+          .toList()
+        ..sort((first, second) => second.date.compareTo(first.date));
     }
     transactionListNotifier.value.clear();
     transactionListNotifier.value.addAll(filteredList);
@@ -114,7 +119,8 @@ class TransactionDB implements TransactionDBFunctions {
       transactionListNotifier.value.clear();
       transactionListNotifier.value.addAll(transactionDB.values
           .where((element) => element.categoryType == CategoryType.income)
-          .toList());
+          .toList()
+        ..sort((first, second) => second.date.compareTo(first.date)));
       selectedCatogory = "Income";
       // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       transactionListNotifier.notifyListeners();
@@ -124,7 +130,8 @@ class TransactionDB implements TransactionDBFunctions {
       transactionListNotifier.value.clear();
       transactionListNotifier.value.addAll(transactionDB.values
           .where((element) => element.categoryType == CategoryType.expense)
-          .toList());
+          .toList()
+        ..sort((first, second) => second.date.compareTo(first.date)));
       selectedCatogory = "Expense";
 
       // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
@@ -150,7 +157,8 @@ class TransactionDB implements TransactionDBFunctions {
                 DateTime.parse(element.date).day == DateTime.now().day &&
                 DateTime.parse(element.date).month == DateTime.now().month &&
                 DateTime.parse(element.date).year == DateTime.now().year)
-            .toList();
+            .toList()
+          ..sort((first, second) => second.date.compareTo(first.date));
       } else if (selectedCatogory == "Expense") {
         dateFilterList = TransactionDb.values
             .where((element) =>
@@ -158,14 +166,16 @@ class TransactionDB implements TransactionDBFunctions {
                 DateTime.parse(element.date).day == DateTime.now().day &&
                 DateTime.parse(element.date).month == DateTime.now().month &&
                 DateTime.parse(element.date).year == DateTime.now().year)
-            .toList();
+            .toList()
+          ..sort((first, second) => second.date.compareTo(first.date));
       } else {
         dateFilterList = TransactionDb.values
             .where((element) =>
                 DateTime.parse(element.date).day == DateTime.now().day &&
                 DateTime.parse(element.date).month == DateTime.now().month &&
                 DateTime.parse(element.date).year == DateTime.now().year)
-            .toList();
+            .toList()
+          ..sort((first, second) => second.date.compareTo(first.date));
         // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         transactionListNotifier.notifyListeners();
       }
@@ -177,7 +187,8 @@ class TransactionDB implements TransactionDBFunctions {
                 DateTime.parse(element.date).day == DateTime.now().day - 1 &&
                 DateTime.parse(element.date).month == DateTime.now().month &&
                 DateTime.parse(element.date).year == DateTime.now().year)
-            .toList();
+            .toList()
+          ..sort((first, second) => second.date.compareTo(first.date));
       } else if (selectedCatogory == "Expense") {
         dateFilterList = TransactionDb.values
             .where((element) =>
@@ -185,14 +196,16 @@ class TransactionDB implements TransactionDBFunctions {
                 DateTime.parse(element.date).day == DateTime.now().day - 1 &&
                 DateTime.parse(element.date).month == DateTime.now().month &&
                 DateTime.parse(element.date).year == DateTime.now().year)
-            .toList();
+            .toList()
+          ..sort((first, second) => second.date.compareTo(first.date));
       } else {
         dateFilterList = TransactionDb.values
             .where((element) =>
                 DateTime.parse(element.date).day == DateTime.now().day - 1 &&
                 DateTime.parse(element.date).month == DateTime.now().month &&
                 DateTime.parse(element.date).year == DateTime.now().year)
-            .toList();
+            .toList()
+          ..sort((first, second) => second.date.compareTo(first.date));
         // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         transactionListNotifier.notifyListeners();
       }
@@ -206,20 +219,23 @@ class TransactionDB implements TransactionDBFunctions {
                 element.categoryType == CategoryType.income &&
                 DateTime.parse(element.date).isAfter(weekAgo) &&
                 DateTime.parse(element.date).isBefore(today))
-            .toList();
+            .toList()
+          ..sort((first, second) => second.date.compareTo(first.date));
       } else if (selectedCatogory == "Expense") {
         dateFilterList = TransactionDb.values
             .where((element) =>
                 element.categoryType == CategoryType.expense &&
                 DateTime.parse(element.date).isAfter(weekAgo) &&
                 DateTime.parse(element.date).isBefore(today))
-            .toList();
+            .toList()
+          ..sort((first, second) => second.date.compareTo(first.date));
       } else {
         dateFilterList = TransactionDb.values
             .where((element) =>
                 DateTime.parse(element.date).isAfter(weekAgo) &&
                 DateTime.parse(element.date).isBefore(today))
-            .toList();
+            .toList()
+          ..sort((first, second) => second.date.compareTo(first.date));
       }
     } else if (dateRange == 'all') {
       refresh();
@@ -249,7 +265,8 @@ class TransactionDB implements TransactionDBFunctions {
                   const Duration(days: 1),
                 ),
               ))
-          .toList();
+          .toList()
+        ..sort((first, second) => second.date.compareTo(first.date));
     } else if (selectedCatogory == "Expense") {
       dateFilterList = TransactionDb.values
           .where((element) =>
@@ -261,7 +278,8 @@ class TransactionDB implements TransactionDBFunctions {
                   const Duration(days: 1),
                 ),
               ))
-          .toList();
+          .toList()
+        ..sort((first, second) => second.date.compareTo(first.date));
     } else {
       dateFilterList = TransactionDb.values
           .where((element) =>
@@ -280,8 +298,5 @@ class TransactionDB implements TransactionDBFunctions {
     transactionListNotifier.value = dateFilterList;
     // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     transactionListNotifier.notifyListeners();
-    print("$dateFilterList print from db");
-    print("$start print from db");
-    print("$end print from db");
   }
 }

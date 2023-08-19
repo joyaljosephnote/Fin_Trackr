@@ -39,7 +39,7 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
         elevation: 0,
         backgroundColor: AppColor.ftScafoldColor,
         title: const Text(
-          'Transactions',
+          'All Transactions',
           style: TextStyle(fontSize: 18),
         ),
         actions: [
@@ -50,15 +50,9 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
               },
               icon: const Icon(Icons.sort_rounded)),
           IconButton(
-              alignment: Alignment.centerRight,
-              onPressed: () {
-                showPopupMenu2();
-              },
-              icon: const Icon(Icons.candlestick_chart_outlined)),
-          IconButton(
               alignment: Alignment.centerLeft,
               onPressed: () {
-                showPopupMenu3(context);
+                showPopupMenu2();
               },
               icon: const Icon(Ionicons.calendar_outline, size: 22)),
         ],
@@ -453,26 +447,32 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
                   fontWeight: FontWeight.bold,
                   color: AppColor.ftTextSecondayColor),
             )),
+        PopupMenuItem(
+            onTap: () async {
+              var daterange = DateTimeRange(
+                start: DateTime(DateTime.now().year, DateTime.now().month,
+                    DateTime.now().day - 7),
+                end: DateTime(DateTime.now().year, DateTime.now().month,
+                    DateTime.now().day),
+              );
+              DateTimeRange? picked = await showDateRangePicker(
+                  context: context,
+                  firstDate: DateTime(DateTime.now().year - 1),
+                  lastDate: DateTime.now(),
+                  initialDateRange: daterange);
+              if (picked != null) {
+                TransactionDB.instance.filterByDate(picked.start, picked.end);
+              }
+            },
+            child: const Text(
+              'Custom Date',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.ftTextSecondayColor),
+            )),
       ],
       elevation: 8.0,
     );
-  }
-
-  void showPopupMenu3(ctx) async {
-    var daterange = DateTimeRange(
-      start: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day - 7),
-      end: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day),
-    );
-    DateTimeRange? picked = await showDateRangePicker(
-        context: context,
-        firstDate: DateTime(DateTime.now().year - 1),
-        lastDate: DateTime.now(),
-        initialDateRange: daterange);
-    if (picked != null) {
-      TransactionDB.instance.filterByDate(picked.start, picked.end);
-    }
   }
 }
 
