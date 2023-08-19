@@ -22,15 +22,29 @@ class TransactionScreen extends StatefulWidget {
 
 class _TransactionScreenState extends State<TransactionScreen> {
   NumberFormat formatter = NumberFormat('#,##0.00');
-  DateTime selectedDate = DateTime.now();
+  DateTimeRange selectedDate = DateTimeRange(
+    start: DateTime(DateTime.now().year, DateTime.now().month),
+    end: DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    ),
+  );
   @override
   void initState() {
+    TransactionDB.instance.refresh();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    TransactionDB.instance.refresh();
+    final double screenWidth = MediaQuery.of(context).size.width;
+    double fontSize = 13;
+    if (screenWidth > 350) {
+      fontSize = 16;
+    }
+    // TransactionDB.instance.getTransactionsForCurrentMonth();
+    // TransactionDB.instance.refresh();
     CategoryDB.instance.getAllCategory();
 
     balanceAmount();
@@ -57,36 +71,51 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   onPressed: () {
                     setState(
                       () {
-                        selectedDate = DateTime(
-                            selectedDate.year, selectedDate.month - 1, 1);
+                        selectedDate = DateTimeRange(
+                          start: DateTime(
+                              DateTime.now().year, DateTime.now().month - 1, 1),
+                          end: DateTime(
+                              DateTime.now().year, DateTime.now().month, 0),
+                        );
                       },
                     );
+                    TransactionDB.instance
+                        .filterForHome(selectedDate.start, selectedDate.end);
+                    TransactionDB.instance.getTransactionsForCurrentMonth();
                   },
                 ),
                 SizedBox(
-                  width: 95,
+                  // width: 100,
                   child: TextButton(
                     onPressed: () async {
-                      // ignore: unused_local_variable, no_leading_underscores_for_local_identifiers
-                      final DateTime? date = await showDatePicker(
-                        context: context,
-                        initialDate: selectedDate,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
+                      var daterange = DateTimeRange(
+                        start:
+                            DateTime(DateTime.now().year, DateTime.now().month),
+                        end: DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                        ),
                       );
-
-                      if (date != null && date != selectedDate) {
-                        setState(
-                          () {
-                            selectedDate = date;
-                          },
-                        );
+                      DateTimeRange? picked = await showDateRangePicker(
+                          context: context,
+                          firstDate: DateTime(DateTime.now().year - 1),
+                          lastDate: DateTime.now(),
+                          initialDateRange: daterange);
+                      if (picked != null) {
+                        TransactionDB.instance
+                            .filterForHome(picked.start, picked.end);
+                        setState(() {
+                          selectedDate = picked;
+                        });
                       }
+                      // TransactionDB.instance.refresh();
+                      TransactionDB.instance.getTransactionsForCurrentMonth();
                     },
                     child: Text(
-                      DateFormat('MMM  yyyy').format(selectedDate),
-                      style: const TextStyle(
-                          fontSize: 16,
+                      "${DateFormat('dd MMM').format(selectedDate.start)} - ${DateFormat('dd MMM').format(selectedDate.end)}",
+                      style: TextStyle(
+                          fontSize: fontSize,
                           fontWeight: FontWeight.bold,
                           color: AppColor.ftTextSecondayColor),
                     ),
@@ -99,10 +128,15 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   onPressed: () {
                     setState(
                       () {
-                        selectedDate = DateTime(
-                            selectedDate.year, selectedDate.month + 1, 1);
+                        selectedDate = DateTimeRange(
+                          start: DateTime(
+                              DateTime.now().year, DateTime.now().month, 1),
+                          end: DateTime(
+                              DateTime.now().year, DateTime.now().month + 1, 0),
+                        );
                       },
                     );
+                    TransactionDB.instance.refresh();
                   },
                 ),
               ],
@@ -370,7 +404,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
           ),
           // ----------------------------------- Transaction History ----------------------------------------
           ValueListenableBuilder(
-            valueListenable: TransactionDB.instance.transactionListNotifier,
+            valueListenable:
+                TransactionDB.instance.transactionMonthListNotifier,
             builder: (context, newList, child) {
               Map<String, List<TransactionModel>> mapList = sortByDate(newList);
               List<String> keys = mapList.keys.toList();
@@ -552,26 +587,22 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       ),
                     )
                   : Center(
-                      child: SizedBox(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              height: 70,
-                            ),
-                            SizedBox(
-                              width: 150,
-                              child: Lottie.asset('assets/noSearch.json'),
-                            ),
-                            const Text(
-                              "No data available..!",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: AppColor.ftTextTertiaryColor),
-                            ),
-                          ],
-                        ),
+                      child: Column(
+                        children: [
+                          // const SizedBox(
+                          //   height: 60,
+                          // ),
+                          SizedBox(
+                            width: 150,
+                            child: Lottie.asset('assets/noSearch.json'),
+                          ),
+                          const Text(
+                            "No data available..!",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: AppColor.ftTextTertiaryColor),
+                          ),
+                        ],
                       ),
                     );
             },

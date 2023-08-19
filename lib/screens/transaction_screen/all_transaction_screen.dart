@@ -8,7 +8,6 @@ import 'package:fin_trackr/screens/transaction_screen/add_transactions/add_trans
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:flutter/src/material/date_picker.dart';
 import 'dart:io';
 import 'package:lottie/lottie.dart';
 

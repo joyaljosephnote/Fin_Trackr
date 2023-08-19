@@ -23,6 +23,8 @@ class TransactionDB implements TransactionDBFunctions {
 
   ValueNotifier<List<TransactionModel>> transactionListNotifier =
       ValueNotifier([]);
+  ValueNotifier<List<TransactionModel>> transactionMonthListNotifier =
+      ValueNotifier([]);
   String? selectedCatogory;
 
   @override
@@ -32,13 +34,50 @@ class TransactionDB implements TransactionDBFunctions {
     await transactionDB.put(value.id, value);
   }
 
+  // Future<void> refresh() async {
+  //   final list = await getAllTransactions();
+  //   list.sort((first, second) => second.date.compareTo(first.date));
+  //   final listForMonth = await getAllTransactions();
+  //   listForMonth.sort((first, second) => second.date.compareTo(first.date));
+  //   transactionListNotifier.value.clear();
+  //   transactionMonthListNotifier.value.clear();
+  //   transactionListNotifier.value.addAll(list);
+  //   transactionMonthListNotifier.value.addAll(listForMonth);
+  //   // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+  //   transactionListNotifier.notifyListeners();
+  //   // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+  //   transactionMonthListNotifier.notifyListeners();
+  // }
+
   Future<void> refresh() async {
     final list = await getAllTransactions();
     list.sort((first, second) => second.date.compareTo(first.date));
+    final listForMonth = await getTransactionsForCurrentMonth();
+    listForMonth.sort((first, second) => second.date.compareTo(first.date));
     transactionListNotifier.value.clear();
+    transactionMonthListNotifier.value.clear();
     transactionListNotifier.value.addAll(list);
+    transactionMonthListNotifier.value.addAll(listForMonth);
     // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     transactionListNotifier.notifyListeners();
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+    transactionMonthListNotifier.notifyListeners();
+  }
+
+  Future<List<TransactionModel>> getTransactionsForCurrentMonth() async {
+    final now = DateTime.now();
+    final startOfMonth = DateTime(now.year, now.month, 1);
+    final endOfMonth = DateTime(now.year, now.month + 1, 0);
+
+    // Step 4: Use Hive queries instead of SQLite queries
+    final box = Hive.box<TransactionModel>(TRANSACTION_DB_NAME);
+    final results = box.values.where((trxn) =>
+        DateTime.parse(trxn.date)
+            .isAfter(startOfMonth.subtract(const Duration(days: 1))) &&
+        DateTime.parse(trxn.date)
+            .isBefore(endOfMonth.add(const Duration(days: 1))));
+
+    return results.toList();
   }
 
   @override
@@ -298,5 +337,57 @@ class TransactionDB implements TransactionDBFunctions {
     transactionListNotifier.value = dateFilterList;
     // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     transactionListNotifier.notifyListeners();
+  }
+
+  Future<void> filterForHome(DateTime start, DateTime end) async {
+    // ignore: non_constant_identifier_names
+    final TransactionDb =
+        await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
+    List<TransactionModel> dateFilterList = [];
+
+    if (selectedCatogory == "Income") {
+      dateFilterList = TransactionDb.values
+          .where((element) =>
+              element.categoryType == CategoryType.income &&
+              DateTime.parse(element.date)
+                  .isAfter(start.subtract(const Duration(days: 1))) &&
+              DateTime.parse(element.date).isBefore(
+                end.add(
+                  const Duration(days: 1),
+                ),
+              ))
+          .toList()
+        ..sort((first, second) => second.date.compareTo(first.date));
+    } else if (selectedCatogory == "Expense") {
+      dateFilterList = TransactionDb.values
+          .where((element) =>
+              element.categoryType == CategoryType.expense &&
+              DateTime.parse(element.date)
+                  .isAfter(start.subtract(const Duration(days: 1))) &&
+              DateTime.parse(element.date).isBefore(
+                end.add(
+                  const Duration(days: 1),
+                ),
+              ))
+          .toList()
+        ..sort((first, second) => second.date.compareTo(first.date));
+    } else {
+      dateFilterList = TransactionDb.values
+          .where((element) =>
+              DateTime.parse(element.date)
+                  .isAfter(start.subtract(const Duration(days: 1))) &&
+              DateTime.parse(element.date).isBefore(
+                end.add(
+                  const Duration(days: 1),
+                ),
+              ))
+          .toList()
+        ..sort((first, second) => second.date.compareTo(first.date));
+    }
+
+    transactionMonthListNotifier.value.clear();
+    transactionMonthListNotifier.value = dateFilterList;
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+    transactionMonthListNotifier.notifyListeners();
   }
 }

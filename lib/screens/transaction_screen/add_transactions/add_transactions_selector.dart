@@ -14,7 +14,7 @@ import 'package:ionicons/ionicons.dart';
 final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
 
 class TransactionScreenSelector extends StatefulWidget {
-  TransactionScreenSelector({super.key, this.tabIndex, this.model});
+  const TransactionScreenSelector({super.key, this.tabIndex, this.model});
 
   @override
   State<TransactionScreenSelector> createState() =>
