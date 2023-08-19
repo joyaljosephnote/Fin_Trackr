@@ -8,8 +8,8 @@ import 'package:fin_trackr/screens/transaction_screen/add_transactions/add_trans
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:flutter/src/material/date_picker.dart';
 import 'dart:io';
-
 import 'package:lottie/lottie.dart';
 
 class ViewAllScreen extends StatefulWidget {
@@ -39,19 +39,26 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
         elevation: 0,
         backgroundColor: AppColor.ftScafoldColor,
         title: const Text(
-          'All Transactions',
+          'Transactions',
           style: TextStyle(fontSize: 18),
         ),
         actions: [
           IconButton(
+              alignment: Alignment.centerRight,
               onPressed: () {
                 showPopupMenu1();
               },
               icon: const Icon(Icons.sort_rounded)),
           IconButton(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.centerRight,
               onPressed: () {
                 showPopupMenu2();
+              },
+              icon: const Icon(Icons.candlestick_chart_outlined)),
+          IconButton(
+              alignment: Alignment.centerLeft,
+              onPressed: () {
+                showPopupMenu3(context);
               },
               icon: const Icon(Ionicons.calendar_outline, size: 22)),
         ],
@@ -449,6 +456,23 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
       ],
       elevation: 8.0,
     );
+  }
+
+  void showPopupMenu3(ctx) async {
+    var daterange = DateTimeRange(
+      start: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day - 7),
+      end: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day),
+    );
+    DateTimeRange? picked = await showDateRangePicker(
+        context: context,
+        firstDate: DateTime(DateTime.now().year - 1),
+        lastDate: DateTime.now(),
+        initialDateRange: daterange);
+    if (picked != null) {
+      TransactionDB.instance.filterByDate(picked.start, picked.end);
+    }
   }
 }
 

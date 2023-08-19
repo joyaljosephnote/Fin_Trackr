@@ -69,6 +69,7 @@ class MyApp extends StatelessWidget {
       title: 'FinTrackr',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        appBarTheme: const AppBarTheme(color: AppColor.ftScafoldColor),
         splashFactory: NoSplash.splashFactory,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,

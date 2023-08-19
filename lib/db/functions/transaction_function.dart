@@ -231,4 +231,57 @@ class TransactionDB implements TransactionDBFunctions {
     // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     transactionListNotifier.notifyListeners();
   }
+
+  Future<void> filterByDate(DateTime start, DateTime end) async {
+    // ignore: non_constant_identifier_names
+    final TransactionDb =
+        await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
+    List<TransactionModel> dateFilterList = [];
+
+    if (selectedCatogory == "Income") {
+      dateFilterList = TransactionDb.values
+          .where((element) =>
+              element.categoryType == CategoryType.income &&
+              DateTime.parse(element.date)
+                  .isAfter(start.subtract(const Duration(days: 1))) &&
+              DateTime.parse(element.date).isBefore(
+                end.add(
+                  const Duration(days: 1),
+                ),
+              ))
+          .toList();
+    } else if (selectedCatogory == "Expense") {
+      dateFilterList = TransactionDb.values
+          .where((element) =>
+              element.categoryType == CategoryType.expense &&
+              DateTime.parse(element.date)
+                  .isAfter(start.subtract(const Duration(days: 1))) &&
+              DateTime.parse(element.date).isBefore(
+                end.add(
+                  const Duration(days: 1),
+                ),
+              ))
+          .toList();
+    } else {
+      dateFilterList = TransactionDb.values
+          .where((element) =>
+              DateTime.parse(element.date)
+                  .isAfter(start.subtract(const Duration(days: 1))) &&
+              DateTime.parse(element.date).isBefore(
+                end.add(
+                  const Duration(days: 1),
+                ),
+              ))
+          .toList()
+        ..sort((first, second) => second.date.compareTo(first.date));
+    }
+
+    transactionListNotifier.value.clear();
+    transactionListNotifier.value = dateFilterList;
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+    transactionListNotifier.notifyListeners();
+    print("$dateFilterList print from db");
+    print("$start print from db");
+    print("$end print from db");
+  }
 }
