@@ -23,7 +23,7 @@ class IntroPageTwo extends StatelessWidget {
                     height: 100,
                   ),
                   Container(
-                    child: Lottie.asset('assets/statistics.json', width: 400),
+                    child: Lottie.asset('assets/statistics.json', width: 300),
                   ),
                   const SizedBox(
                     height: 50,
@@ -47,7 +47,7 @@ class IntroPageTwo extends StatelessWidget {
                               ),
                               TextSpan(
                                 text:
-                                    'Get future predictions & informative statistics based on your behaviour.\n\nAlways make better & informed decisions with your money!',
+                                    'Get future predictions & informative statistics based on your behaviour.\nAlways make better & informed decisions with your money!',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: AppColor.ftTextSecondayColor,

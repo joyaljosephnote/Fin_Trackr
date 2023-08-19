@@ -18,10 +18,10 @@ class IntroPageThree extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(
-                  height: 20,
+                  height: 60,
                 ),
                 Container(
-                  child: Lottie.asset('assets/privacy.json', width: 400),
+                  child: Lottie.asset('assets/privacy.json', width: 300),
                 ),
                 const SizedBox(
                   height: 20,
@@ -47,7 +47,7 @@ class IntroPageThree extends StatelessWidget {
                               ),
                               TextSpan(
                                 text:
-                                    'Your financial data never reaches our servers!\n\nOur commitment to upholding user privacy remains unwavering and resolute.',
+                                    'Your financial data never reaches our servers!\nOur commitment to upholding user privacy remains unwavering and resolute.',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: AppColor.ftTextSecondayColor,

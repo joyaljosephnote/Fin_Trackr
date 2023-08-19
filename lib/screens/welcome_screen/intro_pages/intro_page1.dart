@@ -63,7 +63,7 @@ class IntroPageOne extends StatelessWidget {
                             ),
                             TextSpan(
                               text:
-                                  ' App. \n\nEmpower yourself to track, manage, and achieve your financial goals like never before.',
+                                  ' App. \nEmpower yourself to track, manage, and achieve your financial goals like never before.',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: AppColor.ftTextSecondayColor,
