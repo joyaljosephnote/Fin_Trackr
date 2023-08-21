@@ -1,5 +1,6 @@
 import 'package:fin_trackr/constant/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:clipboard/clipboard.dart';
 // import 'package:google_fonts/google_fonts.dart';
 import 'package:math_expressions/math_expressions.dart';
 
@@ -46,12 +47,18 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           'Calculator',
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            // fontFamily: GoogleFonts.monda().fontFamily,
             color: AppColor.ftTextSecondayColor,
             fontSize: 18,
           ),
         ),
         elevation: 0,
+        actions: [
+          IconButton(
+              onPressed: () {
+                FlutterClipboard.copy(result);
+              },
+              icon: const Icon(Icons.copy_all_outlined))
+        ],
       ),
       backgroundColor: AppColor.ftScafoldColor,
       body: Align(
@@ -71,7 +78,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       userInput,
                       style: const TextStyle(
                         fontSize: 20,
-                        // fontFamily: GoogleFonts.monda().fontFamily,
                         color: AppColor.ftTextSecondayColor,
                       ),
                     ),
@@ -83,7 +89,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       result,
                       style: const TextStyle(
                           fontSize: 30,
-                          // fontFamily: GoogleFonts.monda().fontFamily,
                           color: AppColor.ftTextSecondayColor,
                           fontWeight: FontWeight.bold),
                     ),
@@ -152,7 +157,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             style: TextStyle(
               color: getColor(text),
               fontSize: 24,
-              // fontFamily: GoogleFonts.monda().fontFamily,
               fontWeight: FontWeight.bold,
             ),
           ),

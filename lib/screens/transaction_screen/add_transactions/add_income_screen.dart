@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:clipboard/clipboard.dart';
 import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
@@ -28,7 +29,6 @@ class AddIncomeScreen extends StatefulWidget {
 
 class _AddIncomeScreenState extends State<AddIncomeScreen> {
   DateTime selectedDate = DateTime.now();
-
   TextEditingController _amountController = TextEditingController();
   String? _categoryID;
   CategoryType selectedCategoryType = CategoryType.income;
@@ -44,23 +44,22 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
   @override
   void initState() {
     if (widget.modelFromTransation != null) {
-      // String accountTypeFromTransaction = '';
-      // if (widget.modelFromTransation!.account == AccountType.account) {
-      //   accountTypeFromTransaction = 'Account';
-      // } else if (widget.modelFromTransation!.account == AccountType.cash) {
-      //   accountTypeFromTransaction = 'Cash';
-      // }
-
-      // setState(() {
+      String categoryFromTransaction =
+          widget.modelFromTransation!.category.id.toString();
+      String accountTypeFromTransaction = '';
+      if (widget.modelFromTransation!.account == AccountType.account) {
+        accountTypeFromTransaction = 'account';
+      } else if (widget.modelFromTransation!.account == AccountType.cash) {
+        accountTypeFromTransaction = 'cash';
+      }
       selectedDate = DateTime.parse(widget.modelFromTransation!.date);
       _amountController.text = widget.modelFromTransation!.amount.toString();
-
-      // accountType = accountTypeFromTransaction;
+      accountType = accountTypeFromTransaction;
+      _categoryID = categoryFromTransaction;
       _noteController.text = widget.modelFromTransation!.note;
       if (widget.modelFromTransation!.image != null) {
         image = File(widget.modelFromTransation!.image!);
       }
-      // });
     }
     super.initState();
   }
@@ -105,7 +104,6 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                     ),
                     Expanded(
                       child: TextFormField(
-                        // keyboardType: ,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Enter Date';
@@ -113,7 +111,6 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                             return null;
                           }
                         },
-
                         cursorColor: AppColor.ftTextSecondayColor,
                         style: const TextStyle(
                           color: AppColor.ftTextSecondayColor,
@@ -206,15 +203,27 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                           color: AppColor.ftTextSecondayColor,
                         ),
                         decoration: InputDecoration(
-                          prefixText: "${currencySymboleUpdate.value} ",
-                          prefixStyle: const TextStyle(
-                              color: AppColor.ftTextSecondayColor),
-                          enabledBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColor.ftTabBarSelectorColor,
+                            prefixText: "${currencySymboleUpdate.value} ",
+                            prefixStyle: const TextStyle(
+                                color: AppColor.ftTextSecondayColor),
+                            enabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColor.ftTabBarSelectorColor,
+                              ),
                             ),
-                          ),
-                        ),
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  FlutterClipboard.paste().then((value) {
+                                    setState(() {
+                                      _amountController.text = value;
+                                    });
+                                  });
+                                },
+                                icon: const Icon(
+                                  Ionicons.clipboard_outline,
+                                  size: 20,
+                                  color: AppColor.ftTabBarSelectorColor,
+                                ))),
                         readOnly: false,
                       ),
                     ),

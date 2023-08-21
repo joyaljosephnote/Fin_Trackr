@@ -1,5 +1,7 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:fin_trackr/constant/constant.dart';
-
+import 'package:fin_trackr/db/functions/account_group_function.dart';
+import 'package:fin_trackr/db/functions/currency_function.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -17,6 +19,8 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
   final _accountFromController = TextEditingController();
   final _accountToController = TextEditingController();
   final _noteController = TextEditingController();
+  String? _accountFrom;
+  String? _accountTo;
 
   // ignore: non_constant_identifier_names
   final _FormKey = GlobalKey<FormState>();
@@ -59,7 +63,6 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                   ),
                   Expanded(
                     child: TextFormField(
-                      // keyboardType: ,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Enter Date';
@@ -67,7 +70,6 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                           return null;
                         }
                       },
-
                       cursorColor: AppColor.ftTextSecondayColor,
                       style: const TextStyle(
                         color: AppColor.ftTextSecondayColor,
@@ -160,13 +162,28 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                       style: const TextStyle(
                         color: AppColor.ftTextSecondayColor,
                       ),
-                      decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColor.ftTabBarSelectorColor,
+                      decoration: InputDecoration(
+                          prefixText: "${currencySymboleUpdate.value} ",
+                          prefixStyle: const TextStyle(
+                              color: AppColor.ftTextSecondayColor),
+                          enabledBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: AppColor.ftTabBarSelectorColor,
+                            ),
                           ),
-                        ),
-                      ),
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                FlutterClipboard.paste().then((value) {
+                                  setState(() {
+                                    _amountController.text = value;
+                                  });
+                                });
+                              },
+                              icon: const Icon(
+                                Ionicons.clipboard_outline,
+                                size: 20,
+                                color: AppColor.ftTabBarSelectorColor,
+                              ))),
                       readOnly: false,
                     ),
                   ),
@@ -187,20 +204,12 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                     ),
                   ),
                   Expanded(
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Required Feild';
-                        } else {
-                          return null;
-                        }
-                      },
-                      controller: _accountFromController,
-                      cursorColor: AppColor.ftTextSecondayColor,
-                      style: const TextStyle(
-                        color: AppColor.ftTextSecondayColor,
-                      ),
+                      child: Theme(
+                    data: Theme.of(context).copyWith(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                    ),
+                    child: DropdownButtonFormField<String>(
                       decoration: const InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -208,9 +217,47 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                           ),
                         ),
                       ),
-                      readOnly: false,
+                      hint: const Text(
+                        'Select account type',
+                        style: TextStyle(color: Colors.transparent),
+                      ),
+                      value: _accountFrom,
+                      items: accountGroupNotifier.value
+                          .map((e) => DropdownMenuItem(
+                                value: e.id,
+                                child: Text(
+                                  e.name,
+                                  style: const TextStyle(
+                                    color: AppColor.ftTextSecondayColor,
+                                  ),
+                                ),
+                                onTap: () {},
+                              ))
+                          .toList(),
+                      onChanged: (selectedValue) {
+                        setState(() {
+                          _accountFrom = selectedValue;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required Feild';
+                        } else {
+                          return null;
+                        }
+                      },
+                      isExpanded: true,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: const Icon(Icons.arrow_drop_down,
+                              color: AppColor.ftTabBarSelectorColor),
+                        ),
+                      ),
+                      dropdownColor: AppColor.ftAppBarColor,
                     ),
-                  ),
+                  )),
                 ],
               ),
               Row(
@@ -228,20 +275,12 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                     ),
                   ),
                   Expanded(
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Required Feild';
-                        } else {
-                          return null;
-                        }
-                      },
-                      controller: _accountToController,
-                      cursorColor: AppColor.ftTextSecondayColor,
-                      style: const TextStyle(
-                        color: AppColor.ftTextSecondayColor,
-                      ),
+                      child: Theme(
+                    data: Theme.of(context).copyWith(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                    ),
+                    child: DropdownButtonFormField<String>(
                       decoration: const InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -249,9 +288,47 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                           ),
                         ),
                       ),
-                      readOnly: false,
+                      hint: const Text(
+                        'Select account type',
+                        style: TextStyle(color: Colors.transparent),
+                      ),
+                      value: _accountTo,
+                      items: accountGroupNotifier.value
+                          .map((e) => DropdownMenuItem(
+                                value: e.id,
+                                child: Text(
+                                  e.name,
+                                  style: const TextStyle(
+                                    color: AppColor.ftTextSecondayColor,
+                                  ),
+                                ),
+                                onTap: () {},
+                              ))
+                          .toList(),
+                      onChanged: (selectedValue) {
+                        setState(() {
+                          _accountTo = selectedValue;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required Feild';
+                        } else {
+                          return null;
+                        }
+                      },
+                      isExpanded: true,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: const Icon(Icons.arrow_drop_down,
+                              color: AppColor.ftTabBarSelectorColor),
+                        ),
+                      ),
+                      dropdownColor: AppColor.ftAppBarColor,
                     ),
-                  ),
+                  )),
                 ],
               ),
               Row(
@@ -298,7 +375,7 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -337,29 +414,6 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                       },
                       child: const Text(
                         'Clear ',
-                        style: TextStyle(
-                          color: AppColor.ftTextSecondayColor,
-                        ),
-                      ),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.ftTransactionColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        textStyle: TextStyle(fontSize: fontSize),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 25),
-                      ),
-                      onPressed: () {
-                        // if (_formKey.currentState!.validate()) {
-                        //   addMoneyProLF.addAmountButtonClicked(context: context);
-                        //   addMoneyProLF.clearField();
-                        // }
-                      },
-                      child: const Text(
-                        'Delete',
                         style: TextStyle(
                           color: AppColor.ftTextSecondayColor,
                         ),

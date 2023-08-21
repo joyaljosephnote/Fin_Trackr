@@ -63,6 +63,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
         title: Row(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
                   alignment: Alignment.centerRight,
@@ -84,41 +85,38 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     TransactionDB.instance.getTransactionsForCurrentMonth();
                   },
                 ),
-                SizedBox(
-                  // width: 100,
-                  child: TextButton(
-                    onPressed: () async {
-                      var daterange = DateTimeRange(
-                        start:
-                            DateTime(DateTime.now().year, DateTime.now().month),
-                        end: DateTime(
-                          DateTime.now().year,
-                          DateTime.now().month,
-                          DateTime.now().day,
-                        ),
-                      );
-                      DateTimeRange? picked = await showDateRangePicker(
-                          context: context,
-                          firstDate: DateTime(DateTime.now().year - 1),
-                          lastDate: DateTime.now(),
-                          initialDateRange: daterange);
-                      if (picked != null) {
-                        TransactionDB.instance
-                            .filterForHome(picked.start, picked.end);
-                        setState(() {
-                          selectedDate = picked;
-                        });
-                      }
-                      // TransactionDB.instance.refresh();
-                      TransactionDB.instance.getTransactionsForCurrentMonth();
-                    },
-                    child: Text(
-                      "${DateFormat('dd MMM').format(selectedDate.start)} - ${DateFormat('dd MMM').format(selectedDate.end)}",
-                      style: TextStyle(
-                          fontSize: fontSize,
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.ftTextSecondayColor),
-                    ),
+                TextButton(
+                  onPressed: () async {
+                    var daterange = DateTimeRange(
+                      start:
+                          DateTime(DateTime.now().year, DateTime.now().month),
+                      end: DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                      ),
+                    );
+                    DateTimeRange? picked = await showDateRangePicker(
+                        context: context,
+                        firstDate: DateTime(DateTime.now().year - 1),
+                        lastDate: DateTime.now(),
+                        initialDateRange: daterange);
+                    if (picked != null) {
+                      TransactionDB.instance
+                          .filterForHome(picked.start, picked.end);
+                      setState(() {
+                        selectedDate = picked;
+                      });
+                    }
+                    // TransactionDB.instance.refresh();
+                    TransactionDB.instance.getTransactionsForCurrentMonth();
+                  },
+                  child: Text(
+                    "${DateFormat('dd MMM').format(selectedDate.start)} - ${DateFormat('dd MMM').format(selectedDate.end)}",
+                    style: TextStyle(
+                        fontSize: fontSize,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.ftTextSecondayColor),
                   ),
                 ),
                 IconButton(
