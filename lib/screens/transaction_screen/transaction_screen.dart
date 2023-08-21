@@ -43,7 +43,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
     if (screenWidth > 350) {
       fontSize = 16;
     }
-    // TransactionDB.instance.getTransactionsForCurrentMonth();
+    TransactionDB.instance.getTransactionsForCurrentMonth();
     // TransactionDB.instance.refresh();
     CategoryDB.instance.getAllCategory();
 
@@ -408,6 +408,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 TransactionDB.instance.transactionMonthListNotifier,
             builder: (context, newList, child) {
               Map<String, List<TransactionModel>> mapList = sortByDate(newList);
+              if (mapList.isEmpty) {
+                incomeData = 0;
+                expenseData = 0;
+              }
               List<String> keys = mapList.keys.toList();
               return keys.isNotEmpty
                   ? Expanded(

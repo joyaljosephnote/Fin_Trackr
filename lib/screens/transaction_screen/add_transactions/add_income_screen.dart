@@ -132,10 +132,10 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                                   final DateTime? date = await showDatePicker(
                                     context: context,
                                     initialDate: selectedDate,
-                                    firstDate: DateTime(2000),
-                                    lastDate: DateTime(2100),
+                                    firstDate: DateTime.now()
+                                        .subtract(const Duration(days: 90)),
+                                    lastDate: DateTime.now(),
                                   );
-
                                   if (date != null && date != selectedDate) {
                                     setState(
                                       () {
@@ -162,9 +162,8 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                             context: context,
                             initialDate: selectedDate,
                             firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
+                            lastDate: DateTime.now(),
                           );
-
                           if (date != null && date != selectedDate) {
                             setState(
                               () {
@@ -545,9 +544,9 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                               vertical: 10, horizontal: 25),
                         ),
                         onPressed: () {
-                          TransactionDB.instance.deleteTransaction(
-                              widget.modelFromTransation!.id!);
-                          textFeildClear();
+                          if (widget.modelFromTransation != null) {
+                            deleteTransaction();
+                          }
                         },
                         child: const Text(
                           'Delete',
@@ -664,5 +663,57 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
       default:
         return AccountType.cash;
     }
+  }
+
+  deleteTransaction() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          backgroundColor: AppColor.ftWaveColor,
+          content: const Text(
+              'All the related datas will be cleared from the database!'),
+          title: const Text(
+            'Do you want to delete?',
+            style: TextStyle(
+              color: AppColor.ftTextQuaternaryColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                TransactionDB.instance
+                    .deleteTransaction(widget.modelFromTransation!.id!);
+                textFeildClear();
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'Yes',
+                style: TextStyle(
+                  color: AppColor.ftTextQuaternaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'No',
+                style: TextStyle(
+                  color: AppColor.ftTextQuaternaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

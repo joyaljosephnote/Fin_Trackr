@@ -344,16 +344,6 @@ class AppSettingsScreen extends StatelessWidget {
     );
   }
 
-  // signOut(BuildContext ctx) async {
-  //   final sharedPrefs = await SharedPreferences.getInstance();
-  //   await sharedPrefs.clear();
-  //   await TransactionDB().resetAll();
-  //   // ignore: use_build_context_synchronously
-  //   Navigator.of(ctx).pushAndRemoveUntil(
-  //       MaterialPageRoute(builder: (ctx1) => const SplashScreen()),
-  //       (route) => false);
-  // }
-
   resetApp(value) {
     showDialog(
       context: value,

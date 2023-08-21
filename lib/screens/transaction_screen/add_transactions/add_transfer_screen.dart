@@ -86,10 +86,10 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                                 final DateTime? date = await showDatePicker(
                                   context: context,
                                   initialDate: selectedDate,
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
+                                  firstDate: DateTime.now()
+                                      .subtract(const Duration(days: 30)),
+                                  lastDate: DateTime.now(),
                                 );
-
                                 if (date != null && date != selectedDate) {
                                   setState(
                                     () {
@@ -116,7 +116,7 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                           context: context,
                           initialDate: selectedDate,
                           firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
+                          lastDate: DateTime.now(),
                         );
 
                         if (date != null && date != selectedDate) {
