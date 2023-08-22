@@ -3,6 +3,7 @@ import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
+import 'package:fin_trackr/db/functions/statistics_cart_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/db/models/account_group/account_group_model_db.dart';
 import 'package:fin_trackr/db/models/currency/curency_model.db.dart';
@@ -59,6 +60,7 @@ class MyApp extends StatelessWidget {
     CategoryDB.instance.getAllCategory();
     getAllAccountGroup();
     getCurrency();
+    filterFunction();
 
     // Disables landscape and portrait mode
     SystemChrome.setPreferredOrientations([

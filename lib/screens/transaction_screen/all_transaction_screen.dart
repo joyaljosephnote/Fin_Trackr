@@ -447,28 +447,29 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
                   color: AppColor.ftTextSecondayColor),
             )),
         PopupMenuItem(
-            onTap: () async {
-              var daterange = DateTimeRange(
-                start: DateTime(DateTime.now().year, DateTime.now().month,
-                    DateTime.now().day - 7),
-                end: DateTime(DateTime.now().year, DateTime.now().month,
-                    DateTime.now().day),
-              );
-              DateTimeRange? picked = await showDateRangePicker(
-                  context: context,
-                  firstDate: DateTime(DateTime.now().year - 1),
-                  lastDate: DateTime.now(),
-                  initialDateRange: daterange);
-              if (picked != null) {
-                TransactionDB.instance.filterByDate(picked.start, picked.end);
-              }
-            },
-            child: const Text(
-              'Custom Date',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.ftTextSecondayColor),
-            )),
+          onTap: () async {
+            var daterange = DateTimeRange(
+              start: DateTime(DateTime.now().year, DateTime.now().month,
+                  DateTime.now().day - 7),
+              end: DateTime(DateTime.now().year, DateTime.now().month,
+                  DateTime.now().day),
+            );
+            DateTimeRange? picked = await showDateRangePicker(
+                context: context,
+                firstDate: DateTime(DateTime.now().year - 1),
+                lastDate: DateTime.now(),
+                initialDateRange: daterange);
+            if (picked != null) {
+              TransactionDB.instance.filterByDate(picked.start, picked.end);
+            }
+          },
+          child: const Text(
+            'Custom Date',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: AppColor.ftTextSecondayColor),
+          ),
+        ),
       ],
       elevation: 8.0,
     );

@@ -6,6 +6,7 @@ import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
+import 'package:fin_trackr/db/functions/statistics_cart_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/db/models/account_group/account_group_model_db.dart';
 import 'package:fin_trackr/db/models/category/category_model_db.dart';
@@ -68,6 +69,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     TransactionDB.instance.refresh();
     getAllAccountGroup();
     CategoryDB().getAllCategory();
+    filterFunction();
     final double screenWidth = MediaQuery.of(context).size.width;
     double fontSize =
         9; // default font size for screen width between 280 and 350
@@ -609,7 +611,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
       setState(() => this.image = imageTemporary);
     } on PlatformException catch (e) {
-      // ignore: avoid_print
       print('Faild to pick image: $e');
     }
   }

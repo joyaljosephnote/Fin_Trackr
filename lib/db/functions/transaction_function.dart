@@ -34,21 +34,6 @@ class TransactionDB implements TransactionDBFunctions {
     await transactionDB.put(value.id, value);
   }
 
-  // Future<void> refresh() async {
-  //   final list = await getAllTransactions();
-  //   list.sort((first, second) => second.date.compareTo(first.date));
-  //   final listForMonth = await getAllTransactions();
-  //   listForMonth.sort((first, second) => second.date.compareTo(first.date));
-  //   transactionListNotifier.value.clear();
-  //   transactionMonthListNotifier.value.clear();
-  //   transactionListNotifier.value.addAll(list);
-  //   transactionMonthListNotifier.value.addAll(listForMonth);
-  //   // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-  //   transactionListNotifier.notifyListeners();
-  //   // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-  //   transactionMonthListNotifier.notifyListeners();
-  // }
-
   Future<void> refresh() async {
     final list = await getAllTransactions();
     list.sort((first, second) => second.date.compareTo(first.date));
@@ -117,7 +102,6 @@ class TransactionDB implements TransactionDBFunctions {
                   .contains(text.toLowerCase()))
           .toList()
         ..sort((first, second) => second.date.compareTo(first.date));
-      // ..sort((first, second) => second.id!.compareTo(first.id!));
     } else if (selectedCatogory == 'Expense') {
       filteredList = db.values
           .where((element) =>

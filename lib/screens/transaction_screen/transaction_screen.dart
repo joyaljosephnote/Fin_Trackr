@@ -591,9 +591,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   : Center(
                       child: Column(
                         children: [
-                          // const SizedBox(
-                          //   height: 60,
-                          // ),
                           SizedBox(
                             width: 150,
                             child: Lottie.asset('assets/noSearch.json'),
