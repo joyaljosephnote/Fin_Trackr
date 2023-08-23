@@ -368,7 +368,6 @@ class TransactionDB implements TransactionDBFunctions {
           .toList()
         ..sort((first, second) => second.date.compareTo(first.date));
     }
-
     transactionMonthListNotifier.value.clear();
     transactionMonthListNotifier.value = dateFilterList;
     // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member

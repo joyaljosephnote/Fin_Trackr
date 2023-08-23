@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'db/models/category/category_model_db.dart';
+import 'screens/accounts_screen/balance_calculation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,12 +36,10 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(AccountGroupModelAdapter().typeId)) {
     Hive.registerAdapter(AccountGroupModelAdapter());
   }
-
   if (!Hive.isAdapterRegistered(TransactionModelAdapter().typeId)) {
     Hive.registerAdapter(TransactionModelAdapter());
   }
   await addInitialData();
-
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -61,6 +60,8 @@ class MyApp extends StatelessWidget {
     getAllAccountGroup();
     getCurrency();
     filterFunction();
+    getAllAccountAmount();
+    accountGroupBalanceAmount();
 
     // Disables landscape and portrait mode
     SystemChrome.setPreferredOrientations([

@@ -14,12 +14,14 @@ Future<void> addInitialData() async {
     accountType: AccountType.account,
     name: 'Account',
     id: 'account',
+    amount: 0,
   );
 
   var defaultModel2 = AccountGroupModel(
     accountType: AccountType.cash,
     name: 'Cash',
     id: 'cash',
+    amount: 0,
   );
 
   await box.put('account', defaultModel1);
@@ -30,6 +32,18 @@ Future<void> addAccountGroup(AccountGroupModel value) async {
   final accountGroupDB = await Hive.openBox<AccountGroupModel>(ACCOUNT_DB_NAME);
   await accountGroupDB.put(value.id, value);
   getAllAccountGroup();
+}
+
+Future<List<AccountGroupModel>> getAllAccountAmount() async {
+  final accountGroupDB = await Hive.openBox<AccountGroupModel>(ACCOUNT_DB_NAME);
+  // accountGroupNotifier.value.clear();
+  // accountGroupNotifier.value.addAll(accountGroupDB.values);
+  // // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+  // accountGroupNotifier.notifyListeners();
+  List<AccountGroupModel> temp = accountGroupDB.values.toList();
+  print(temp[0].amount);
+  print(temp[1].amount);
+  return accountGroupDB.values.toList();
 }
 
 Future<void> getAllAccountGroup() async {

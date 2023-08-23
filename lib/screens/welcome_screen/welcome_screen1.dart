@@ -1,6 +1,7 @@
-// ignore_for_file: unused_field
+// ignore_for_file: unused_field, use_build_context_synchronously
 
 import 'package:fin_trackr/constant/constant.dart';
+import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/default/app_default.dart';
 import 'package:fin_trackr/screens/app_settings_screen/expense_category_settings/expense_category_provider.dart';
@@ -29,8 +30,8 @@ class _WelcomeScreenOneState extends State<WelcomeScreenOne> {
 
   @override
   void initState() {
-    super.initState();
     checkIfSeenWelcomescreen();
+    super.initState();
   }
 
   void checkIfSeenWelcomescreen() async {
@@ -91,6 +92,7 @@ class _WelcomeScreenOneState extends State<WelcomeScreenOne> {
                       ? GestureDetector(
                           onTap: () {
                             setHasSeenWelcomeScreen();
+                            addInitialData();
                             ExpenseCategoryProvider().addDefaultCategory(
                                 AppDefaultExpenseCategory()
                                     .appDefaultExpenseCategory);

@@ -36,6 +36,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
     super.initState();
   }
 
+  ValueNotifier<double> incomeCustomDateNotifier = ValueNotifier(0);
+  ValueNotifier<double> expenseCustomDateNotifier = ValueNotifier(0);
+  ValueNotifier<double> totalCustomDateNotifier = ValueNotifier(0);
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -439,8 +443,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
                               return previousValue;
                             });
 
-                            incomeData = mapList.values.fold(0,
-                                (previousValue, element) {
+                            incomeCustomDateNotifier.value = incomeData =
+                                mapList.values.fold(0,
+                                    (previousValue, element) {
                               for (var transaction in element) {
                                 if (transaction.categoryType ==
                                     CategoryType.income) {

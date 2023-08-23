@@ -56,6 +56,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       _amountController.text = widget.modelFromTransation!.amount.toString();
       accountType = accountTypeFromTransaction;
       _categoryID = categoryFromTransaction;
+      selectedcategoryModel = widget.modelFromTransation!.category;
       _noteController.text = widget.modelFromTransation!.note;
       if (widget.modelFromTransation!.image != null) {
         image = File(widget.modelFromTransation!.image!);

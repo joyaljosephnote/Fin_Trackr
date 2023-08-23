@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, prefer_final_fields
+// ignore_for_file: avoid_print, prefer_final_fields, unrelated_type_equality_checks
 
 import 'dart:io';
 
@@ -12,6 +12,7 @@ import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/db/models/account_group/account_group_model_db.dart';
 import 'package:fin_trackr/db/models/category/category_model_db.dart';
 import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
+import 'package:fin_trackr/screens/accounts_screen/balance_calculation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -58,6 +59,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
       accountType = accountTypeFromTransaction;
       _categoryID = categoryFromTransaction;
       _noteController.text = widget.modelFromTransation!.note;
+      selectedcategoryModel = widget.modelFromTransation!.category;
       if (widget.modelFromTransation!.image != null) {
         image = File(widget.modelFromTransation!.image!);
       }
@@ -70,6 +72,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
     TransactionDB.instance.refresh();
     CategoryDB.instance.getAllCategory();
     getAllAccountGroup();
+    accountGroupBalanceAmount();
     filterFunction();
     final double screenWidth = MediaQuery.of(context).size.width;
     double fontSize =
@@ -624,6 +627,12 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
     });
   }
 
+  // Future addAccountAmount() async {
+  //   final amount = _amountController.text;
+  //   final categoryType = CategoryType.income;
+
+  // }
+
   Future addIncomeTransaction() async {
     final note = _noteController.text;
     final amount = _amountController.text;
@@ -661,7 +670,6 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
     }
     print('in side else case 2');
     textFeildClear();
-
     // print("$model is printed for verification");
   }
 

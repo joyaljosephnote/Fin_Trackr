@@ -19,7 +19,7 @@ class HoemeScreen extends StatelessWidget {
   final _pages = [
     const TransactionScreen(),
     const StatisticsScreen(),
-    AccountsScreen(),
+    const AccountsScreen(),
     const AppSettingsScreen(),
   ];
 
