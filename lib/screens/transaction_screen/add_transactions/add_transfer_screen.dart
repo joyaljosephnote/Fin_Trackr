@@ -15,12 +15,10 @@ class AddTransferScreen extends StatefulWidget {
 }
 
 class _AddTransferScreenState extends State<AddTransferScreen> {
-  DateTime selectedDate = DateTime.now();
-
   final _amountController = TextEditingController();
   final _accountFromController = TextEditingController();
   final _accountToController = TextEditingController();
-  final _noteController = TextEditingController();
+
   String? _accountFrom;
   String? _accountTo;
 
@@ -49,92 +47,6 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
           key: _FormKey,
           child: Column(
             children: <Widget>[
-              // Row(
-              //   children: <Widget>[
-              //     const SizedBox(
-              //       width: 80,
-              //       child: Align(
-              //         alignment: Alignment.bottomLeft,
-              //         child: Text(
-              //           'Date ',
-              //           style: TextStyle(
-              //             color: AppColor.ftTextTertiaryColor,
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //     Expanded(
-              //       child: TextFormField(
-              //         validator: (value) {
-              //           if (value == null || value.isEmpty) {
-              //             return 'Enter Date';
-              //           } else {
-              //             return null;
-              //           }
-              //         },
-              //         cursorColor: AppColor.ftTextSecondayColor,
-              //         style: const TextStyle(
-              //           color: AppColor.ftTextSecondayColor,
-              //         ),
-              //         decoration: InputDecoration(
-              //           enabledBorder: const UnderlineInputBorder(
-              //             borderSide: BorderSide(
-              //               color: AppColor.ftTabBarSelectorColor,
-              //             ),
-              //           ),
-              //           suffixIcon: Row(
-              //             mainAxisSize: MainAxisSize.min,
-              //             children: [
-              //               IconButton(
-              //                 onPressed: () async {
-              //                   final DateTime? date = await showDatePicker(
-              //                     context: context,
-              //                     initialDate: selectedDate,
-              //                     firstDate: DateTime.now()
-              //                         .subtract(const Duration(days: 30)),
-              //                     lastDate: DateTime.now(),
-              //                   );
-              //                   if (date != null && date != selectedDate) {
-              //                     setState(
-              //                       () {
-              //                         selectedDate = date;
-              //                       },
-              //                     );
-              //                   }
-              //                 },
-              //                 icon: const Icon(
-              //                   Ionicons.calendar_outline,
-              //                 ),
-              //               ),
-              //             ],
-              //           ),
-              //           suffixIconColor: AppColor.ftTabBarSelectorColor,
-              //         ),
-              //         controller: TextEditingController(
-              //           text:
-              //               '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}', // display selected date in text field
-              //         ),
-              //         readOnly: true,
-              //         onTap: () async {
-              //           final DateTime? date = await showDatePicker(
-              //             context: context,
-              //             initialDate: selectedDate,
-              //             firstDate: DateTime(2000),
-              //             lastDate: DateTime.now(),
-              //           );
-
-              //           if (date != null && date != selectedDate) {
-              //             setState(
-              //               () {
-              //                 selectedDate = date;
-              //               },
-              //             );
-              //           }
-              //         },
-              //       ),
-              //     ),
-              //   ],
-              // ),
               Row(
                 children: <Widget>[
                   const SizedBox(
@@ -239,6 +151,11 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                       onChanged: (selectedValue) {
                         setState(() {
                           _accountFrom = selectedValue;
+                          if (selectedValue == 'account') {
+                            _accountTo = 'cash';
+                          } else {
+                            _accountTo = 'account';
+                          }
                         });
                       },
                       validator: (value) {
@@ -310,6 +227,11 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                       onChanged: (selectedValue) {
                         setState(() {
                           _accountTo = selectedValue;
+                          if (selectedValue == 'account') {
+                            _accountFrom = 'cash';
+                          } else {
+                            _accountFrom = 'account';
+                          }
                         });
                       },
                       validator: (value) {
@@ -333,51 +255,10 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                   )),
                 ],
               ),
-              // Row(
-              //   children: [
-              //     const SizedBox(
-              //       width: 80,
-              //       child: Align(
-              //         alignment: Alignment.bottomLeft,
-              //         child: Text(
-              //           'Note ',
-              //           style: TextStyle(
-              //             color: AppColor.ftTextTertiaryColor,
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //     Expanded(
-              //       child: TextFormField(
-              //         keyboardType: TextInputType.text,
-              //         validator: (value) {
-              //           if (value == null || value.isEmpty) {
-              //             return 'Required Feild';
-              //           } else {
-              //             return null;
-              //           }
-              //         },
-              //         controller: _noteController,
-              //         cursorColor: AppColor.ftTextSecondayColor,
-              //         style: const TextStyle(
-              //           color: AppColor.ftTextSecondayColor,
-              //         ),
-              //         decoration: const InputDecoration(
-              //           enabledBorder: UnderlineInputBorder(
-              //             borderSide: BorderSide(
-              //               color: AppColor.ftTabBarSelectorColor,
-              //             ),
-              //           ),
-              //         ),
-              //         readOnly: false,
-              //       ),
-              //     ),
-              //   ],
-              // ),
               Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -396,6 +277,39 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                       },
                       child: const Text(
                         ' Save ',
+                        style: TextStyle(
+                          color: AppColor.ftTextSecondayColor,
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColor.ftTransactionColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        textStyle: TextStyle(fontSize: fontSize),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 25),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (_accountTo == null && _accountFrom == null) {
+                            _accountTo = 'cash';
+                            _accountFrom = 'account';
+                          } else {
+                            if (_accountTo == 'account') {
+                              _accountTo = 'cash';
+                              _accountFrom = 'account';
+                            } else {
+                              _accountTo = 'account';
+                              _accountFrom = 'cash';
+                            }
+                          }
+                        });
+                      },
+                      child: const Text(
+                        'Swap ',
                         style: TextStyle(
                           color: AppColor.ftTextSecondayColor,
                         ),
@@ -436,31 +350,66 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
       if (accountAmountGroupNotifier.value <
           double.parse(_amountController.text)) {
         //show snak insufficiant balance
-        print('in showsnak');
+        insufficientBalance();
       } else {
-        print('in acccount');
         selfTransfer(
             accountType: 'account',
             amount: double.parse(_amountController.text));
+        transferSuccess();
+        textFeildClear();
       }
     } else {
       if (cashAmountGroupNotifier.value <
           double.parse(_amountController.text)) {
-        //show snak insufficiant cash
-        print('in showsnak');
+        insufficientBalance();
       } else {
         selfTransfer(
             accountType: 'cash', amount: double.parse(_amountController.text));
+        transferSuccess();
+        textFeildClear();
       }
     }
-    _FormKey.currentState!.reset;
-    textFeildClear();
+  }
+
+  insufficientBalance() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        duration: Duration(seconds: 2),
+        elevation: 2,
+        behavior: SnackBarBehavior.floating,
+        padding: EdgeInsets.all(15),
+        backgroundColor: AppColor.ftExpenseColor,
+        content: Text(
+          'Insufficient balance',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  transferSuccess() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        duration: Duration(seconds: 2),
+        elevation: 2,
+        behavior: SnackBarBehavior.floating,
+        padding: EdgeInsets.all(15),
+        backgroundColor: AppColor.ftIncomeColor,
+        content: Text(
+          'Success!',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
   }
 
   void textFeildClear() {
-    _amountController.clear();
-    _accountFromController.clear();
-    _accountToController.clear();
-    _noteController.clear();
+    setState(() {
+      _accountTo = null;
+      _accountFrom = null;
+      _amountController.clear();
+      _accountFromController.clear();
+      _accountToController.clear();
+    });
   }
 }

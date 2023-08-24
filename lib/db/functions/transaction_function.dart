@@ -84,10 +84,12 @@ class TransactionDB implements TransactionDBFunctions {
 
   Future<void> editTransactionDb(int id, TransactionModel model) async {
     final db = await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
+    final tempModel = db.values.where((element) => element.id == id).first;
     await db.put(id, model);
     // transactionListNotifier.value.clear();
     // transactionListNotifier.value.addAll(db.values);
     // getAllTransactions();
+    await editAccountGroup(tempModel);
     await updateAccountGroup(model);
     refresh();
   }

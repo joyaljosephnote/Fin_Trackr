@@ -38,6 +38,19 @@ Future<void> addAccountGroup(AccountGroupModel value) async {
   getAllAccountGroup();
 }
 
+Future<void> editAccountGroup(TransactionModel model) async {
+  final accountGroupDB = await Hive.openBox<AccountGroupModel>(ACCOUNT_DB_NAME);
+  final accountModel = accountGroupDB.values
+      .where((element) => element.id == model.account.name.toLowerCase())
+      .first;
+  if (model.categoryType == CategoryType.income) {
+    accountModel.amount = accountModel.amount! - model.amount;
+  } else {
+    accountModel.amount = accountModel.amount! + model.amount;
+  }
+  await accountGroupDB.put(accountModel.id, accountModel);
+}
+
 Future<void> updateAccountGroup(TransactionModel model,
     [bool isDeleting = false]) async {
   final accountGroupDB = await Hive.openBox<AccountGroupModel>(ACCOUNT_DB_NAME);
