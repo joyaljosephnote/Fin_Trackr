@@ -1,10 +1,16 @@
+// ignore_for_file: unrelated_type_equality_checks
+
+import 'package:clipboard/clipboard.dart';
 import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
 import 'package:fin_trackr/db/models/account_group/account_group_model_db.dart';
 import 'package:fin_trackr/db/models/category/category_model_db.dart';
+import 'package:fin_trackr/screens/accounts_screen/balance_calculation.dart';
+import 'package:fin_trackr/screens/calculator/calculator_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fin_trackr/constant/constant.dart';
+import 'package:ionicons/ionicons.dart';
 
 // ignore: must_be_immutable
 class AccountGroup extends StatefulWidget {
@@ -47,7 +53,26 @@ class _AccountGrouptState extends State<AccountGroup> {
       backgroundColor: AppColor.ftScafoldColor,
       appBar: AppBar(
         backgroundColor: AppColor.ftScafoldColor,
-        title: const Text('Account Group', style: TextStyle(fontSize: 18)),
+        title: const Text(
+          'Account Group',
+          style: TextStyle(fontSize: 18),
+        ),
+        actions: [
+          IconButton(
+            alignment: Alignment.centerLeft,
+            icon: const Icon(Ionicons.calculator,
+                color: AppColor.ftTextSecondayColor, size: 18),
+            onPressed: () {
+              // Handle forward button press
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CalculatorScreen(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
@@ -128,15 +153,28 @@ class _AccountGrouptState extends State<AccountGroup> {
                                 color: AppColor.ftTextSecondayColor,
                               ),
                               decoration: InputDecoration(
-                                prefixText: '${currencySymboleUpdate.value} ',
-                                prefixStyle: const TextStyle(
-                                    color: AppColor.ftTextSecondayColor),
-                                enabledBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: AppColor.ftTabBarSelectorColor,
+                                  prefixText: '${currencySymboleUpdate.value} ',
+                                  prefixStyle: const TextStyle(
+                                      color: AppColor.ftTextSecondayColor),
+                                  enabledBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: AppColor.ftTabBarSelectorColor,
+                                    ),
                                   ),
-                                ),
-                              ),
+                                  suffixIcon: IconButton(
+                                      onPressed: () {
+                                        FlutterClipboard.paste().then((value) {
+                                          setState(() {
+                                            accountGroupAmountController.text =
+                                                value;
+                                          });
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Ionicons.clipboard_outline,
+                                        size: 20,
+                                        color: AppColor.ftTabBarSelectorColor,
+                                      ))),
                               readOnly: false,
                             ),
                           ),
@@ -156,7 +194,24 @@ class _AccountGrouptState extends State<AccountGroup> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 25),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              final accountGroupModel = AccountGroupModel(
+                                id: accountGroupNameController.text
+                                    .toLowerCase()
+                                    .trim(),
+                                name: accountGroupNameController.text.trim(),
+                                accountType:
+                                    accountGroupNameController.text == 'Account'
+                                        ? AccountType.account
+                                        : AccountType.cash,
+                                amount: double.parse(
+                                    accountGroupAmountController.text),
+                              );
+                              addAccountGroup(accountGroupModel);
+                              accountGroupBalanceAmount();
+                              accountGroupAmountController.clear();
+                              accountGroupNameController.clear();
+                            },
                             child: Text(
                               ' Save ',
                               style: TextStyle(
@@ -174,7 +229,10 @@ class _AccountGrouptState extends State<AccountGroup> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 25),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              accountGroupAmountController.clear();
+                              accountGroupNameController.clear();
+                            },
                             child: Text(
                               'Clear',
                               style: TextStyle(
@@ -239,25 +297,7 @@ class _AccountGrouptState extends State<AccountGroup> {
                                 color: AppColor.ftSecondaryDividerColor);
                           },
                           itemCount: accountGroupNameList.length)
-                      : const Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "Please add a new category or click the 'Default Categories' button to add default categories.",
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.grey),
-                                    ),
-                                    SizedBox(height: 25),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
+                      : Container();
                 },
               ),
             ),

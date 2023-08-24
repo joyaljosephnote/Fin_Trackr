@@ -137,6 +137,10 @@ class _TransactionScreenSelector extends State<TransactionScreenSelector>
               indicatorSize: TabBarIndicatorSize.label,
               splashFactory: NoSplash.splashFactory,
               onTap: (value) {
+                if (widget.model != null) {
+                  _tabController.index = widget.tabIndex!;
+                  return;
+                }
                 _tabIndex = value;
                 setState(() {});
               },

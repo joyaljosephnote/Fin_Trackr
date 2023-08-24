@@ -5,6 +5,8 @@ import 'package:fin_trackr/db/functions/currency_function.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
+import '../../accounts_screen/balance_calculation.dart';
+
 class AddTransferScreen extends StatefulWidget {
   const AddTransferScreen({super.key});
 
@@ -47,92 +49,92 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
           key: _FormKey,
           child: Column(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  const SizedBox(
-                    width: 80,
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(
-                        'Date ',
-                        style: TextStyle(
-                          color: AppColor.ftTextTertiaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter Date';
-                        } else {
-                          return null;
-                        }
-                      },
-                      cursorColor: AppColor.ftTextSecondayColor,
-                      style: const TextStyle(
-                        color: AppColor.ftTextSecondayColor,
-                      ),
-                      decoration: InputDecoration(
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColor.ftTabBarSelectorColor,
-                          ),
-                        ),
-                        suffixIcon: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              onPressed: () async {
-                                final DateTime? date = await showDatePicker(
-                                  context: context,
-                                  initialDate: selectedDate,
-                                  firstDate: DateTime.now()
-                                      .subtract(const Duration(days: 30)),
-                                  lastDate: DateTime.now(),
-                                );
-                                if (date != null && date != selectedDate) {
-                                  setState(
-                                    () {
-                                      selectedDate = date;
-                                    },
-                                  );
-                                }
-                              },
-                              icon: const Icon(
-                                Ionicons.calendar_outline,
-                              ),
-                            ),
-                          ],
-                        ),
-                        suffixIconColor: AppColor.ftTabBarSelectorColor,
-                      ),
-                      controller: TextEditingController(
-                        text:
-                            '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}', // display selected date in text field
-                      ),
-                      readOnly: true,
-                      onTap: () async {
-                        final DateTime? date = await showDatePicker(
-                          context: context,
-                          initialDate: selectedDate,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime.now(),
-                        );
+              // Row(
+              //   children: <Widget>[
+              //     const SizedBox(
+              //       width: 80,
+              //       child: Align(
+              //         alignment: Alignment.bottomLeft,
+              //         child: Text(
+              //           'Date ',
+              //           style: TextStyle(
+              //             color: AppColor.ftTextTertiaryColor,
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //     Expanded(
+              //       child: TextFormField(
+              //         validator: (value) {
+              //           if (value == null || value.isEmpty) {
+              //             return 'Enter Date';
+              //           } else {
+              //             return null;
+              //           }
+              //         },
+              //         cursorColor: AppColor.ftTextSecondayColor,
+              //         style: const TextStyle(
+              //           color: AppColor.ftTextSecondayColor,
+              //         ),
+              //         decoration: InputDecoration(
+              //           enabledBorder: const UnderlineInputBorder(
+              //             borderSide: BorderSide(
+              //               color: AppColor.ftTabBarSelectorColor,
+              //             ),
+              //           ),
+              //           suffixIcon: Row(
+              //             mainAxisSize: MainAxisSize.min,
+              //             children: [
+              //               IconButton(
+              //                 onPressed: () async {
+              //                   final DateTime? date = await showDatePicker(
+              //                     context: context,
+              //                     initialDate: selectedDate,
+              //                     firstDate: DateTime.now()
+              //                         .subtract(const Duration(days: 30)),
+              //                     lastDate: DateTime.now(),
+              //                   );
+              //                   if (date != null && date != selectedDate) {
+              //                     setState(
+              //                       () {
+              //                         selectedDate = date;
+              //                       },
+              //                     );
+              //                   }
+              //                 },
+              //                 icon: const Icon(
+              //                   Ionicons.calendar_outline,
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //           suffixIconColor: AppColor.ftTabBarSelectorColor,
+              //         ),
+              //         controller: TextEditingController(
+              //           text:
+              //               '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}', // display selected date in text field
+              //         ),
+              //         readOnly: true,
+              //         onTap: () async {
+              //           final DateTime? date = await showDatePicker(
+              //             context: context,
+              //             initialDate: selectedDate,
+              //             firstDate: DateTime(2000),
+              //             lastDate: DateTime.now(),
+              //           );
 
-                        if (date != null && date != selectedDate) {
-                          setState(
-                            () {
-                              selectedDate = date;
-                            },
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              //           if (date != null && date != selectedDate) {
+              //             setState(
+              //               () {
+              //                 selectedDate = date;
+              //               },
+              //             );
+              //           }
+              //         },
+              //       ),
+              //     ),
+              //   ],
+              // ),
               Row(
                 children: <Widget>[
                   const SizedBox(
@@ -331,47 +333,47 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
                   )),
                 ],
               ),
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 80,
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(
-                        'Note ',
-                        style: TextStyle(
-                          color: AppColor.ftTextTertiaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Required Feild';
-                        } else {
-                          return null;
-                        }
-                      },
-                      controller: _noteController,
-                      cursorColor: AppColor.ftTextSecondayColor,
-                      style: const TextStyle(
-                        color: AppColor.ftTextSecondayColor,
-                      ),
-                      decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColor.ftTabBarSelectorColor,
-                          ),
-                        ),
-                      ),
-                      readOnly: false,
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     const SizedBox(
+              //       width: 80,
+              //       child: Align(
+              //         alignment: Alignment.bottomLeft,
+              //         child: Text(
+              //           'Note ',
+              //           style: TextStyle(
+              //             color: AppColor.ftTextTertiaryColor,
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //     Expanded(
+              //       child: TextFormField(
+              //         keyboardType: TextInputType.text,
+              //         validator: (value) {
+              //           if (value == null || value.isEmpty) {
+              //             return 'Required Feild';
+              //           } else {
+              //             return null;
+              //           }
+              //         },
+              //         controller: _noteController,
+              //         cursorColor: AppColor.ftTextSecondayColor,
+              //         style: const TextStyle(
+              //           color: AppColor.ftTextSecondayColor,
+              //         ),
+              //         decoration: const InputDecoration(
+              //           enabledBorder: UnderlineInputBorder(
+              //             borderSide: BorderSide(
+              //               color: AppColor.ftTabBarSelectorColor,
+              //             ),
+              //           ),
+              //         ),
+              //         readOnly: false,
+              //       ),
+              //     ),
+              //   ],
+              // ),
               Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: Row(
@@ -430,6 +432,27 @@ class _AddTransferScreenState extends State<AddTransferScreen> {
   }
 
   Future<void> onAddTransferSavedButton(context) async {
+    if (_accountFrom == 'account') {
+      if (accountAmountGroupNotifier.value <
+          double.parse(_amountController.text)) {
+        //show snak insufficiant balance
+        print('in showsnak');
+      } else {
+        print('in acccount');
+        selfTransfer(
+            accountType: 'account',
+            amount: double.parse(_amountController.text));
+      }
+    } else {
+      if (cashAmountGroupNotifier.value <
+          double.parse(_amountController.text)) {
+        //show snak insufficiant cash
+        print('in showsnak');
+      } else {
+        selfTransfer(
+            accountType: 'cash', amount: double.parse(_amountController.text));
+      }
+    }
     _FormKey.currentState!.reset;
     textFeildClear();
   }

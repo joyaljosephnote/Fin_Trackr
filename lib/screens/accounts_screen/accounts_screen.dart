@@ -68,45 +68,55 @@ class AccountsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Column(
+                    Column(
                       children: [
-                        Text(
+                        const Text(
                           'Assets',
                           style: TextStyle(
                             color: AppColor.ftTextTertiaryColor,
                             fontSize: 14,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        Text(
-                          '₹ 23,720.00',
-                          style: TextStyle(
-                            color: AppColor.ftTextQuinaryColor,
-                            fontSize: 14,
-                          ),
+                        ValueListenableBuilder(
+                          valueListenable: assetAmountGroupNotifier,
+                          builder: (context, value, child) {
+                            return Text(
+                              "${currencySymboleUpdate.value} ${formatter.format(assetAmountGroupNotifier.value)}",
+                              style: const TextStyle(
+                                color: AppColor.ftTextQuinaryColor,
+                                fontSize: 14,
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
-                    const Column(
+                    Column(
                       children: [
-                        Text(
+                        const Text(
                           'Libilities',
                           style: TextStyle(
                             color: AppColor.ftTextTertiaryColor,
                             fontSize: 14,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        Text(
-                          '₹ 1,500.00',
-                          style: TextStyle(
-                            color: AppColor.ftTextPrimaryColor,
-                            fontSize: 14,
-                          ),
+                        ValueListenableBuilder(
+                          valueListenable: assetAmountGroupNotifier,
+                          builder: (context, value, child) {
+                            return Text(
+                              "${currencySymboleUpdate.value} ${formatter.format(assetAmountGroupNotifier.value - totalnotifier.value)}",
+                              style: const TextStyle(
+                                color: AppColor.ftTextExpenseColor,
+                                fontSize: 14,
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),

@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/models/category/category_model_db.dart';
 import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
 import 'package:flutter/foundation.dart';
@@ -11,7 +12,7 @@ const TRANSACTION_DB_NAME = 'transaction-db';
 abstract class TransactionDBFunctions {
   Future<void> addTransaction(TransactionModel objects);
   Future<List<TransactionModel>> getAllTransactions();
-  Future<void> deleteTransaction(int index);
+  Future<void> deleteTransaction(TransactionModel model);
 }
 
 class TransactionDB implements TransactionDBFunctions {
@@ -32,6 +33,7 @@ class TransactionDB implements TransactionDBFunctions {
     final transactionDB =
         await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
     await transactionDB.put(value.id, value);
+    await updateAccountGroup(value);
   }
 
   Future<void> refresh() async {
@@ -73,9 +75,10 @@ class TransactionDB implements TransactionDBFunctions {
   }
 
   @override
-  Future<void> deleteTransaction(int id) async {
+  Future<void> deleteTransaction(TransactionModel model) async {
     final db = await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
-    await db.delete(id);
+    await updateAccountGroup(model, true);
+    await db.delete(model.id);
     refresh();
   }
 
@@ -85,6 +88,7 @@ class TransactionDB implements TransactionDBFunctions {
     // transactionListNotifier.value.clear();
     // transactionListNotifier.value.addAll(db.values);
     // getAllTransactions();
+    await updateAccountGroup(model);
     refresh();
   }
 

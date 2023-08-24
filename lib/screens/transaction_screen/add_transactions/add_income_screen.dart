@@ -706,7 +706,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
             TextButton(
               onPressed: () {
                 TransactionDB.instance
-                    .deleteTransaction(widget.modelFromTransation!.id!);
+                    .deleteTransaction(widget.modelFromTransation!);
                 textFeildClear();
                 Navigator.of(context).pop();
               },

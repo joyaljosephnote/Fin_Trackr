@@ -36,12 +36,44 @@ String yesterday = DateFormat.yMd().format(
   ),
 );
 
-DateTime start = DateTime.now();
-DateTime end = DateTime.now().subtract(
-  const Duration(days: 60),
-);
+// customFilterFunction(DateTime start, DateTime end) async {
+//   print('in custom date function');
+//   final list = await TransactionDB.instance.getAllTransactions();
+//   customDateNotifier.value.clear();
+//   overviewNotifier.value.clear();
+//   incomeNotifier1.value.clear();
+//   expenseNotifier1.value.clear();
+//   customDateNotifier.value.clear();
+//   todayNotifier.value.clear();
+//   yesterdayNotifier.value.clear();
+//   incomeTodayNotifier.value.clear();
+//   incomeYesterdayNotifier.value.clear();
+//   expenseTodayNotifier.value.clear();
+//   expenseYesterdayNotifier.value.clear();
+//   lastWeekNotifier.value.clear();
+//   expenseLastWeekNotifier.value.clear();
+//   incomeLastWeekNotifier.value.clear();
+//   lastMonthNotifier.value.clear();
+//   expenseLastMonthNotifier.value.clear();
+//   incomeLastMonthNotifier.value.clear();
+
+//   for (var element in list) {
+//     if (DateTime.parse(element.date).isAfter(
+//           start.subtract(
+//             const Duration(days: 1),
+//           ),
+//         ) &&
+//         DateTime.parse(element.date).isBefore(
+//           end.add(const Duration(days: 1)),
+//         )) {
+//       customDateNotifier.value.add(element);
+//     }
+//   }
+//   customDateNotifier.notifyListeners();
+// }
 
 filterFunction() async {
+  // if()
   final list = await TransactionDB.instance.getAllTransactions();
   overviewNotifier.value.clear();
   incomeNotifier1.value.clear();
@@ -93,17 +125,6 @@ filterFunction() async {
       ),
     )) {
       lastMonthNotifier.value.add(element);
-    }
-
-    if (DateTime.parse(element.date).isAfter(
-          start.subtract(
-            const Duration(days: 1),
-          ),
-        ) &&
-        DateTime.parse(element.date).isBefore(
-          end.add(const Duration(days: 1)),
-        )) {
-      customDateNotifier.value.add(element);
     }
 
     if (elementDate == today && element.categoryType == CategoryType.income) {

@@ -12,6 +12,7 @@ ValueNotifier<double> expenseCurrentMonthNotifier = ValueNotifier(0);
 ValueNotifier<double> totalCurrentMonthNotifier = ValueNotifier(0);
 ValueNotifier<double> accountAmountGroupNotifier = ValueNotifier(0);
 ValueNotifier<double> cashAmountGroupNotifier = ValueNotifier(0);
+ValueNotifier<double> assetAmountGroupNotifier = ValueNotifier(0);
 
 Future<void> balanceAmount() async {
   await TransactionDB.instance.getAllTransactions().then((value) {
@@ -59,5 +60,7 @@ Future<void> accountGroupBalanceAmount() async {
         cashAmountGroupNotifier.value += item.amount!;
       }
     }
+    assetAmountGroupNotifier.value =
+        accountAmountGroupNotifier.value + cashAmountGroupNotifier.value;
   });
 }

@@ -39,7 +39,7 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(TransactionModelAdapter().typeId)) {
     Hive.registerAdapter(TransactionModelAdapter());
   }
-  await addInitialData();
+  // await addInitialData();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

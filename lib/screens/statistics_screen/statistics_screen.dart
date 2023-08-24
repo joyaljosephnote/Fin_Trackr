@@ -453,9 +453,11 @@ class _StatisticsScreenState extends State<StatisticsScreen>
         //         lastDate: DateTime.now(),
         //         initialDateRange: daterange);
         //     if (picked != null) {
-        //       // TransactionDB.instance.filterByDate(picked.start, picked.end);
-        //       categoryId2 == 'Custom';
+        //       customFilterFunction(picked.start, picked.end);
         //     }
+        //     setState(() {
+        //       categoryId2 == 'Custom';
+        //     });
         //   },
         //   child: const Text(
         //     'Custom Date',

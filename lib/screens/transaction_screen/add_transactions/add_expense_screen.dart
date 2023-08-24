@@ -693,7 +693,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             TextButton(
               onPressed: () {
                 TransactionDB.instance
-                    .deleteTransaction(widget.modelFromTransation!.id!);
+                    .deleteTransaction(widget.modelFromTransation!);
                 textFeildClear();
                 Navigator.of(context).pop();
               },
