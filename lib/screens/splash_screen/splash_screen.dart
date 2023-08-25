@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: const Center(
                   child: SpinKitThreeBounce(
                     size: 10,
-                    color: AppColor.ftLodingSpinKitColor,
+                    color: AppColor.ftBottomNavigatorSelectorColor,
                   ),
                 ),
               ),

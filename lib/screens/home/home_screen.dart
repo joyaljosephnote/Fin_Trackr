@@ -6,9 +6,6 @@ import 'package:fin_trackr/screens/home/widget/floatting_action_button.dart';
 import 'package:fin_trackr/screens/app_settings_screen/app_settings_screen.dart';
 import 'package:fin_trackr/screens/statistics_screen/statistics_screen.dart';
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:month_year_picker/month_year_picker.dart';
 import '../transaction_screen/transaction_screen.dart';
 
 class HoemeScreen extends StatelessWidget {
@@ -57,11 +54,6 @@ class HoemeScreen extends StatelessWidget {
           },
         ),
       ),
-      localizationsDelegates: const [
-        GlobalWidgetsLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        MonthYearPickerLocalizations.delegate,
-      ],
     );
   }
 }
