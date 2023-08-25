@@ -1,6 +1,6 @@
+import 'package:fin_trackr/models/category/category_model_db.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:fin_trackr/db/models/category/category_model_db.dart';
 import 'package:flutter/material.dart';
 
 // ignore: constant_identifier_names

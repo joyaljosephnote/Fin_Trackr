@@ -2,7 +2,7 @@
 
 import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
-import 'package:fin_trackr/db/models/currency/curency_model.db.dart';
+import 'package:fin_trackr/models/currency/curency_model.db.dart';
 import 'package:flutter/material.dart';
 import 'package:currency_picker/currency_picker.dart';
 

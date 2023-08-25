@@ -1,8 +1,8 @@
 import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
-import 'package:fin_trackr/db/models/category/category_model_db.dart';
-import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
+import 'package:fin_trackr/models/category/category_model_db.dart';
+import 'package:fin_trackr/models/transactions/transaction_model_db.dart';
 import 'package:fin_trackr/screens/accounts_screen/balance_calculation.dart';
 import 'package:fin_trackr/screens/transaction_screen/add_transactions/add_transactions_selector.dart';
 import 'package:flutter/material.dart';

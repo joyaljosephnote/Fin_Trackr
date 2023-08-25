@@ -2,7 +2,7 @@ import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/db/functions/statistics_cart_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
-import 'package:fin_trackr/db/models/statistics/statistics_model.db.dart';
+import 'package:fin_trackr/models/statistics/statistics_model.db.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';

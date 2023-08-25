@@ -1,8 +1,7 @@
 import 'dart:core';
-
 import 'package:fin_trackr/db/functions/account_group_function.dart';
-import 'package:fin_trackr/db/models/category/category_model_db.dart';
-import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
+import 'package:fin_trackr/models/category/category_model_db.dart';
+import 'package:fin_trackr/models/transactions/transaction_model_db.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 

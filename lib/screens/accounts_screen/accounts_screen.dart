@@ -71,7 +71,7 @@ class AccountsScreen extends StatelessWidget {
                     Column(
                       children: [
                         const Text(
-                          'Assets',
+                          'Income',
                           style: TextStyle(
                             color: AppColor.ftTextTertiaryColor,
                             fontSize: 14,
@@ -81,10 +81,10 @@ class AccountsScreen extends StatelessWidget {
                           height: 10,
                         ),
                         ValueListenableBuilder(
-                          valueListenable: assetAmountGroupNotifier,
+                          valueListenable: incomenotifier,
                           builder: (context, value, child) {
                             return Text(
-                              "${currencySymboleUpdate.value} ${formatter.format(assetAmountGroupNotifier.value)}",
+                              "${currencySymboleUpdate.value} ${formatter.format(incomenotifier.value)}",
                               style: const TextStyle(
                                 color: AppColor.ftTextQuinaryColor,
                                 fontSize: 14,
@@ -97,7 +97,7 @@ class AccountsScreen extends StatelessWidget {
                     Column(
                       children: [
                         const Text(
-                          'Libilities',
+                          'Expense',
                           style: TextStyle(
                             color: AppColor.ftTextTertiaryColor,
                             fontSize: 14,
@@ -110,7 +110,7 @@ class AccountsScreen extends StatelessWidget {
                           valueListenable: assetAmountGroupNotifier,
                           builder: (context, value, child) {
                             return Text(
-                              "${currencySymboleUpdate.value} ${formatter.format(assetAmountGroupNotifier.value - totalnotifier.value)}",
+                              "${currencySymboleUpdate.value} ${formatter.format(expensenotifier.value)}",
                               style: const TextStyle(
                                 color: AppColor.ftTextExpenseColor,
                                 fontSize: 14,
@@ -121,7 +121,7 @@ class AccountsScreen extends StatelessWidget {
                       ],
                     ),
                     ValueListenableBuilder(
-                      valueListenable: totalnotifier,
+                      valueListenable: assetAmountGroupNotifier,
                       builder: (context, value, child) {
                         return Column(
                           children: [
@@ -136,7 +136,7 @@ class AccountsScreen extends StatelessWidget {
                               height: 10,
                             ),
                             Text(
-                              "${currencySymboleUpdate.value} ${formatter.format(totalnotifier.value)}",
+                              "${currencySymboleUpdate.value} ${formatter.format(assetAmountGroupNotifier.value)}",
                               style: const TextStyle(
                                 color: AppColor.ftTextSecondayColor,
                                 fontSize: 14,

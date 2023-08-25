@@ -1,10 +1,11 @@
 // ignore_for_file: avoid_print
 
-import 'package:fin_trackr/db/models/category/category_model_db.dart';
-import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
+import 'package:fin_trackr/models/account_group/account_group_model_db.dart';
+import 'package:fin_trackr/models/category/category_model_db.dart';
+import 'package:fin_trackr/models/transactions/transaction_model_db.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:fin_trackr/db/models/account_group/account_group_model_db.dart';
+
 import 'package:flutter/material.dart';
 
 // ignore: constant_identifier_names

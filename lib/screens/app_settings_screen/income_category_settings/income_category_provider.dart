@@ -1,5 +1,5 @@
 import 'package:fin_trackr/db/functions/category_functions.dart';
-import 'package:fin_trackr/db/models/category/category_model_db.dart';
+import 'package:fin_trackr/models/category/category_model_db.dart';
 
 class IncomeCategoryProvider {
   Future<void> editCategoryDetails(

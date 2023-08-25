@@ -1,4 +1,4 @@
-import 'package:fin_trackr/db/models/currency/curency_model.db.dart';
+import 'package:fin_trackr/models/currency/curency_model.db.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 

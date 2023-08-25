@@ -5,16 +5,16 @@ import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
 import 'package:fin_trackr/db/functions/statistics_cart_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
-import 'package:fin_trackr/db/models/account_group/account_group_model_db.dart';
-import 'package:fin_trackr/db/models/currency/curency_model.db.dart';
-import 'package:fin_trackr/db/models/transactions/transaction_model_db.dart';
+import 'package:fin_trackr/models/account_group/account_group_model_db.dart';
+import 'package:fin_trackr/models/category/category_model_db.dart';
+import 'package:fin_trackr/models/currency/curency_model.db.dart';
+import 'package:fin_trackr/models/transactions/transaction_model_db.dart';
 import 'package:fin_trackr/screens/welcome_screen/welcome_screen1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fin_trackr/screens/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'db/models/category/category_model_db.dart';
 import 'screens/accounts_screen/balance_calculation.dart';
 
 Future<void> main() async {

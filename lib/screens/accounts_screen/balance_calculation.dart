@@ -1,7 +1,7 @@
 import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
-import 'package:fin_trackr/db/models/account_group/account_group_model_db.dart';
-import 'package:fin_trackr/db/models/category/category_model_db.dart';
+import 'package:fin_trackr/models/account_group/account_group_model_db.dart';
+import 'package:fin_trackr/models/category/category_model_db.dart';
 import 'package:flutter/widgets.dart';
 
 ValueNotifier<double> incomenotifier = ValueNotifier(0);
