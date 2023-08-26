@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class CategoryWiseStatistics extends StatefulWidget {
   const CategoryWiseStatistics({super.key});
@@ -17,11 +18,19 @@ class CategoryWiseStatistics extends StatefulWidget {
 class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
   ValueNotifier<bool> searchBarNotifier = ValueNotifier<bool>(false);
   var clearcontroller = TextEditingController();
+
+  TooltipBehavior _tooltipBehavior = TooltipBehavior();
   NumberFormat formatter = NumberFormat('#,##0.00');
 
   @override
   void initState() {
-    // TransactionDB.instance.refresh();
+    _tooltipBehavior = TooltipBehavior(enable: true);
+    TransactionDB.instance.filter('Expense');
+    TransactionDB.instance.filterByDate(
+        DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day - 30),
+        DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day));
     super.initState();
   }
 
@@ -54,93 +63,138 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
       ),
       body: Column(
         children: [
-          Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.04,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: AppColor.ftTransactionColor,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: AppColor.ftShadowColor,
-                        spreadRadius: 0,
-                        blurRadius: 5,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.04,
                   ),
-                  child: ValueListenableBuilder<bool>(
-                    valueListenable: searchBarNotifier,
-                    builder: (context, boolValue, child) => Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          child: Stack(
-                            alignment: Alignment.centerRight,
-                            children: [
-                              TextField(
-                                controller: clearcontroller,
-                                onChanged: (value) {
-                                  TransactionDB.instance.search(value);
-
-                                  if (value.isEmpty) {
-                                    searchBarNotifier.value = false;
-                                    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-                                    searchBarNotifier.notifyListeners();
-                                  } else {
-                                    searchBarNotifier.value = true;
-                                    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-                                    searchBarNotifier.notifyListeners();
-                                  }
-                                },
-                                cursorColor: AppColor.ftTextSecondayColor,
-                                style: const TextStyle(
-                                    color: AppColor.ftTextSecondayColor),
-                                decoration: InputDecoration(
-                                  suffixIcon: searchBarNotifier.value == false
-                                      ? const Icon(Ionicons.search_outline)
-                                      : null,
-                                  suffixIconColor:
-                                      AppColor.ftTabBarSelectorColor,
-                                  hintText: 'Search by category name',
-                                  hintStyle: const TextStyle(
-                                      color: AppColor.ftTextTertiaryColor),
-                                  enabledBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: AppColor.ftSecondaryDividerColor,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Visibility(
-                                visible: searchBarNotifier.value,
-                                child: IconButton(
-                                  onPressed: () {
-                                    clearcontroller.clear();
-                                    setState(() {
-                                      searchBarNotifier.value = false;
-                                    });
-                                  },
-                                  icon: const Icon(
-                                    Ionicons.close_circle_outline,
-                                    color: AppColor.ftTabBarSelectorColor,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColor.ftTransactionColor,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: AppColor.ftShadowColor,
+                          spreadRadius: 0,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
                         ),
                       ],
                     ),
+                    child: ValueListenableBuilder<bool>(
+                      valueListenable: searchBarNotifier,
+                      builder: (context, boolValue, child) => Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            child: Stack(
+                              alignment: Alignment.centerRight,
+                              children: [
+                                TextField(
+                                  controller: clearcontroller,
+                                  onChanged: (value) {
+                                    TransactionDB.instance.search(value);
+
+                                    if (value.isEmpty) {
+                                      searchBarNotifier.value = false;
+                                      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+                                      searchBarNotifier.notifyListeners();
+                                    } else {
+                                      searchBarNotifier.value = true;
+                                      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+                                      searchBarNotifier.notifyListeners();
+                                    }
+                                  },
+                                  cursorColor: AppColor.ftTextSecondayColor,
+                                  style: const TextStyle(
+                                      color: AppColor.ftTextSecondayColor),
+                                  decoration: InputDecoration(
+                                    suffixIcon: searchBarNotifier.value == false
+                                        ? const Icon(Ionicons.search_outline)
+                                        : null,
+                                    suffixIconColor:
+                                        AppColor.ftTabBarSelectorColor,
+                                    hintText: 'Search by category name',
+                                    hintStyle: const TextStyle(
+                                        color: AppColor.ftTextTertiaryColor),
+                                    enabledBorder: const UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: AppColor.ftSecondaryDividerColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: searchBarNotifier.value,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      clearcontroller.clear();
+                                      setState(() {
+                                        searchBarNotifier.value = false;
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Ionicons.close_circle_outline,
+                                      color: AppColor.ftTabBarSelectorColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
+                //
+                ValueListenableBuilder(
+                  valueListenable:
+                      TransactionDB.instance.transactionListNotifier,
+                  builder: (context, value, child) {
+                    List<ChartDatas> newData = chartLogic(value);
+                    return SfCircularChart(
+                      legend: const Legend(
+                        title: LegendTitle(
+                          text: 'Categories',
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        isVisible: true,
+                        overflowMode: LegendItemOverflowMode.wrap,
+                        position: LegendPosition.bottom,
+                        textStyle: TextStyle(
+                          color: AppColor.ftTextSecondayColor,
+                        ),
+                      ),
+                      tooltipBehavior: _tooltipBehavior,
+                      series: <CircularSeries>[
+                        DoughnutSeries<ChartDatas, String>(
+                          enableTooltip: true,
+                          dataSource: newData,
+                          xValueMapper: (ChartDatas data, _) => data.category,
+                          yValueMapper: (ChartDatas data, _) => data.amount,
+                          explode: true,
+                          dataLabelSettings: const DataLabelSettings(
+                            showZeroValue: false,
+                            isVisible: false,
+                            labelPosition: ChartDataLabelPosition.inside,
+                            useSeriesColor: true,
+                            connectorLineSettings: ConnectorLineSettings(
+                                type: ConnectorType.curve),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                )
+              ],
+            ),
           ),
           ValueListenableBuilder(
             valueListenable: TransactionDB.instance.transactionListNotifier,
@@ -187,34 +241,23 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
                                           children: [
                                             Row(
                                               children: [
-                                                Container(
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: AppColor
-                                                        .ftTextLinkColor2,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                      Radius.circular(5),
-                                                    ),
-                                                  ),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      newData[index]
-                                                          .categoryType
-                                                          .toString()
-                                                          .toUpperCase()
-                                                          .substring(0, 3),
-                                                      style: const TextStyle(
-                                                        color: AppColor
-                                                            .ftTextSecondayColor,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: newData[index]
+                                                              .categoryType ==
+                                                          'income'
+                                                      ? const Icon(
+                                                          Icons.arrow_circle_up,
+                                                          color: AppColor
+                                                              .ftTextIncomeColor,
+                                                        )
+                                                      : const Icon(
+                                                          Icons
+                                                              .arrow_circle_down,
+                                                          color: AppColor
+                                                              .ftTextExpenseColor,
+                                                        ),
                                                 ),
                                                 Padding(
                                                   padding:
@@ -237,9 +280,8 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
                                                   child: Text(
                                                     '${currencySymboleUpdate.value} ${formatter.format(newData[index].amount)}',
                                                     style: const TextStyle(
-                                                      color: AppColor
-                                                          .ftTextSecondayColor,
-                                                    ),
+                                                        color: AppColor
+                                                            .ftTextTertiaryColor),
                                                   ),
                                                 ),
                                               ],
@@ -297,18 +339,12 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
       items: [
         PopupMenuItem(
             onTap: () {
-              TransactionDB.instance.filter('All');
-              TransactionDB.instance.refresh();
-            },
-            child: const Text(
-              'All',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.ftTextSecondayColor),
-            )),
-        PopupMenuItem(
-            onTap: () {
               TransactionDB.instance.filter('Income');
+              TransactionDB.instance.filterByDate(
+                  DateTime(DateTime.now().year, DateTime.now().month,
+                      DateTime.now().day - 30),
+                  DateTime(DateTime.now().year, DateTime.now().month,
+                      DateTime.now().day));
             },
             child: const Text(
               'Income',
@@ -319,6 +355,11 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
         PopupMenuItem(
             onTap: () {
               TransactionDB.instance.filter('Expense');
+              TransactionDB.instance.filterByDate(
+                  DateTime(DateTime.now().year, DateTime.now().month,
+                      DateTime.now().day - 30),
+                  DateTime(DateTime.now().year, DateTime.now().month,
+                      DateTime.now().day));
             },
             child: const Text(
               'Expense',
@@ -339,7 +380,11 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
       items: [
         PopupMenuItem(
             onTap: () {
-              TransactionDB.instance.filterDataByDate('all');
+              TransactionDB.instance.filterByDate(
+                  DateTime(DateTime.now().year, DateTime.now().month,
+                      DateTime.now().day - 30),
+                  DateTime(DateTime.now().year, DateTime.now().month,
+                      DateTime.now().day));
             },
             child: const Text(
               'All',
