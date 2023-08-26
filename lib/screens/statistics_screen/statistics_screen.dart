@@ -3,6 +3,7 @@ import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/db/functions/statistics_cart_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/models/statistics/statistics_model.db.dart';
+import 'package:fin_trackr/screens/statistics_screen/category_wise_statiscs.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
@@ -74,6 +75,19 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           ),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Ionicons.swap_horizontal,
+                color: AppColor.ftTextSecondayColor, size: 18),
+            onPressed: () {
+              // Handle forward button press
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CategoryWiseStatistics(),
+                ),
+              );
+            },
+          ),
           IconButton(
               alignment: Alignment.centerLeft,
               onPressed: () {
@@ -439,33 +453,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
                   fontWeight: FontWeight.bold,
                   color: AppColor.ftTextSecondayColor),
             )),
-        // PopupMenuItem(
-        //   onTap: () async {
-        //     var daterange = DateTimeRange(
-        //       start: DateTime(DateTime.now().year, DateTime.now().month,
-        //           DateTime.now().day - 7),
-        //       end: DateTime(DateTime.now().year, DateTime.now().month,
-        //           DateTime.now().day),
-        //     );
-        //     DateTimeRange? picked = await showDateRangePicker(
-        //         context: context,
-        //         firstDate: DateTime(DateTime.now().year - 1),
-        //         lastDate: DateTime.now(),
-        //         initialDateRange: daterange);
-        //     if (picked != null) {
-        //       customFilterFunction(picked.start, picked.end);
-        //     }
-        //     setState(() {
-        //       categoryId2 == 'Custom';
-        //     });
-        //   },
-        //   child: const Text(
-        //     'Custom Date',
-        //     style: TextStyle(
-        //         fontWeight: FontWeight.bold,
-        //         color: AppColor.ftTextSecondayColor),
-        //   ),
-        // ),
       ],
       elevation: 8.0,
     );
