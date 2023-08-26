@@ -1,5 +1,4 @@
 import 'package:fin_trackr/constant/constant.dart';
-import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
@@ -8,6 +7,7 @@ import 'package:fin_trackr/screens/calculator/calculator_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class AccountsScreen extends StatelessWidget {
   const AccountsScreen({super.key});
@@ -19,10 +19,8 @@ class AccountsScreen extends StatelessWidget {
     NumberFormat formatter = NumberFormat('#,##0.00');
     TransactionDB.instance.refresh();
     CategoryDB.instance.getAllCategory();
-    getAllAccountGroup();
     accountGroupBalanceAmount();
     balanceAmountOfCurrentMonth();
-    balanceAmount();
     return Scaffold(
       backgroundColor: AppColor.ftScafoldColor,
       appBar: AppBar(
@@ -42,7 +40,6 @@ class AccountsScreen extends StatelessWidget {
                   icon: const Icon(Ionicons.calculator,
                       color: AppColor.ftTextSecondayColor, size: 18),
                   onPressed: () {
-                    // Handle forward button press
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -65,11 +62,15 @@ class AccountsScreen extends StatelessWidget {
                 thickness: 2.0,
                 color: AppColor.ftPrimaryDividerColor,
               ),
-              Text(
-                'Balance Sheet of $formattedDate',
-                style: const TextStyle(
-                    color: AppColor.ftTextTertiaryColor,
-                    fontWeight: FontWeight.bold),
+              Container(
+                alignment: Alignment.center,
+                height: 30,
+                child: Text(
+                  'Balance Sheet of $formattedDate',
+                  style: const TextStyle(
+                      color: AppColor.ftTextTertiaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
               const Divider(
                 thickness: 2.0,
@@ -166,17 +167,95 @@ class AccountsScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    ValueListenableBuilder(
+                      valueListenable: incomePercentageNotifier,
+                      builder: (context, value, child) {
+                        return CircularPercentIndicator(
+                          radius: 45.0,
+                          lineWidth: 8.0,
+                          animation: true,
+                          percent: incomePercentageNotifier.value > 0 ||
+                                  expensePercentageNotifier.value > 0
+                              ? (incomePercentageNotifier.value * 100) / 100
+                              : 0,
+                          center: Text(
+                            "${incomePercentageNotifier.value > 0 || expensePercentageNotifier.value > 0 ? (incomePercentageNotifier.value * 100).toDouble().toStringAsFixed(0) : 0}%",
+                            style: const TextStyle(
+                              color: AppColor.ftTextSecondayColor,
+                              fontSize: 14,
+                            ),
+                          ),
+                          footer: const Text(
+                            "Income",
+                            style: TextStyle(
+                                height: 1.9,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14.0,
+                                color: AppColor.ftTextTertiaryColor),
+                          ),
+                          circularStrokeCap: CircularStrokeCap.round,
+                          backgroundColor: const Color(0xFF474242),
+                          progressColor: AppColor.ftTextIncomeColor,
+                        );
+                      },
+                    ),
+                    ValueListenableBuilder(
+                      valueListenable: expensePercentageNotifier,
+                      builder: (context, value, child) {
+                        return CircularPercentIndicator(
+                          radius: 45.0,
+                          lineWidth: 8.0,
+                          animation: true,
+                          percent: incomePercentageNotifier.value > 0 ||
+                                  expensePercentageNotifier.value > 0
+                              ? (100 -
+                                      (expensePercentageNotifier.value * 100)) /
+                                  100
+                              : 0,
+                          center: Text(
+                            "${incomePercentageNotifier.value > 0 || expensePercentageNotifier.value > 0 ? (100 - (expensePercentageNotifier.value * 100)).toDouble().toStringAsFixed(0) : 0}%",
+                            style: const TextStyle(
+                              color: AppColor.ftTextSecondayColor,
+                              fontSize: 14,
+                            ),
+                          ),
+                          footer: const Text(
+                            "Expense",
+                            style: TextStyle(
+                                height: 1.9,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14.0,
+                                color: AppColor.ftTextTertiaryColor),
+                          ),
+                          circularStrokeCap: CircularStrokeCap.round,
+                          backgroundColor: const Color(0xFF474242),
+                          progressColor: AppColor.ftTextExpenseColor,
+                        );
+                      },
+                    )
+                  ],
+                ),
+              ),
               const Divider(
                 thickness: 2.0,
                 color: AppColor.ftPrimaryDividerColor,
               ),
               Column(
                 children: [
-                  const Text(
-                    'Actual Balance',
-                    style: TextStyle(
-                        color: AppColor.ftTextTertiaryColor,
-                        fontWeight: FontWeight.bold),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 35,
+                    child: const Text(
+                      'Actual Balance',
+                      style: TextStyle(
+                          color: AppColor.ftTextTertiaryColor,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                   const Divider(
                     thickness: 2.0,
@@ -215,10 +294,6 @@ class AccountsScreen extends StatelessWidget {
                         );
                       },
                     ),
-                  ),
-                  const Divider(
-                    thickness: 2.0,
-                    color: AppColor.ftPrimaryDividerColor,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15),

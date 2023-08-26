@@ -14,6 +14,8 @@ ValueNotifier<double> accountAmountGroupNotifier = ValueNotifier(0);
 ValueNotifier<double> cashAmountGroupNotifier = ValueNotifier(0);
 ValueNotifier<double> assetAmountGroupNotifier = ValueNotifier(0);
 ValueNotifier<double> liabiliteAmountGroupNotifier = ValueNotifier(0);
+ValueNotifier<double> incomePercentageNotifier = ValueNotifier(0);
+ValueNotifier<double> expensePercentageNotifier = ValueNotifier(0);
 
 Future<void> balanceAmount() async {
   await TransactionDB.instance.getAllTransactions().then((value) {
@@ -37,6 +39,8 @@ Future<void> balanceAmountOfCurrentMonth() async {
     incomeCurrentMonthNotifier.value = 0;
     expenseCurrentMonthNotifier.value = 0;
     totalCurrentMonthNotifier.value = 0;
+    incomePercentageNotifier.value = 0;
+    expensePercentageNotifier.value = 0;
 
     for (var item in value) {
       if (item.categoryType == CategoryType.income) {
@@ -47,6 +51,14 @@ Future<void> balanceAmountOfCurrentMonth() async {
     }
     totalCurrentMonthNotifier.value =
         incomeCurrentMonthNotifier.value - expenseCurrentMonthNotifier.value;
+
+    incomePercentageNotifier.value =
+        (incomeCurrentMonthNotifier.value - expenseCurrentMonthNotifier.value) /
+            (incomeCurrentMonthNotifier.value);
+
+    expensePercentageNotifier.value =
+        (incomeCurrentMonthNotifier.value - expenseCurrentMonthNotifier.value) /
+            (incomeCurrentMonthNotifier.value);
   });
 }
 
@@ -62,13 +74,6 @@ Future<void> accountGroupBalanceAmount() async {
       }
     }
 
-    if (accountAmountGroupNotifier.value < 0) {
-      liabiliteAmountGroupNotifier.value = accountAmountGroupNotifier.value;
-    }
-    if (cashAmountGroupNotifier.value < 0) {
-      liabiliteAmountGroupNotifier.value =
-          liabiliteAmountGroupNotifier.value + cashAmountGroupNotifier.value;
-    }
     assetAmountGroupNotifier.value =
         accountAmountGroupNotifier.value + cashAmountGroupNotifier.value;
   });

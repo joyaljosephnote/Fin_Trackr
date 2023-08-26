@@ -1,5 +1,4 @@
 import 'package:fin_trackr/constant/constant.dart';
-// ignore: unused_import
 import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
