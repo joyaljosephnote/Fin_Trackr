@@ -25,7 +25,7 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
   @override
   void initState() {
     _tooltipBehavior = TooltipBehavior(enable: true);
-    TransactionDB.instance.filter('Expense');
+    TransactionDB.instance.filter('Income');
     TransactionDB.instance.filterByDate(
         DateTime(
             DateTime.now().year, DateTime.now().month, DateTime.now().day - 30),
@@ -43,7 +43,7 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
         elevation: 0,
         backgroundColor: AppColor.ftScafoldColor,
         title: const Text(
-          'Category Wise Report',
+          'Statistics',
           style: TextStyle(fontSize: 17),
         ),
         actions: [
@@ -156,41 +156,60 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
                       TransactionDB.instance.transactionListNotifier,
                   builder: (context, value, child) {
                     List<ChartDatas> newData = chartLogic(value);
-                    return SfCircularChart(
-                      legend: const Legend(
-                        title: LegendTitle(
-                          text: 'Categories',
-                          textStyle: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        isVisible: true,
-                        overflowMode: LegendItemOverflowMode.wrap,
-                        position: LegendPosition.bottom,
-                        textStyle: TextStyle(
-                          color: AppColor.ftTextSecondayColor,
-                        ),
-                      ),
-                      tooltipBehavior: _tooltipBehavior,
-                      series: <CircularSeries>[
-                        DoughnutSeries<ChartDatas, String>(
-                          enableTooltip: true,
-                          dataSource: newData,
-                          xValueMapper: (ChartDatas data, _) => data.category,
-                          yValueMapper: (ChartDatas data, _) => data.amount,
-                          explode: true,
-                          dataLabelSettings: const DataLabelSettings(
-                            showZeroValue: false,
-                            isVisible: false,
-                            labelPosition: ChartDataLabelPosition.inside,
-                            useSeriesColor: true,
-                            connectorLineSettings: ConnectorLineSettings(
-                                type: ConnectorType.curve),
-                          ),
-                        ),
-                      ],
-                    );
+                    return newData.isNotEmpty
+                        ? SfCircularChart(
+                            legend: const Legend(
+                              isVisible: true,
+                              overflowMode: LegendItemOverflowMode.wrap,
+                              position: LegendPosition.bottom,
+                              textStyle: TextStyle(
+                                color: AppColor.ftTextSecondayColor,
+                              ),
+                            ),
+                            tooltipBehavior: _tooltipBehavior,
+                            series: <CircularSeries>[
+                              DoughnutSeries<ChartDatas, String>(
+                                enableTooltip: true,
+                                dataSource: newData,
+                                xValueMapper: (ChartDatas data, _) =>
+                                    data.category,
+                                yValueMapper: (ChartDatas data, _) =>
+                                    data.amount,
+                                explode: true,
+                                dataLabelSettings: const DataLabelSettings(
+                                  showZeroValue: false,
+                                  isVisible: false,
+                                  labelPosition: ChartDataLabelPosition.inside,
+                                  useSeriesColor: true,
+                                  connectorLineSettings: ConnectorLineSettings(
+                                      type: ConnectorType.curve),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                ),
+                                SizedBox(
+                                  width: 180,
+                                  child: Lottie.asset(
+                                    'assets/nodata.json',
+                                  ),
+                                ),
+                                const Text(
+                                  "No transactions yet !",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: AppColor.ftTextTertiaryColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
                   },
                 )
               ],
@@ -200,130 +219,95 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
             valueListenable: TransactionDB.instance.transactionListNotifier,
             builder: (context, newList, child) {
               List<ChartDatas> newData = chartLogic(newList);
-              return newData.isNotEmpty
-                  ? Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 9),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: newData.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.04,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 8.8),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColor.ftTransactionColor,
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: AppColor.ftShadowColor,
-                                        spreadRadius: 0,
-                                        blurRadius: 5,
-                                        offset: Offset(0, 3),
-                                      ),
-                                    ],
-                                  ),
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 9),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: newData.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width * 0.04,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 8.8),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColor.ftTransactionColor,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: AppColor.ftShadowColor,
+                                  spreadRadius: 0,
+                                  blurRadius: 5,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10, top: 10, bottom: 10),
                                   child: Column(
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 10,
-                                            right: 10,
-                                            top: 10,
-                                            bottom: 10),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: newData[index]
-                                                              .categoryType ==
-                                                          'income'
-                                                      ? const Icon(
-                                                          Icons.arrow_circle_up,
-                                                          color: AppColor
-                                                              .ftTextIncomeColor,
-                                                        )
-                                                      : const Icon(
-                                                          Icons
-                                                              .arrow_circle_down,
-                                                          color: AppColor
-                                                              .ftTextExpenseColor,
-                                                        ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10),
-                                                  child: Text(
-                                                    newData[index]
-                                                        .category
-                                                        .toString(),
-                                                    style: const TextStyle(
-                                                      color: AppColor
-                                                          .ftTextTertiaryColor,
-                                                    ),
-                                                  ),
-                                                ),
-                                                const Spacer(),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    '${currencySymboleUpdate.value} ${formatter.format(newData[index].amount)}',
-                                                    style: const TextStyle(
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child:
+                                                newData[index].categoryType ==
+                                                        'income'
+                                                    ? const Icon(
+                                                        Icons.arrow_circle_up,
                                                         color: AppColor
-                                                            .ftTextTertiaryColor),
-                                                  ),
-                                                ),
-                                              ],
+                                                            .ftTextIncomeColor,
+                                                      )
+                                                    : const Icon(
+                                                        Icons.arrow_circle_down,
+                                                        color: AppColor
+                                                            .ftTextExpenseColor,
+                                                      ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              newData[index]
+                                                  .category
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                color: AppColor
+                                                    .ftTextTertiaryColor,
+                                              ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                          const Spacer(),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              '${currencySymboleUpdate.value} ${formatter.format(newData[index].amount)}',
+                                              style: const TextStyle(
+                                                  color: AppColor
+                                                      .ftTextTertiaryColor),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    )
-                  : Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            height: 120,
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                          ),
-                          SizedBox(
-                            width: 180,
-                            child: Lottie.asset(
-                              'assets/nodata.json',
-                            ),
-                          ),
-                          const Text(
-                            "No transactions yet !",
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: AppColor.ftTextTertiaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                      );
+                    },
+                  ),
+                ),
+              );
             },
           ),
         ],
