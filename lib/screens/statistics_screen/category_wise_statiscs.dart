@@ -150,67 +150,88 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
                     ),
                   ),
                 ),
-                //
-                ValueListenableBuilder(
-                  valueListenable:
-                      TransactionDB.instance.transactionListNotifier,
-                  builder: (context, value, child) {
-                    List<ChartDatas> newData = chartLogic(value);
-                    return newData.isNotEmpty
-                        ? SfCircularChart(
-                            legend: const Legend(
-                              isVisible: true,
-                              overflowMode: LegendItemOverflowMode.wrap,
-                              position: LegendPosition.bottom,
-                              textStyle: TextStyle(
-                                color: AppColor.ftTextSecondayColor,
-                              ),
-                            ),
-                            tooltipBehavior: _tooltipBehavior,
-                            series: <CircularSeries>[
-                              DoughnutSeries<ChartDatas, String>(
-                                enableTooltip: true,
-                                dataSource: newData,
-                                xValueMapper: (ChartDatas data, _) =>
-                                    data.category,
-                                yValueMapper: (ChartDatas data, _) =>
-                                    data.amount,
-                                explode: true,
-                                dataLabelSettings: const DataLabelSettings(
-                                  showZeroValue: false,
-                                  isVisible: false,
-                                  labelPosition: ChartDataLabelPosition.inside,
-                                  useSeriesColor: true,
-                                  connectorLineSettings: ConnectorLineSettings(
-                                      type: ConnectorType.curve),
-                                ),
-                              ),
-                            ],
-                          )
-                        : Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                ),
-                                SizedBox(
-                                  width: 180,
-                                  child: Lottie.asset(
-                                    'assets/nodata.json',
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.04,
+                  ),
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 8.9),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColor.ftTransactionColor,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: AppColor.ftShadowColor,
+                          spreadRadius: 0,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: ValueListenableBuilder(
+                      valueListenable:
+                          TransactionDB.instance.transactionListNotifier,
+                      builder: (context, value, child) {
+                        List<ChartDatas> newData = chartLogic(value);
+                        return newData.isNotEmpty
+                            ? SfCircularChart(
+                                legend: const Legend(
+                                  isVisible: true,
+                                  overflowMode: LegendItemOverflowMode.wrap,
+                                  position: LegendPosition.bottom,
+                                  textStyle: TextStyle(
+                                    color: AppColor.ftTextSecondayColor,
                                   ),
                                 ),
-                                const Text(
-                                  "No transactions yet !",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: AppColor.ftTextTertiaryColor,
+                                tooltipBehavior: _tooltipBehavior,
+                                series: <CircularSeries>[
+                                  DoughnutSeries<ChartDatas, String>(
+                                    enableTooltip: true,
+                                    dataSource: newData,
+                                    xValueMapper: (ChartDatas data, _) =>
+                                        data.category,
+                                    yValueMapper: (ChartDatas data, _) =>
+                                        data.amount,
+                                    explode: true,
+                                    dataLabelSettings: const DataLabelSettings(
+                                      showZeroValue: false,
+                                      isVisible: false,
+                                      labelPosition:
+                                          ChartDataLabelPosition.inside,
+                                      useSeriesColor: true,
+                                      connectorLineSettings:
+                                          ConnectorLineSettings(
+                                              type: ConnectorType.curve),
+                                    ),
                                   ),
+                                ],
+                              )
+                            : Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                    ),
+                                    SizedBox(
+                                      width: 180,
+                                      child: Lottie.asset(
+                                        'assets/nodata.json',
+                                      ),
+                                    ),
+                                    const Text(
+                                      "No transactions yet !",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: AppColor.ftTextTertiaryColor,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          );
-                  },
+                              );
+                      },
+                    ),
+                  ),
                 )
               ],
             ),

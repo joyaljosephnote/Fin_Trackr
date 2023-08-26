@@ -7,7 +7,6 @@ import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
-import 'package:fin_trackr/db/functions/statistics_cart_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/models/account_group/account_group_model_db.dart';
 import 'package:fin_trackr/models/category/category_model_db.dart';
@@ -73,7 +72,6 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
     CategoryDB.instance.getAllCategory();
     getAllAccountGroup();
     accountGroupBalanceAmount();
-    filterFunction();
     final double screenWidth = MediaQuery.of(context).size.width;
     double fontSize =
         9; // default font size for screen width between 280 and 350

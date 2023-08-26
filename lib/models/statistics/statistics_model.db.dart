@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:fin_trackr/models/category/category_model_db.dart';
 import 'package:fin_trackr/models/transactions/transaction_model_db.dart';
 
 class ChartDatas {
