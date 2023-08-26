@@ -14,11 +14,14 @@ class AccountsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('MMM yyyy').format(now);
     NumberFormat formatter = NumberFormat('#,##0.00');
     TransactionDB.instance.refresh();
     CategoryDB.instance.getAllCategory();
     getAllAccountGroup();
     accountGroupBalanceAmount();
+    balanceAmountOfCurrentMonth();
     balanceAmount();
     return Scaffold(
       backgroundColor: AppColor.ftScafoldColor,
@@ -62,71 +65,28 @@ class AccountsScreen extends StatelessWidget {
                 thickness: 2.0,
                 color: AppColor.ftPrimaryDividerColor,
               ),
+              Text(
+                'Balance Sheet of $formattedDate',
+                style: const TextStyle(
+                    color: AppColor.ftTextTertiaryColor,
+                    fontWeight: FontWeight.bold),
+              ),
+              const Divider(
+                thickness: 2.0,
+                color: AppColor.ftPrimaryDividerColor,
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                child: Column(
                   children: [
-                    Column(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
-                          'Income',
-                          style: TextStyle(
-                            color: AppColor.ftTextTertiaryColor,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        ValueListenableBuilder(
-                          valueListenable: incomenotifier,
-                          builder: (context, value, child) {
-                            return Text(
-                              "${currencySymboleUpdate.value} ${formatter.format(incomenotifier.value)}",
-                              style: const TextStyle(
-                                color: AppColor.ftTextQuinaryColor,
-                                fontSize: 14,
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        const Text(
-                          'Expense',
-                          style: TextStyle(
-                            color: AppColor.ftTextTertiaryColor,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        ValueListenableBuilder(
-                          valueListenable: assetAmountGroupNotifier,
-                          builder: (context, value, child) {
-                            return Text(
-                              "${currencySymboleUpdate.value} ${formatter.format(expensenotifier.value)}",
-                              style: const TextStyle(
-                                color: AppColor.ftTextExpenseColor,
-                                fontSize: 14,
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                    ValueListenableBuilder(
-                      valueListenable: assetAmountGroupNotifier,
-                      builder: (context, value, child) {
-                        return Column(
+                        Column(
                           children: [
                             const Text(
-                              'Balance',
+                              'Income',
                               style: TextStyle(
                                 color: AppColor.ftTextTertiaryColor,
                                 fontSize: 14,
@@ -135,16 +95,73 @@ class AccountsScreen extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            Text(
-                              "${currencySymboleUpdate.value} ${formatter.format(assetAmountGroupNotifier.value)}",
-                              style: const TextStyle(
-                                color: AppColor.ftTextSecondayColor,
+                            ValueListenableBuilder(
+                              valueListenable: incomeCurrentMonthNotifier,
+                              builder: (context, value, child) {
+                                return Text(
+                                  "${currencySymboleUpdate.value} ${formatter.format(incomeCurrentMonthNotifier.value)}",
+                                  style: const TextStyle(
+                                    color: AppColor.ftTextIncomeColor,
+                                    fontSize: 14,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            const Text(
+                              'Expense',
+                              style: TextStyle(
+                                color: AppColor.ftTextTertiaryColor,
                                 fontSize: 14,
                               ),
                             ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            ValueListenableBuilder(
+                              valueListenable: expenseCurrentMonthNotifier,
+                              builder: (context, value, child) {
+                                return Text(
+                                  "${currencySymboleUpdate.value} ${formatter.format(expenseCurrentMonthNotifier.value)}",
+                                  style: const TextStyle(
+                                    color: AppColor.ftTextExpenseColor,
+                                    fontSize: 14,
+                                  ),
+                                );
+                              },
+                            ),
                           ],
-                        );
-                      },
+                        ),
+                        ValueListenableBuilder(
+                          valueListenable: totalCurrentMonthNotifier,
+                          builder: (context, value, child) {
+                            return Column(
+                              children: [
+                                const Text(
+                                  'Balance',
+                                  style: TextStyle(
+                                    color: AppColor.ftTextTertiaryColor,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "${currencySymboleUpdate.value} ${formatter.format(totalCurrentMonthNotifier.value)}",
+                                  style: const TextStyle(
+                                    color: AppColor.ftTextSecondayColor,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -155,6 +172,16 @@ class AccountsScreen extends StatelessWidget {
               ),
               Column(
                 children: [
+                  const Text(
+                    'Actual Balance',
+                    style: TextStyle(
+                        color: AppColor.ftTextTertiaryColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const Divider(
+                    thickness: 2.0,
+                    color: AppColor.ftPrimaryDividerColor,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15),
                     child: ValueListenableBuilder(
@@ -170,7 +197,7 @@ class AccountsScreen extends StatelessWidget {
                                 child: Text(
                                   'Account',
                                   style: TextStyle(
-                                      color: AppColor.ftTextSecondayColor,
+                                      color: AppColor.ftTextTertiaryColor,
                                       fontSize: 14),
                                 ),
                               ),
@@ -179,7 +206,7 @@ class AccountsScreen extends StatelessWidget {
                                 child: Text(
                                   '${currencySymboleUpdate.value} ${formatter.format(accountAmountGroupNotifier.value)}',
                                   style: const TextStyle(
-                                      color: AppColor.ftTextSecondayColor,
+                                      color: AppColor.ftTextTertiaryColor,
                                       fontSize: 14),
                                 ),
                               ),
@@ -208,7 +235,7 @@ class AccountsScreen extends StatelessWidget {
                                 child: Text(
                                   'Cash',
                                   style: TextStyle(
-                                      color: AppColor.ftTextSecondayColor,
+                                      color: AppColor.ftTextTertiaryColor,
                                       fontSize: 14),
                                 ),
                               ),
@@ -217,7 +244,7 @@ class AccountsScreen extends StatelessWidget {
                                 child: Text(
                                   '${currencySymboleUpdate.value} ${formatter.format(cashAmountGroupNotifier.value)}',
                                   style: const TextStyle(
-                                      color: AppColor.ftTextSecondayColor,
+                                      color: AppColor.ftTextTertiaryColor,
                                       fontSize: 14),
                                 ),
                               ),
@@ -228,6 +255,46 @@ class AccountsScreen extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+              const Divider(
+                thickness: 2.0,
+                color: AppColor.ftPrimaryDividerColor,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: ValueListenableBuilder(
+                  valueListenable: assetAmountGroupNotifier,
+                  builder: (context, value, child) {
+                    return SizedBox(
+                      height: 35,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Total Balance',
+                              style: TextStyle(
+                                  color: AppColor.ftTextLinkColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              '${currencySymboleUpdate.value} ${formatter.format(assetAmountGroupNotifier.value)}',
+                              style: const TextStyle(
+                                  color: AppColor.ftTextLinkColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
               const Divider(
                 thickness: 2.0,

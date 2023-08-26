@@ -35,10 +35,10 @@ class AppText {
   static const String appName = 'FinTrackr';
   static const String appVersion = 'Version 1.0.0';
   static const String appVersionNumber = ' 1.0.0';
-  static const String appUpdateDate = '27-Jul-2023';
-  static const String appTermsConditonUpdateDate = '27-Jul-2023';
+  static const String appUpdateDate = '27-Aug-2023';
+  static const String appTermsConditonUpdateDate = '27-Aug-2023';
   static const String authorName = 'Joyal Joseph';
-  static const String companyName = 'Hello Tech';
+  static const String companyName = 'Hello Tech Malayalam';
   static const String website = 'www.hellotechmalayalam.com';
   static const String email = 'hellotechmalayalam@gmail.com';
   static const String linkedin = 'linkedin.com/in/joyaljoseph';
