@@ -5,6 +5,7 @@ import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/models/category/category_model_db.dart';
 import 'package:fin_trackr/models/transactions/transaction_model_db.dart';
+import 'package:fin_trackr/screens/home/home_screen.dart';
 import 'package:fin_trackr/screens/welcome_screen/welcome_screen1.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -107,6 +108,7 @@ class ResetAppSettings extends StatelessWidget {
                     await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
                 categoryDb.clear();
                 transactionDB.clear();
+                HoemeScreen.selectedIndexNotifier = ValueNotifier(0);
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => const WelcomeScreenOne()));

@@ -12,6 +12,7 @@ import 'package:fin_trackr/models/account_group/account_group_model_db.dart';
 import 'package:fin_trackr/models/category/category_model_db.dart';
 import 'package:fin_trackr/models/transactions/transaction_model_db.dart';
 import 'package:fin_trackr/screens/accounts_screen/balance_calculation.dart';
+import 'package:fin_trackr/screens/transaction_screen/add_transactions/camera_previre.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -441,7 +442,19 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                         padding: const EdgeInsets.only(top: 30),
                         child: Expanded(
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              if (image == null) return;
+                              if (image != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ImagePreview(
+                                      imageFile: File(image!.path),
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
                             child: Stack(
                               children: [
                                 Container(
