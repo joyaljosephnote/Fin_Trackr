@@ -5,6 +5,7 @@ import 'package:fin_trackr/screens/app_settings_screen/contact_us.dart';
 import 'package:fin_trackr/screens/app_settings_screen/currency_selector/currency_selector.dart';
 import 'package:fin_trackr/screens/app_settings_screen/expense_category_settings/expense_category_list_view.dart';
 import 'package:fin_trackr/screens/app_settings_screen/income_category_settings/income_category_list_view.dart';
+import 'package:fin_trackr/screens/app_settings_screen/user_guid/user_gaid_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'dart:math' as math;
@@ -119,42 +120,6 @@ class AppSettingsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                // InkWell(
-                //   splashFactory: NoSplash.splashFactory,
-                //   onTap: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => const AboutApp(),
-                //       ),
-                //     );
-                //   },
-                //   child: Container(
-                //     decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.circular(20),
-                //     ),
-                //     child: const Column(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         Icon(
-                //           Ionicons.server_outline,
-                //           size: 25,
-                //           color: AppColor.ftBottomNavigatorUnSelectorColor,
-                //         ),
-                //         SizedBox(
-                //           height: 10,
-                //         ),
-                //         Text(
-                //           'Budget',
-                //           style: TextStyle(
-                //             color: AppColor.ftBottomNavigatorUnSelectorColor,
-                //             fontSize: 14,
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
                 InkWell(
                   splashFactory: NoSplash.splashFactory,
                   onTap: () {
@@ -233,6 +198,42 @@ class AppSettingsScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
+                        builder: (context) => const UserGuid(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.auto_stories_outlined,
+                          size: 25,
+                          color: AppColor.ftBottomNavigatorUnSelectorColor,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'User Guid',
+                          style: TextStyle(
+                            color: AppColor.ftBottomNavigatorUnSelectorColor,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
+                  splashFactory: NoSplash.splashFactory,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
                         builder: (context) => const ResetAppSettings(),
                       ),
                     );
@@ -245,7 +246,7 @@ class AppSettingsScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Ionicons.refresh_outline,
+                          Icons.settings_backup_restore_outlined,
                           size: 25,
                           color: AppColor.ftBottomNavigatorUnSelectorColor,
                         ),

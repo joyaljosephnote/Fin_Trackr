@@ -27,13 +27,19 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
   @override
   void initState() {
     _tooltipBehavior = TooltipBehavior(enable: true);
-    TransactionDB.instance.filter('Expense');
+    TransactionDB.instance.filter('Income');
     TransactionDB.instance.filterByDate(
         DateTime(
             DateTime.now().year, DateTime.now().month, DateTime.now().day - 30),
         DateTime(
             DateTime.now().year, DateTime.now().month, DateTime.now().day));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    TransactionDB.instance.filter('All');
+    super.dispose();
   }
 
   @override
@@ -161,6 +167,7 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
                 List<ChartDatas> newData = chartLogic(value);
                 double amount = newData.fold(0,
                     (previousValue, element) => previousValue + element.amount);
+                String categoryName;
                 return newData.isNotEmpty
                     ? Padding(
                         padding: EdgeInsets.symmetric(
@@ -191,12 +198,17 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
                                       children: [
                                         Row(
                                           children: [
-                                            const Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 10),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10),
                                               child: Text(
-                                                'Total Amount',
-                                                style: TextStyle(
+                                                newData.first.categoryType ==
+                                                        'income'
+                                                    ? categoryName =
+                                                        'Total Income'
+                                                    : categoryName =
+                                                        'Total Expense',
+                                                style: const TextStyle(
                                                     color: AppColor
                                                         .ftTextSecondayColor,
                                                     fontWeight:

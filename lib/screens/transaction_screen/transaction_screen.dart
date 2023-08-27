@@ -4,7 +4,6 @@ import 'package:fin_trackr/db/functions/currency_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/models/category/category_model_db.dart';
 import 'package:fin_trackr/models/transactions/transaction_model_db.dart';
-import 'package:fin_trackr/screens/accounts_screen/balance_calculation.dart';
 import 'package:fin_trackr/screens/calculator/calculator_screen.dart';
 import 'package:fin_trackr/screens/transaction_screen/all_transaction_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +32,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
   @override
   void initState() {
     TransactionDB.instance.refresh();
+    TransactionDB.instance.getTransactionsForCurrentMonth();
+    CategoryDB.instance.getAllCategory();
     super.initState();
   }
 
@@ -48,10 +49,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
       fontSize = 16;
     }
     TransactionDB.instance.getTransactionsForCurrentMonth();
-    // TransactionDB.instance.refresh();
     CategoryDB.instance.getAllCategory();
 
-    balanceAmount();
     getCurrency();
 
     double incomeData = 0;
@@ -106,13 +105,13 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         lastDate: DateTime.now(),
                         initialDateRange: daterange);
                     if (picked != null) {
+                      CategoryDB.instance.getAllCategory();
                       TransactionDB.instance
                           .filterForHome(picked.start, picked.end);
                       setState(() {
                         selectedDate = picked;
                       });
                     }
-                    // TransactionDB.instance.refresh();
                     TransactionDB.instance.getTransactionsForCurrentMonth();
                   },
                   child: Text(
@@ -183,76 +182,95 @@ class _TransactionScreenState extends State<TransactionScreen> {
       body: Column(
         children: [
           //------------------------------------Income, Expense and Balance Preview --------------------------
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.04,
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColor.ftTransactionColor,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    color: AppColor.ftShadowColor,
-                    spreadRadius: 0,
-                    blurRadius: 5,
-                    offset: Offset(0, 3),
+          ValueListenableBuilder(
+            valueListenable:
+                TransactionDB.instance.transactionMonthListNotifier,
+            builder: (context, value, child) {
+              Map<String, List<TransactionModel>> mapList = sortByDate(value);
+              incomeData = mapList.values.fold(0, (previousValue, element) {
+                for (var transaction in element) {
+                  if (transaction.categoryType == CategoryType.income) {
+                    previousValue += transaction.amount;
+                  }
+                }
+                return previousValue;
+              });
+              expenseData = mapList.values.fold(0, (previousValue, element) {
+                for (var transaction in element) {
+                  if (transaction.categoryType == CategoryType.expense) {
+                    previousValue += transaction.amount;
+                  }
+                }
+                return previousValue;
+              });
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.04,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColor.ftTransactionColor,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: AppColor.ftShadowColor,
+                        spreadRadius: 0,
+                        blurRadius: 5,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Container(
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
-                    ),
-                    Wrap(
-                      spacing: 10.0,
-                      runSpacing: 10.0,
-                      crossAxisAlignment: WrapCrossAlignment.center,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Column(
                       children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.09,
-                          width: MediaQuery.of(context).size.width * 0.41,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: AppColor.ftIncomeColor,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: AppColor.ftShadowColor,
-                                spreadRadius: 0,
-                                blurRadius: 5,
-                                offset: Offset(0, 5),
-                              ),
-                            ],
-                          ),
-                          // --------------------------Income-------------------------
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  'Income',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColor.ftTextSecondayColor,
-                                    fontSize:
-                                        MediaQuery.of(context).size.width >= 300
-                                            ? 15
-                                            : MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.035,
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.02,
+                        ),
+                        Wrap(
+                          spacing: 10.0,
+                          runSpacing: 10.0,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.09,
+                              width: MediaQuery.of(context).size.width * 0.41,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: AppColor.ftIncomeColor,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: AppColor.ftShadowColor,
+                                    spreadRadius: 0,
+                                    blurRadius: 5,
+                                    offset: Offset(0, 5),
                                   ),
-                                ),
+                                ],
                               ),
-                              ValueListenableBuilder(
-                                valueListenable: incomenotifier,
-                                builder: (context, value, child) {
-                                  return FittedBox(
+                              // --------------------------Income-------------------------
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      'Income',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColor.ftTextSecondayColor,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width >=
+                                                    300
+                                                ? 15
+                                                : MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.035,
+                                      ),
+                                    ),
+                                  ),
+                                  FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Padding(
                                       padding: const EdgeInsets.only(
@@ -274,55 +292,51 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-
-                        //------------------------------Expense-------------------------
-
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.09,
-                          width: MediaQuery.of(context).size.width * 0.41,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: AppColor.ftExpenseColor,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: AppColor.ftShadowColor,
-                                spreadRadius: 0,
-                                blurRadius: 5,
-                                offset: Offset(0, 5),
+                                  )
+                                ],
                               ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  'Expense',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColor.ftTextSecondayColor,
-                                    fontSize:
-                                        MediaQuery.of(context).size.width >= 300
-                                            ? 15
-                                            : MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.035,
+                            ),
+
+                            //------------------------------Expense-------------------------
+
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.09,
+                              width: MediaQuery.of(context).size.width * 0.41,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: AppColor.ftExpenseColor,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: AppColor.ftShadowColor,
+                                    spreadRadius: 0,
+                                    blurRadius: 5,
+                                    offset: Offset(0, 5),
                                   ),
-                                ),
+                                ],
                               ),
-                              ValueListenableBuilder(
-                                valueListenable: expensenotifier,
-                                builder: (context, value, child) {
-                                  return FittedBox(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      'Expense',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColor.ftTextSecondayColor,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width >=
+                                                    300
+                                                ? 15
+                                                : MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.035,
+                                      ),
+                                    ),
+                                  ),
+                                  FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Padding(
                                       padding: const EdgeInsets.only(
@@ -344,38 +358,34 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
+                                  )
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                        // -------------------------------- Balance Start ----------------------------------------------
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            LayoutBuilder(
-                              builder: (BuildContext context,
-                                  BoxConstraints constraints) {
-                                return FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        'Balance',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          color: AppColor.ftTextSecondayColor,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      ValueListenableBuilder(
-                                        valueListenable: totalnotifier,
-                                        builder: (context, value, child) {
-                                          return Text(
+                            ),
+                            // -------------------------------- Balance Start ----------------------------------------------
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                LayoutBuilder(
+                                  builder: (BuildContext context,
+                                      BoxConstraints constraints) {
+                                    return FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'Balance',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              color:
+                                                  AppColor.ftTextSecondayColor,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                          Text(
                                             '${currencySymboleUpdate.value} ${formatter.format(incomeData - expenseData)}',
                                             style: const TextStyle(
                                               fontWeight: FontWeight.w700,
@@ -383,26 +393,26 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                                   AppColor.ftTextSecondayColor,
                                               fontSize: 35,
                                             ),
-                                          );
-                                        },
+                                          )
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                );
-                              },
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
                           ],
                         ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01,
+                        ),
+                        //------------------------------------Income, Expense and Balance Preview End --------------------------
                       ],
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01,
-                    ),
-                    //------------------------------------Income, Expense and Balance Preview End --------------------------
-                  ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
           // ----------------------------------- Transaction History ----------------------------------------
           ValueListenableBuilder(
@@ -442,30 +452,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                               }
                               return previousValue;
                             });
-
-                            incomeCustomDateNotifier.value = incomeData =
-                                mapList.values.fold(0,
-                                    (previousValue, element) {
-                              for (var transaction in element) {
-                                if (transaction.categoryType ==
-                                    CategoryType.income) {
-                                  previousValue += transaction.amount;
-                                }
-                              }
-                              return previousValue;
-                            });
-
-                            expenseData = mapList.values.fold(0,
-                                (previousValue, element) {
-                              for (var transaction in element) {
-                                if (transaction.categoryType ==
-                                    CategoryType.expense) {
-                                  previousValue += transaction.amount;
-                                }
-                              }
-                              return previousValue;
-                            });
-
                             return Padding(
                               padding: EdgeInsets.symmetric(
                                 horizontal:
