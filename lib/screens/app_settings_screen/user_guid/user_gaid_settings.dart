@@ -70,6 +70,11 @@ class _UserGuidState extends State<UserGuid> {
                   controller: _controller,
                   showVideoProgressIndicator: true,
                   onReady: () => debugPrint('Ready'),
+                  bottomActions: [
+                    CurrentPosition(),
+                    ProgressBar(isExpanded: true),
+                    const PlaybackSpeedButton()
+                  ],
                 ),
               ),
             ),
