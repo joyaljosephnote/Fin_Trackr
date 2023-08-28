@@ -5,7 +5,7 @@ import 'package:fin_trackr/screens/app_settings_screen/contact_us.dart';
 import 'package:fin_trackr/screens/app_settings_screen/currency_selector/currency_selector.dart';
 import 'package:fin_trackr/screens/app_settings_screen/expense_category_settings/expense_category_list_view.dart';
 import 'package:fin_trackr/screens/app_settings_screen/income_category_settings/income_category_list_view.dart';
-import 'package:fin_trackr/screens/app_settings_screen/user_guid/user_gaid_settings.dart';
+import 'package:fin_trackr/screens/app_settings_screen/user_guid/user_guid_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'dart:math' as math;
