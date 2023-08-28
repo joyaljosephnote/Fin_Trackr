@@ -94,6 +94,7 @@ flutter:
     - assets/searchNotFound.json
     - assets/nodata.json
     - assets/noSearch.json
+    - assets/image/appLogo.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

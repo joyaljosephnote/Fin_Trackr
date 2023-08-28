@@ -242,9 +242,31 @@ class _AccountGrouptState extends State<AccountGroup> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 30),
+                      RichText(
+                        text: const TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: '\nImportant : ',
+                              style: TextStyle(
+                                  color: AppColor.ftTextTertiaryColor,
+                                  height: 1.3,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text:
+                                  'Once the account group balance is updated, the existing account group balance will change according to the newly entered amount.\n',
+                              style: TextStyle(
+                                  color: AppColor.ftTextTertiaryColor,
+                                  height: 1.3,
+                                  fontSize: 12),
+                            )
+                          ],
+                        ),
+                      ),
                       const Divider(
-                          thickness: 3, color: AppColor.ftSecondaryDividerColor)
+                          thickness: 1,
+                          color: AppColor.ftSecondaryDividerColor),
                     ],
                   ),
                 ),
@@ -261,40 +283,46 @@ class _AccountGrouptState extends State<AccountGroup> {
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (ctx, index) {
                             final data = accountGroupNameList[index];
-                            return Row(
+                            return Column(
                               children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  height: 40,
-                                  child: Text(
-                                    data.name,
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        color: AppColor.ftTextSecondayColor),
-                                  ),
-                                ),
-                                const Spacer(),
-                                IconButton(
-                                  onPressed: () {
-                                    setState(
-                                      () {
-                                        accountGroupNameController =
-                                            TextEditingController(
-                                                text: data.name);
+                                Row(
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      height: 40,
+                                      child: Text(
+                                        data.name,
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            color:
+                                                AppColor.ftTextSecondayColor),
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(
+                                          () {
+                                            accountGroupNameController =
+                                                TextEditingController(
+                                                    text: data.name);
+                                          },
+                                        );
+                                        accountGroupModel = data;
                                       },
-                                    );
-                                    accountGroupModel = data;
-                                  },
-                                  icon: const Icon(Icons.edit_outlined,
-                                      color: AppColor.ftTextTertiaryColor),
+                                      icon: const Icon(Icons.edit_outlined,
+                                          color: AppColor.ftTextTertiaryColor),
+                                    ),
+                                  ],
                                 ),
+                                const Divider(
+                                    thickness: 1,
+                                    color: AppColor.ftSecondaryDividerColor),
                               ],
                             );
                           },
                           separatorBuilder: (ctx, index) {
-                            return const Divider(
-                                thickness: 1,
-                                color: AppColor.ftSecondaryDividerColor);
+                            return Container();
                           },
                           itemCount: accountGroupNameList.length)
                       : Container();
