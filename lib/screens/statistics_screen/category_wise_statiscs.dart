@@ -4,6 +4,7 @@ import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/models/statistics/statistics_model.db.dart';
+import 'package:fin_trackr/models/transactions/transaction_model_db.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
@@ -164,6 +165,9 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
             ValueListenableBuilder(
               valueListenable: TransactionDB.instance.transactionListNotifier,
               builder: (context, value, child) {
+                Map<String, List<TransactionModel>> model = sortByDate(value);
+                String startDate = model.keys.last.toString();
+                String endDate = model.keys.first.toString();
                 List<ChartDatas> newData = chartLogic(value);
                 double amount = newData.fold(0,
                     (previousValue, element) => previousValue + element.amount);
@@ -238,6 +242,22 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
                                             color: AppColor
                                                 .ftSecondaryDividerColor,
                                           ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                "Date : ${DateFormat("MMM dd").format(DateTime.parse(startDate))} - ${DateFormat("MMM dd").format(DateTime.parse(endDate))}",
+                                                style: const TextStyle(
+                                                    color: AppColor
+                                                        .ftTextTertiaryColor,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -494,5 +514,17 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
       ],
       elevation: 8.0,
     );
+  }
+
+  Map<String, List<TransactionModel>> sortByDate(
+      List<TransactionModel> models) {
+    Map<String, List<TransactionModel>> mapList = {};
+    for (TransactionModel model in models) {
+      if (!mapList.containsKey(model.date)) {
+        mapList[model.date] = [];
+      }
+      mapList[model.date]!.add(model);
+    }
+    return mapList;
   }
 }
