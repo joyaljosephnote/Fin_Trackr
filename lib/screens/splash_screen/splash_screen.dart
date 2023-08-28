@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +15,12 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    super.initState();
     _navigateHome();
+    super.initState();
   }
 
   _navigateHome() async {
-    await Future.delayed(const Duration(seconds: 2), () {});
-    // ignore: use_build_context_synchronously
+    await Future.delayed(const Duration(milliseconds: 1500), () {});
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -31,6 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    ImageProvider logo = const AssetImage("assets/image/appLogo.png");
     return Scaffold(
       backgroundColor: AppColor.ftScafoldColor,
       body: Container(
@@ -58,39 +60,13 @@ class _SplashScreenState extends State<SplashScreen> {
                     Row(
                       children: [
                         Container(
-                          width: 25,
-                          height: 25,
-                          decoration: const BoxDecoration(
+                          width: 72,
+                          height: 39.36,
+                          decoration: BoxDecoration(
                             image: DecorationImage(
+                              image: logo,
                               fit: BoxFit.cover,
-                              image: AssetImage('assets/image/appLogo.png'),
                             ),
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.bottomCenter,
-                          height: 30,
-                          child: Column(
-                            children: [
-                              const Text(
-                                'from  ',
-                                style: TextStyle(
-                                  height: 1.1,
-                                  fontSize: 12,
-                                  color: AppColor.ftTextTertiaryColor,
-                                ),
-                              ),
-                              Text(
-                                'Hello Tech',
-                                style: TextStyle(
-                                  height: 1.2,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: GoogleFonts.ubuntu().fontFamily,
-                                  color: AppColor.ftTextTertiaryColor,
-                                ),
-                              ),
-                            ],
                           ),
                         ),
                       ],
