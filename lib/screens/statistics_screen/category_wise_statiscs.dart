@@ -166,8 +166,12 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
               valueListenable: TransactionDB.instance.transactionListNotifier,
               builder: (context, value, child) {
                 Map<String, List<TransactionModel>> model = sortByDate(value);
-                String startDate = model.keys.last.toString();
-                String endDate = model.keys.first.toString();
+                String? endDate;
+                String? startDate;
+                if (value.isNotEmpty) {
+                  endDate = model.keys.first.toString();
+                  startDate = model.keys.last.toString();
+                }
                 List<ChartDatas> newData = chartLogic(value);
                 double amount = newData.fold(0,
                     (previousValue, element) => previousValue + element.amount);
@@ -249,7 +253,7 @@ class _CategoryWiseStatisticsState extends State<CategoryWiseStatistics> {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
-                                                "Date : ${DateFormat("MMM dd").format(DateTime.parse(startDate))} - ${DateFormat("MMM dd").format(DateTime.parse(endDate))}",
+                                                "Date : ${DateFormat("MMM dd").format(DateTime.parse(startDate!))} - ${DateFormat("MMM dd").format(DateTime.parse(endDate!))}",
                                                 style: const TextStyle(
                                                     color: AppColor
                                                         .ftTextTertiaryColor,
