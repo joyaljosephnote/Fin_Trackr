@@ -6,6 +6,7 @@ import 'package:fin_trackr/models/category/category_model_db.dart';
 import 'package:fin_trackr/models/transactions/transaction_model_db.dart';
 import 'package:fin_trackr/screens/calculator/calculator_screen.dart';
 import 'package:fin_trackr/screens/transaction_screen/all_transaction_screen.dart';
+import 'package:fin_trackr/screens/transaction_screen/widget/transaction_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
@@ -21,14 +22,8 @@ class TransactionScreen extends StatefulWidget {
 
 class _TransactionScreenState extends State<TransactionScreen> {
   NumberFormat formatter = NumberFormat('#,##0.00');
-  DateTimeRange selectedDate = DateTimeRange(
-    start: DateTime(DateTime.now().year, DateTime.now().month),
-    end: DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-    ),
-  );
+  DateTimeRange selectedDate = SelectDate().currentDateForCalenderSelection();
+
   @override
   void initState() {
     TransactionDB.instance.refresh();
@@ -75,12 +70,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   onPressed: () {
                     setState(
                       () {
-                        selectedDate = DateTimeRange(
-                          start: DateTime(
-                              DateTime.now().year, DateTime.now().month - 1, 1),
-                          end: DateTime(
-                              DateTime.now().year, DateTime.now().month, 0),
-                        );
+                        selectedDate = SelectDate().selectePreviousMonth();
                       },
                     );
                     TransactionDB.instance
@@ -90,15 +80,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 ),
                 TextButton(
                   onPressed: () async {
-                    var daterange = DateTimeRange(
-                      start:
-                          DateTime(DateTime.now().year, DateTime.now().month),
-                      end: DateTime(
-                        DateTime.now().year,
-                        DateTime.now().month,
-                        DateTime.now().day,
-                      ),
-                    );
+                    var daterange =
+                        SelectDate().currentDateForCalenderSelection();
                     DateTimeRange? picked = await showDateRangePicker(
                         context: context,
                         firstDate: DateTime(DateTime.now().year - 1),
@@ -129,12 +112,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   onPressed: () {
                     setState(
                       () {
-                        selectedDate = DateTimeRange(
-                          start: DateTime(
-                              DateTime.now().year, DateTime.now().month, 1),
-                          end: DateTime(
-                              DateTime.now().year, DateTime.now().month + 1, 0),
-                        );
+                        selectedDate = SelectDate().selecteNextMonth();
                       },
                     );
                     TransactionDB.instance.refresh();
@@ -152,7 +130,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   icon: const Icon(Ionicons.swap_horizontal,
                       color: AppColor.ftTextSecondayColor, size: 18),
                   onPressed: () {
-                    // Handle forward button press
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -165,7 +142,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   icon: const Icon(Ionicons.calculator,
                       color: AppColor.ftTextSecondayColor, size: 18),
                   onPressed: () {
-                    // Handle forward button press
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -186,7 +162,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
             valueListenable:
                 TransactionDB.instance.transactionMonthListNotifier,
             builder: (context, value, child) {
-              Map<String, List<TransactionModel>> mapList = sortByDate(value);
+              Map<String, List<TransactionModel>> mapList =
+                  SelectDate().sortByDate(value);
               incomeData = mapList.values.fold(0, (previousValue, element) {
                 for (var transaction in element) {
                   if (transaction.categoryType == CategoryType.income) {
@@ -257,17 +234,17 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                     child: Text(
                                       'Income',
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColor.ftTextSecondayColor,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width >=
-                                                    300
-                                                ? 15
-                                                : MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.035,
-                                      ),
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColor.ftTextSecondayColor,
+                                          fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width >=
+                                                  300
+                                              ? 15
+                                              : MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.035),
                                     ),
                                   ),
                                   FittedBox(
@@ -278,27 +255,24 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                       child: Text(
                                         formatter.format(incomeData),
                                         style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          color: AppColor.ftTextSecondayColor,
-                                          fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width >=
-                                                  300
-                                              ? 18
-                                              : MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.06,
-                                        ),
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColor.ftTextSecondayColor,
+                                            fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width >=
+                                                    300
+                                                ? 18
+                                                : MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.06),
                                       ),
                                     ),
                                   )
                                 ],
                               ),
                             ),
-
                             //------------------------------Expense-------------------------
-
                             Container(
                               height: MediaQuery.of(context).size.height * 0.09,
                               width: MediaQuery.of(context).size.width * 0.41,
@@ -419,11 +393,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
             valueListenable:
                 TransactionDB.instance.transactionMonthListNotifier,
             builder: (context, newList, child) {
-              Map<String, List<TransactionModel>> mapList = sortByDate(newList);
-              if (mapList.isEmpty) {
-                incomeData = 0;
-                expenseData = 0;
-              }
+              Map<String, List<TransactionModel>> mapList =
+                  SelectDate().sortByDate(newList);
               List<String> keys = mapList.keys.toList();
               return keys.isNotEmpty
                   ? Expanded(
@@ -601,17 +572,5 @@ class _TransactionScreenState extends State<TransactionScreen> {
         ],
       ),
     );
-  }
-
-  Map<String, List<TransactionModel>> sortByDate(
-      List<TransactionModel> models) {
-    Map<String, List<TransactionModel>> mapList = {};
-    for (TransactionModel model in models) {
-      if (!mapList.containsKey(model.date)) {
-        mapList[model.date] = [];
-      }
-      mapList[model.date]!.add(model);
-    }
-    return mapList;
   }
 }
