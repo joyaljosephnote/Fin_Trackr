@@ -107,6 +107,3 @@ gitHub() async {
     throw 'Could not launch $url';
   }
 }
-
-const videoURL = 'https://youtu.be/N7WB6w0GoH8';
-//User guid video
