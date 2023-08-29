@@ -54,11 +54,10 @@ class _TransactionScreenSelector extends State<TransactionScreenSelector>
     CategoryDB.instance.getAllCategory();
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    double fontSize =
-        9; // default font size for screen width between 280 and 350
+    double fontSize = 9;
 
     if (screenWidth > 350) {
-      fontSize = 16; // increase font size for screen width above 350
+      fontSize = 16;
     }
     return Scaffold(
       resizeToAvoidBottomInset: false,
