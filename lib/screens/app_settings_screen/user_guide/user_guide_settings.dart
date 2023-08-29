@@ -1,14 +1,14 @@
 import 'package:fin_trackr/constants/constant.dart';
 import 'package:flutter/material.dart';
 
-class UserGuid extends StatefulWidget {
-  const UserGuid({super.key});
+class UserGuide extends StatefulWidget {
+  const UserGuide({super.key});
 
   @override
-  State<UserGuid> createState() => _UserGuidState();
+  State<UserGuide> createState() => _UserGuideState();
 }
 
-class _UserGuidState extends State<UserGuid> {
+class _UserGuideState extends State<UserGuide> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
