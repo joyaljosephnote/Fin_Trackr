@@ -7,6 +7,7 @@ FinTrackr is an exceptional financial tracking application designed to put you i
 1. **Seamless Transaction Management:** Effortlessly add income and expenses with the option to attach receipts for better record-keeping.
 
 ![Alt text](<splash screen.jpeg>)
+<img src="splash_screen.jpeg" alt="splash screen" width="300"/>
 
 ![Alt text](<Home screen.jpeg>)
 
