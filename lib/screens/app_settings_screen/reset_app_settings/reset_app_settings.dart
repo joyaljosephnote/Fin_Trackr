@@ -109,7 +109,6 @@ class ResetAppSettings extends StatelessWidget {
                 categoryDb.clear();
                 transactionDB.clear();
                 HoemeScreen.selectedIndexNotifier = ValueNotifier(0);
-                // ignore: use_build_context_synchronously
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => const WelcomeScreenOne()));
               },

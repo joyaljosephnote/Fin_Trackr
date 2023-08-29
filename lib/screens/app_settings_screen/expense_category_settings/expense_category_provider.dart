@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/models/category/category_model_db.dart';
 
@@ -5,7 +7,6 @@ class ExpenseCategoryProvider {
   Future<void> editCategoryDetails(
       editCategoryModel, categoryController) async {
     final name = categoryController.text;
-    // ignore: unnecessary_null_comparison
     if (name.isEmpty == null) {
       return;
     } else {
@@ -18,14 +19,11 @@ class ExpenseCategoryProvider {
   }
 
   Future<void> addDefaultCategory(appDefaultExpenseCategory) async {
-    // ignore: no_leading_underscores_for_local_identifiers
     List<String> _addExpenseDefaultCategory =
         appDefaultExpenseCategory.toList();
-    // ignore: no_leading_underscores_for_local_identifiers
     String _expenseCategoryName;
     for (var element in _addExpenseDefaultCategory) {
       _expenseCategoryName = element;
-      // ignore: no_leading_underscores_for_local_identifiers
       final _expenseCategory = CategoryModel(
         id: "${_expenseCategoryName.toLowerCase()}+${CategoryType.expense}",
         isDeleted: false,
@@ -38,7 +36,6 @@ class ExpenseCategoryProvider {
   }
 
   Future<void> onAddExpenseCategorySavedButton(categoryController) async {
-    // ignore: no_leading_underscores_for_local_identifiers
     final _expenseCategory = CategoryModel(
         name: categoryController.text.trim(),
         categoryType: CategoryType.expense,

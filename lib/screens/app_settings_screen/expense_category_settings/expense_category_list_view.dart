@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
 
-// ignore: must_be_immutable
 class ExpenseCategoryList extends StatefulWidget {
   const ExpenseCategoryList({super.key});
 
@@ -14,18 +13,10 @@ class ExpenseCategoryList extends StatefulWidget {
 }
 
 class _ExpenseCategoryListState extends State<ExpenseCategoryList> {
-  // ignore: prefer_final_field
   TextEditingController expenseCategoryController = TextEditingController();
-
-  // ignore: non_constant_identifier_names
   final _formKey = GlobalKey<FormState>();
-  //it is used for updation
   late CategoryModel categoryExpenseModel;
-
-  // this flag for defauilt income category button check;
   bool? defaultFlag = true;
-
-  //textFeildEdit button is used for change theSave button updation
   bool textFeildEdit = false;
 
   List<CategoryModel> selectedExpenseCategory = [];
@@ -33,11 +24,9 @@ class _ExpenseCategoryListState extends State<ExpenseCategoryList> {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    double fontSize =
-        9; // default font size for screen width between 280 and 350
-
+    double fontSize = 9;
     if (screenWidth > 350) {
-      fontSize = 16; // increase font size for screen width above 350
+      fontSize = 16;
     }
     CategoryDB().getAllCategory();
     return Scaffold(
@@ -102,8 +91,6 @@ class _ExpenseCategoryListState extends State<ExpenseCategoryList> {
                                       vertical: 10, horizontal: 25)),
                               onPressed: () {
                                 if (textFeildEdit == false) {
-                                  // ignore: avoid_print
-                                  print("first save");
                                   if (_formKey.currentState!.validate()) {
                                     ExpenseCategoryProvider()
                                         .onAddExpenseCategorySavedButton(
@@ -126,8 +113,6 @@ class _ExpenseCategoryListState extends State<ExpenseCategoryList> {
                                   ExpenseCategoryProvider().editCategoryDetails(
                                       categoryExpenseModel,
                                       expenseCategoryController);
-                                  // ignore: avoid_print
-                                  print("second save");
                                   textFeildEdit = false;
                                   expenseCategoryController.clear();
                                 }

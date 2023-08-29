@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
 
-// ignore: must_be_immutable
 class IncomeCategoryList extends StatefulWidget {
   const IncomeCategoryList({super.key});
 
@@ -14,31 +13,20 @@ class IncomeCategoryList extends StatefulWidget {
 }
 
 class _IncomeCategoryListState extends State<IncomeCategoryList> {
-  // ignore: prefer_final_field
   TextEditingController incomeCategoryController = TextEditingController();
-
-  // ignore: non_constant_identifier_names
   final _formKey = GlobalKey<FormState>();
-  //it is used for updation
   late CategoryModel categoryIncomeModel;
-
-  // this flag for defauilt income category button check;
   bool? defaultFlag = true;
-
-  //textFeildEdit button is used for change theSave button updation
   bool textFeildEdit = false;
-
   List<CategoryModel> selectedIncomeCategory = [];
 
   @override
   Widget build(BuildContext context) {
     CategoryDB().getAllCategory();
     final double screenWidth = MediaQuery.of(context).size.width;
-    double fontSize =
-        9; // default font size for screen width between 280 and 350
-
+    double fontSize = 9;
     if (screenWidth > 350) {
-      fontSize = 16; // increase font size for screen width above 350
+      fontSize = 16;
     }
     return Scaffold(
       backgroundColor: AppColor.ftScafoldColor,
@@ -102,8 +90,6 @@ class _IncomeCategoryListState extends State<IncomeCategoryList> {
                                       vertical: 10, horizontal: 25)),
                               onPressed: () {
                                 if (textFeildEdit == false) {
-                                  // ignore: avoid_print
-                                  print("first save");
                                   if (_formKey.currentState!.validate()) {
                                     IncomeCategoryProvider()
                                         .onAddIncomeCategorySavedButton(
@@ -126,8 +112,6 @@ class _IncomeCategoryListState extends State<IncomeCategoryList> {
                                   IncomeCategoryProvider().editCategoryDetails(
                                       categoryIncomeModel,
                                       incomeCategoryController);
-                                  // ignore: avoid_print
-                                  print("second save");
                                   textFeildEdit = false;
                                   incomeCategoryController.clear();
                                 }
