@@ -1,7 +1,7 @@
 import 'package:fin_trackr/constants/constant.dart';
 import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
-import 'package:fin_trackr/default/app_default.dart';
+import 'package:fin_trackr/constants/default/app_default.dart';
 import 'package:fin_trackr/screens/app_settings_screen/expense_category_settings/expense_category_provider.dart';
 import 'package:fin_trackr/screens/app_settings_screen/income_category_settings/income_category_provider.dart';
 import 'package:fin_trackr/screens/splash_screen/splash_screen.dart';

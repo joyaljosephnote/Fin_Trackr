@@ -1,4 +1,4 @@
-import 'package:fin_trackr/default/app_default.dart';
+import 'package:fin_trackr/constants/default/app_default.dart';
 import 'package:fin_trackr/models/category/category_model_db.dart';
 import 'package:fin_trackr/screens/app_settings_screen/expense_category_settings/expense_category_provider.dart';
 import 'package:flutter/material.dart';
