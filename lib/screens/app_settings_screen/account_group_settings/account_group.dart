@@ -63,7 +63,6 @@ class _AccountGrouptState extends State<AccountGroup> {
             icon: const Icon(Ionicons.calculator,
                 color: AppColor.ftTextSecondayColor, size: 18),
             onPressed: () {
-              // Handle forward button press
               Navigator.push(
                 context,
                 MaterialPageRoute(
