@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers
 
 import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
@@ -287,12 +287,10 @@ class _CurencySelectionState extends State<CurencySelection> {
   }
 
   Future<void> onAddCurrencySavedButton() async {
-    // ignore: no_leading_underscores_for_local_identifiers
     final _currencyUpdate = CurrencyModel(
         id: '1',
         cuntry: _currencyController.text.trim(),
         symbol: _currencySymbolController.text.trim());
-
     addCurrency(_currencyUpdate);
     _currencyController.clear();
     _currencySymbolController.clear();
