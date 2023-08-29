@@ -1,5 +1,3 @@
-// ignore_for_file: unused_field, use_build_context_synchronously
-
 import 'package:fin_trackr/constant/constant.dart';
 import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
@@ -22,6 +20,7 @@ class WelcomeScreenOne extends StatefulWidget {
 }
 
 class _WelcomeScreenOneState extends State<WelcomeScreenOne> {
+  // ignore: unused_field
   bool _hasSeenWelcomeScreen = false;
 
   // ignore: prefer_final_fields
@@ -67,8 +66,6 @@ class _WelcomeScreenOneState extends State<WelcomeScreenOne> {
               IntroPageThree(),
             ],
           ),
-
-          // dot Indicators
           Container(
               alignment: const Alignment(0, 0.75),
               child: Row(
@@ -84,10 +81,8 @@ class _WelcomeScreenOneState extends State<WelcomeScreenOne> {
                       style: TextStyle(color: AppColor.ftTextSecondayColor),
                     ),
                   ),
-
                   //dot Indicator
                   SmoothPageIndicator(controller: _dotController, count: 3),
-
                   onLastPage
                       ? GestureDetector(
                           onTap: () {
