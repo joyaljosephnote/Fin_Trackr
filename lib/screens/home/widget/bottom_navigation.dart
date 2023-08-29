@@ -1,4 +1,4 @@
-import 'package:fin_trackr/constant/constant.dart';
+import 'package:fin_trackr/constants/constant.dart';
 import 'package:fin_trackr/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';

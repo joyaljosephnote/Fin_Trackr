@@ -2,7 +2,7 @@ import 'package:fin_trackr/default/app_default.dart';
 import 'package:fin_trackr/models/category/category_model_db.dart';
 import 'package:fin_trackr/screens/app_settings_screen/income_category_settings/income_category_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:fin_trackr/constant/constant.dart';
+import 'package:fin_trackr/constants/constant.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
 
 class IncomeCategoryList extends StatefulWidget {

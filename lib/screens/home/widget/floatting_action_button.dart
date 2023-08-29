@@ -1,4 +1,4 @@
-import 'package:fin_trackr/constant/constant.dart';
+import 'package:fin_trackr/constants/constant.dart';
 import 'package:fin_trackr/screens/app_settings_screen/account_group_settings/account_group.dart';
 import 'package:fin_trackr/screens/transaction_screen/add_transactions/add_transactions_selector.dart';
 import 'package:flutter/material.dart';

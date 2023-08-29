@@ -1,4 +1,4 @@
-import 'package:fin_trackr/constant/constant.dart';
+import 'package:fin_trackr/constants/constant.dart';
 import 'package:fin_trackr/details/about_app/about_app.dart';
 import 'package:fin_trackr/screens/app_settings_screen/account_group_settings/account_group.dart';
 import 'package:fin_trackr/screens/app_settings_screen/contact_us.dart';

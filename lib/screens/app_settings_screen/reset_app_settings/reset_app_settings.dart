@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, duplicate_ignore
 
-import 'package:fin_trackr/constant/constant.dart';
+import 'package:fin_trackr/constants/constant.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/models/category/category_model_db.dart';

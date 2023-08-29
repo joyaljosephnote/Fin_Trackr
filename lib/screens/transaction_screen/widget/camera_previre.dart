@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:fin_trackr/constant/constant.dart';
+import 'package:fin_trackr/constants/constant.dart';
 import 'package:flutter/material.dart';
 
 class ImagePreview extends StatefulWidget {

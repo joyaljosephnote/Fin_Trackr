@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers
 
-import 'package:fin_trackr/constant/constant.dart';
+import 'package:fin_trackr/constants/constant.dart';
 import 'package:fin_trackr/db/functions/currency_function.dart';
 import 'package:fin_trackr/models/currency/curency_model.db.dart';
 import 'package:flutter/material.dart';

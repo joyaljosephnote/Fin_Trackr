@@ -9,7 +9,7 @@ import 'package:fin_trackr/models/category/category_model_db.dart';
 import 'package:fin_trackr/screens/accounts_screen/balance_calculation.dart';
 import 'package:fin_trackr/screens/calculator/calculator_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:fin_trackr/constant/constant.dart';
+import 'package:fin_trackr/constants/constant.dart';
 import 'package:ionicons/ionicons.dart';
 
 // ignore: must_be_immutable

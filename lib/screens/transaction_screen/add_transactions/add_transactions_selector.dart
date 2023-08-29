@@ -1,4 +1,4 @@
-import 'package:fin_trackr/constant/constant.dart';
+import 'package:fin_trackr/constants/constant.dart';
 import 'package:fin_trackr/db/functions/category_functions.dart';
 import 'package:fin_trackr/models/transactions/transaction_model_db.dart';
 import 'package:fin_trackr/screens/app_settings_screen/account_group_settings/account_group.dart';
