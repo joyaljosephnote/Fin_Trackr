@@ -10,7 +10,7 @@ import 'package:fin_trackr/db/functions/transaction_function.dart';
 import 'package:fin_trackr/models/account_group/account_group_model_db.dart';
 import 'package:fin_trackr/models/category/category_model_db.dart';
 import 'package:fin_trackr/models/transactions/transaction_model_db.dart';
-import 'package:fin_trackr/screens/transaction_screen/add_transactions/camera_previre.dart';
+import 'package:fin_trackr/screens/transaction_screen/widget/camera_previre.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -71,10 +71,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     getAllAccountGroup();
     CategoryDB().getAllCategory();
     final double screenWidth = MediaQuery.of(context).size.width;
-    double fontSize =
-        9; // default font size for screen width between 280 and 350
+    double fontSize = 9;
     if (screenWidth > 350) {
-      fontSize = 16; // increase font size for screen width above 350
+      fontSize = 16;
     }
     return Scaffold(
       backgroundColor: AppColor.ftScafoldColor,
@@ -152,7 +151,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         ),
                         controller: TextEditingController(
                           text:
-                              '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}', // display selected date in text field
+                              '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
                         ),
                         readOnly: true,
                         onTap: () async {
