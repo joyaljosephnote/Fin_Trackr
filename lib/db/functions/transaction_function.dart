@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member, non_constant_identifier_names
+
 import 'dart:core';
 import 'package:fin_trackr/db/functions/account_group_function.dart';
 import 'package:fin_trackr/models/category/category_model_db.dart';
@@ -44,9 +46,7 @@ class TransactionDB implements TransactionDBFunctions {
     transactionMonthListNotifier.value.clear();
     transactionListNotifier.value.addAll(list);
     transactionMonthListNotifier.value.addAll(listForMonth);
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     transactionListNotifier.notifyListeners();
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     transactionMonthListNotifier.notifyListeners();
   }
 
@@ -54,15 +54,12 @@ class TransactionDB implements TransactionDBFunctions {
     final now = DateTime.now();
     final startOfMonth = DateTime(now.year, now.month, 1);
     final endOfMonth = DateTime(now.year, now.month + 1, 0);
-
-    // Step 4: Use Hive queries instead of SQLite queries
     final box = Hive.box<TransactionModel>(TRANSACTION_DB_NAME);
     final results = box.values.where((trxn) =>
         DateTime.parse(trxn.date)
             .isAfter(startOfMonth.subtract(const Duration(days: 1))) &&
         DateTime.parse(trxn.date)
             .isBefore(endOfMonth.add(const Duration(days: 1))));
-
     return results.toList();
   }
 
@@ -85,9 +82,6 @@ class TransactionDB implements TransactionDBFunctions {
     final db = await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
     final tempModel = db.values.where((element) => element.id == id).first;
     await db.put(id, model);
-    // transactionListNotifier.value.clear();
-    // transactionListNotifier.value.addAll(db.values);
-    // getAllTransactions();
     await editAccountGroup(tempModel);
     await updateAccountGroup(model);
     refresh();
@@ -136,7 +130,6 @@ class TransactionDB implements TransactionDBFunctions {
     }
     transactionListNotifier.value.clear();
     transactionListNotifier.value.addAll(filteredList);
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     transactionListNotifier.notifyListeners();
   }
 
@@ -150,7 +143,6 @@ class TransactionDB implements TransactionDBFunctions {
           .toList()
         ..sort((first, second) => second.date.compareTo(first.date)));
       selectedCatogory = "Income";
-      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       transactionListNotifier.notifyListeners();
     } else if (text == 'Expense') {
       final transactionDB =
@@ -161,19 +153,15 @@ class TransactionDB implements TransactionDBFunctions {
           .toList()
         ..sort((first, second) => second.date.compareTo(first.date)));
       selectedCatogory = "Expense";
-
-      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       transactionListNotifier.notifyListeners();
     } else if (text == "All") {
       selectedCatogory = "All";
       refresh();
-      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       transactionListNotifier.notifyListeners();
     }
   }
 
   Future<void> filterDataByDate(String dateRange) async {
-    // ignore: non_constant_identifier_names
     final TransactionDb =
         await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
     List<TransactionModel> dateFilterList = [];
@@ -204,7 +192,6 @@ class TransactionDB implements TransactionDBFunctions {
                 DateTime.parse(element.date).year == DateTime.now().year)
             .toList()
           ..sort((first, second) => second.date.compareTo(first.date));
-        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         transactionListNotifier.notifyListeners();
       }
     } else if (dateRange == 'yesterday') {
@@ -234,7 +221,6 @@ class TransactionDB implements TransactionDBFunctions {
                 DateTime.parse(element.date).year == DateTime.now().year)
             .toList()
           ..sort((first, second) => second.date.compareTo(first.date));
-        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         transactionListNotifier.notifyListeners();
       }
     } else if (dateRange == 'last week') {
@@ -272,12 +258,10 @@ class TransactionDB implements TransactionDBFunctions {
     }
     transactionListNotifier.value.clear();
     transactionListNotifier.value = dateFilterList;
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     transactionListNotifier.notifyListeners();
   }
 
   Future<void> filterByDate(DateTime start, DateTime end) async {
-    // ignore: non_constant_identifier_names
     final TransactionDb =
         await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
     List<TransactionModel> dateFilterList = [];
@@ -321,15 +305,12 @@ class TransactionDB implements TransactionDBFunctions {
           .toList()
         ..sort((first, second) => second.date.compareTo(first.date));
     }
-
     transactionListNotifier.value.clear();
     transactionListNotifier.value = dateFilterList;
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     transactionListNotifier.notifyListeners();
   }
 
   Future<void> filterForHome(DateTime start, DateTime end) async {
-    // ignore: non_constant_identifier_names
     final TransactionDb =
         await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
     List<TransactionModel> dateFilterList = [];
@@ -375,7 +356,6 @@ class TransactionDB implements TransactionDBFunctions {
     }
     transactionMonthListNotifier.value.clear();
     transactionMonthListNotifier.value = dateFilterList;
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     transactionMonthListNotifier.notifyListeners();
   }
 }

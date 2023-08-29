@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+
 import 'package:fin_trackr/models/currency/curency_model.db.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -17,16 +19,13 @@ Future<void> addCurrency(CurrencyModel value) async {
 Future<void> getAllCurrency() async {
   final currencyDB = await Hive.openBox<CurrencyModel>(CURENCY_DB_NAME);
   currencyNotifier.value.clear();
-
   currencyNotifier.value.addAll(currencyDB.values);
-  // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
   currencyNotifier.notifyListeners();
 }
 
 Future<void> getCurrency() async {
   var currencyDB = await Hive.openBox<CurrencyModel>(CURENCY_DB_NAME);
   currencySymboleUpdate.value = currencyDB.values.first.symbol;
-  // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
   currencyNotifier.notifyListeners();
   getAllCurrency();
 }

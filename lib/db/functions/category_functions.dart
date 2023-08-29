@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member, unused_local_variable
+
 import 'package:fin_trackr/models/category/category_model_db.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -33,11 +35,8 @@ class CategoryDB implements CategoryDBfunctions {
 
   @override
   Future<List<CategoryModel>> getCategories() async {
-    // ignore: non_constant_identifier_names
     final CategoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     incomeCategoryNotifier.notifyListeners();
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     expenseCategoryNotifier.notifyListeners();
     return CategoryDB.values.toList();
   }
@@ -46,12 +45,9 @@ class CategoryDB implements CategoryDBfunctions {
     final categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
     incomeCategoryNotifier.value.clear();
     expenseCategoryNotifier.value.clear();
-
     incomeCategoryNotifier.value.addAll(categoryDB.values);
     expenseCategoryNotifier.value.addAll(categoryDB.values);
-    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
     incomeCategoryNotifier.notifyListeners();
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     expenseCategoryNotifier.notifyListeners();
   }
 
@@ -68,14 +64,11 @@ class CategoryDB implements CategoryDBfunctions {
     required String id,
     required String name,
   }) async {
-    // ignore: unused_local_variable
     final categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
     editCategoryModel.id = id;
     editCategoryModel.name = name;
     editCategoryModel.save();
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     incomeCategoryNotifier.notifyListeners();
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     expenseCategoryNotifier.notifyListeners();
   }
 }

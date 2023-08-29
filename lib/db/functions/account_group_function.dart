@@ -1,14 +1,12 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: constant_identifier_names, invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
 
 import 'package:fin_trackr/models/account_group/account_group_model_db.dart';
 import 'package:fin_trackr/models/category/category_model_db.dart';
 import 'package:fin_trackr/models/transactions/transaction_model_db.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import 'package:flutter/material.dart';
 
-// ignore: constant_identifier_names
 const ACCOUNT_DB_NAME = 'account-group-database';
 ValueNotifier<List<AccountGroupModel>> accountGroupNotifier = ValueNotifier([]);
 
@@ -31,6 +29,7 @@ Future<void> addInitialData() async {
 
   await box.put('account', defaultModel1);
   await box.put('cash', defaultModel2);
+  getAllAccountGroup();
 }
 
 Future<void> addAccountGroup(AccountGroupModel value) async {
@@ -93,21 +92,12 @@ Future<void> selfTransfer(
 
 Future<List<AccountGroupModel>> getAllAccountAmount() async {
   final accountGroupDB = await Hive.openBox<AccountGroupModel>(ACCOUNT_DB_NAME);
-  // accountGroupNotifier.value.clear();
-  // accountGroupNotifier.value.addAll(accountGroupDB.values);
-  // // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-  // accountGroupNotifier.notifyListeners();
-  List<AccountGroupModel> temp = accountGroupDB.values.toList();
-  print("${temp[0].amount} from db 1");
-  print("${temp[1].amount} from db 2");
   return accountGroupDB.values.toList();
 }
 
 Future<void> getAllAccountGroup() async {
   final accountGroupDB = await Hive.openBox<AccountGroupModel>(ACCOUNT_DB_NAME);
   accountGroupNotifier.value.clear();
-
   accountGroupNotifier.value.addAll(accountGroupDB.values);
-  // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
   accountGroupNotifier.notifyListeners();
 }
