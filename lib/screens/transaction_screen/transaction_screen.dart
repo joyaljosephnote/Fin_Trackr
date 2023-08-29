@@ -79,11 +79,24 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   },
                 ),
                 TextButton(
+                  style: TextButton.styleFrom(
+                      foregroundColor: AppColor.ftScafoldColor),
                   onPressed: () async {
                     var daterange =
                         SelectDate().currentDateForCalenderSelection();
                     DateTimeRange? picked = await showDateRangePicker(
                         context: context,
+                        builder: (context, child) {
+                          return Theme(
+                            data: ThemeData.dark().copyWith(
+                                colorScheme: const ColorScheme.dark(
+                                    onPrimary: AppColor.ftAppBarColor,
+                                    onSurface: AppColor.ftTextSecondayColor,
+                                    primary: AppColor.ftTextTertiaryColor),
+                                dialogBackgroundColor: AppColor.ftAppBarColor),
+                            child: child!,
+                          );
+                        },
                         firstDate: DateTime(DateTime.now().year - 1),
                         lastDate: DateTime.now(),
                         initialDateRange: daterange);
