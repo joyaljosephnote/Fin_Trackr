@@ -172,6 +172,18 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         onTap: () async {
                           final DateTime? date = await showDatePicker(
                             context: context,
+                            builder: (context, child) {
+                              return Theme(
+                                data: ThemeData.dark().copyWith(
+                                    colorScheme: const ColorScheme.dark(
+                                        onPrimary: AppColor.ftAppBarColor,
+                                        onSurface: AppColor.ftTextSecondayColor,
+                                        primary: AppColor.ftTextTertiaryColor),
+                                    dialogBackgroundColor:
+                                        AppColor.ftAppBarColor),
+                                child: child!,
+                              );
+                            },
                             initialDate: selectedDate,
                             firstDate: DateTime(2000),
                             lastDate: DateTime.now(),
