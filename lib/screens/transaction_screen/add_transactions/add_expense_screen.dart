@@ -465,72 +465,79 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 image != null
                     ? Padding(
                         padding: const EdgeInsets.only(top: 30),
-                        child: Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              if (image == null) return;
-                              if (image != null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ImagePreview(
-                                      imageFile: File(image!.path),
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                            child: Stack(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: AppColor.ftTextTertiaryColor,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 1,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (image == null) return;
+                                  if (image != null) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ImagePreview(
+                                          imageFile: File(image!.path),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                          color: AppColor.ftTextTertiaryColor,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            width: 1,
+                                          ),
+                                        ),
+                                        margin: const EdgeInsets.all(3),
+                                        child: Image.file(
+                                          image!,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.2,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              2,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                    margin: const EdgeInsets.all(3),
-                                    child: Image.file(
-                                      image!,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.2,
-                                      width:
-                                          MediaQuery.of(context).size.width * 2,
-                                      fit: BoxFit.cover,
+                                    Positioned(
+                                      top: 5,
+                                      right: 5,
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Color(0x81000000),
+                                          shape: BoxShape.rectangle,
+                                        ),
+                                        child: IconButton(
+                                          icon: const Icon(Icons.delete,
+                                              color: AppColor
+                                                  .ftTabBarSelectorColor),
+                                          onPressed: () {
+                                            setState(() {
+                                              image = null;
+                                            });
+                                          },
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                                Positioned(
-                                  top: 5,
-                                  right: 5,
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      color: Color(0x81000000),
-                                      shape: BoxShape.rectangle,
-                                    ),
-                                    child: IconButton(
-                                      icon: const Icon(Icons.delete,
-                                          color:
-                                              AppColor.ftTabBarSelectorColor),
-                                      onPressed: () {
-                                        setState(() {
-                                          image = null;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       )
                     : Container(),
